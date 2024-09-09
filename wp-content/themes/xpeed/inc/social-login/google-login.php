@@ -7,8 +7,8 @@ function handle_google_login()
     try{
         // Initialize Google Client
         $client = new Google_Client();
-        $client->setClientId('697902993845-08guf9k8u509h27075c73vcegav0ksmj.apps.googleusercontent.com'); // google client ID
-        $client->setClientSecret('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'); // google client secret
+        $client->setClientId(''); // google client ID
+        $client->setClientSecret(''); // google client secret
         $client->setRedirectUri(home_url('/google-login-callback'));
         $client->addScope('email');
         $client->addScope('profile');

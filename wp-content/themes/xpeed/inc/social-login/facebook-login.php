@@ -11,8 +11,8 @@ function handle_facebook_login() {
     }
     // Initialize Facebook SDK
     $fb = new \Facebook\Facebook([
-        'app_id' => '543697601517133', // app ID
-        'app_secret' => '24dc974cd6042c44738409c06eaf2f87', // app secret
+        'app_id' => '', // app ID
+        'app_secret' => '', // app secret
         'default_graph_version' => 'v12.0',
     ]);
 
