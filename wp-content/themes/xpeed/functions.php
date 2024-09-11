@@ -72,3 +72,27 @@ function track_custom_blogs($post_ID)
     set_views($post_ID);
 }
 add_action('wp_head', 'track_custom_blogs');
+
+// Function to handle Google login callback
+function google_login_callback() {
+    include_once get_template_directory() . '/inc/social-login/google-login.php';
+    exit;
+}
+
+// Function to handle Facebook login callback
+function facebook_login_callback() {
+    include_once get_template_directory() . '/inc/social-login/facebook-login.php';
+    exit;
+}
+
+// Hook to process the login callbacks
+add_action('init', function() {
+    if (strpos($_SERVER['REQUEST_URI'], 'google-login-callback') !== false) {
+        google_login_callback();
+    }
+
+    if (strpos($_SERVER['REQUEST_URI'], 'facebook-login-callback') !== false) {
+        facebook_login_callback();
+    }
+});
+
