@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 
@@ -14,7 +16,10 @@
       <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
       <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
       <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-      <?php wp_head() ?>
+      <script src="https://unpkg.com/scrollreveal"></script>
+      <?php
+      wp_head()
+      ?>
 </head>
 
 <body>
@@ -24,90 +29,202 @@
                         <div class="header_headline-one headline-common">
                               8월 택배 쉬는 날 배송 공지
                         </div>
-
                   </div>
-                  <div class="header_main containerX">
-                        <div class="header_main-logo">
-                              <img class="logo"
-                                    src="<?= get_template_directory_uri() . '/assets/images/logo/logo.png' ?>"
-                                    alt="Logo" />
-                        </div>
-                        <div class="header_main-nav">
-                              <ul class="header_main-nav-list">
-                                    <li class="header_main-nav--item">
-                                          <a href="">RPHA 12 CARBON</a>
-                                          <!-- <div class="header_main-submenu">
-                                                <ul class="header_main-submenu-list">
-                                                      <li class="header_main-submenu--item">
-                                                            <a class="header_main-submenu--item-link" href="">RPHA 1
-                                                            </a>
-                                                            <span class="header_main-submenu__badge">N</span>
-                                                      </li>
-                                                      <li class="header_main-submenu--item">
-                                                            <a class="header_main-submenu--item-link" href="">RPHA 1</a>
-                                                      </li>
-                                                      <li class="header_main-submenu--item">
-                                                            <a class="header_main-submenu--item-link" href="">RPHA 1</a>
-                                                      </li>
-                                                      <li class="header_main-submenu--item">
-                                                            <a class="header_main-submenu--item-link" href="">RPHA 1</a>
-                                                      </li>
-                                                      <li class="header_main-submenu--item">
-                                                            <a class="header_main-submenu--item-link" href="">RPHA 1</a>
-                                                      </li>
-                                                </ul>
-                                                <img class="header_main-submenu__image"
-                                                      src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
-                                                      alt="">
-                                          </div> -->
+                  <div class="header_main">
+                        <div class="containerX header_main-in">
+                              <a href="<?= home_url() ?>" class="header_main-logo">
+                                    <img class="logo"
+                                          src="<?= get_template_directory_uri() . '/assets/images/logo/logo.png'  ?>"
+                                          alt="" />
+                              </a>
+                              <div class="header_main-nav">
+                                    <ul class="header_main-nav-list">
+                                          <li class="header_main-nav--item">
+                                                RPHA 12 CARBON
+
+                                                <!-- submenu -->
+                                                <div class="header_main-submenu">
+                                                      <ul class="header_main-submenu-list">
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1
+                                                                  </a>
+                                                                  <span class="header_main-submenu__badge">N</span>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                      </ul>
+                                                      <img class="header_main-submenu__image"
+                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
+                                                            alt="" />
+                                                </div>
+                                          </li>
+                                          <li class="header_main-nav--item">
+                                                RPHA 1
+
+                                                <!-- submenu -->
+                                                <div class="header_main-submenu">
+                                                      <ul class="header_main-submenu-list">
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1
+                                                                  </a>
+                                                                  <span class="header_main-submenu__badge">N</span>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                      </ul>
+                                                      <img class="header_main-submenu__image"
+                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
+                                                            alt="" />
+                                                </div>
+                                          </li>
+                                          <li class="header_main-nav--item">
+                                                RPHA 12 CARBON
+                                                <!-- submenu -->
+                                                <div class="header_main-submenu">
+                                                      <ul class="header_main-submenu-list">
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1
+                                                                  </a>
+                                                                  <span class="header_main-submenu__badge">N</span>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                      </ul>
+                                                      <img class="header_main-submenu__image"
+                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
+                                                            alt="" />
+                                                </div>
+                                          </li>
+                                          <li class="header_main-nav--item">
+                                                RPHA 12
+                                                <!-- submenu -->
+                                                <div class="header_main-submenu">
+                                                      <ul class="header_main-submenu-list">
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1
+                                                                  </a>
+                                                                  <span class="header_main-submenu__badge">N</span>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                      </ul>
+                                                      <img class="header_main-submenu__image"
+                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
+                                                            alt="" />
+                                                </div>
+                                          </li>
+                                          <li class="header_main-nav--item">
+                                                RPAH 71 CARBON
+                                                <!-- submenu -->
+                                                <div class="header_main-submenu">
+                                                      <ul class="header_main-submenu-list">
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1
+                                                                  </a>
+                                                                  <span class="header_main-submenu__badge">N</span>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                            <li class="header_main-submenu--item">
+                                                                  <a class="header_main-submenu--item-link" href="">RPHA
+                                                                        1</a>
+                                                            </li>
+                                                      </ul>
+                                                      <img class="header_main-submenu__image"
+                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
+                                                            alt="" />
+                                                </div>
+                                          </li>
+                                    </ul>
+                              </div>
+                              <div class="header_main-icon">
+                                    <li class="header_main-icon--item">
+                                          <a href="" class="header_main-icon--item--link">
+                                                <ion-icon name="search-outline"></ion-icon>
+                                          </a>
                                     </li>
-                                    <li class="header_main-nav--item">
-                                          <a href="">RPHA 1</a>
+                                    <li class="header_main-icon--item">
+                                          <a href="" class="header_main-icon--item--link">
+                                                <ion-icon name="person-circle-outline"></ion-icon>
+                                          </a>
                                     </li>
-                                    <li class="header_main-nav--item">
-                                          <a href="">RPHA 12 CARBON</a>
-                                          <!-- <div class="header_main-submenu">
-                  <ul class="header_main-submenu-list">
-                    <li class="header_main-submenu--item">
-                      <a class="header_main-submenu--item-link" href="">RPHA 1 </a>
-                      <span class="header_main-submenu__badge">N</span>
-                    </li>
-                    <li class="header_main-submenu--item">
-                      <a class="header_main-submenu--item-link" href="">RPHA 1</a>
-                    </li>
-                    <li class="header_main-submenu--item">
-                      <a class="header_main-submenu--item-link" href="">RPHA 1</a>
-                    </li>
-                    <li class="header_main-submenu--item">
-                      <a class="header_main-submenu--item-link" href="">RPHA 1</a>
-                    </li>
-                    <li class="header_main-submenu--item">
-                      <a class="header_main-submenu--item-link" href="">RPHA 1</a>
-                    </li>
-                  </ul>
-                  <img class="header_main-submenu__image" src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080" alt="">
-                </div> -->
+                                    <li class="header_main-icon--item">
+                                          <a href="" class="header_main-icon--item--link">
+                                                <ion-icon name="cart-outline"></ion-icon>
+                                          </a>
                                     </li>
-                                    <li class="header_main-nav--item">RPHA 12</li>
-                                    <li class="header_main-nav--item">RPAH 71 CARBON</li>
-                              </ul>
-                        </div>
-                        <div class="header_main-icon">
-                              <li class="header_main-icon--item">
-                                    <a href="" class="header_main-icon--item--link">
-                                          <ion-icon name="search-outline"></ion-icon>
-                                    </a>
-                              </li>
-                              <li class="header_main-icon--item">
-                                    <a href="" class="header_main-icon--item--link">
-                                          <ion-icon name="person-circle-outline"></ion-icon>
-                                    </a>
-                              </li>
-                              <li class="header_main-icon--item">
-                                    <a href="" class="header_main-icon--item--link">
-                                          <ion-icon name="cart-outline"></ion-icon>
-                                    </a>
-                              </li>
+                              </div>
                         </div>
                   </div>
             </header>

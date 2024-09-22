@@ -86,5 +86,9 @@
 </footer>
 </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="<?= get_template_directory_uri() . '/assets/js/animations/animation.js' ?>"></script>
+<script src="<?= get_template_directory_uri() . '/dist/main.bundle.js' ?>"></script>
+
 
 </html>
