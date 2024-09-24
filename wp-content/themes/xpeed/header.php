@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'api/controllers/controller.php';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -39,173 +40,19 @@ session_start();
                               </a>
                               <div class="header_main-nav">
                                     <ul class="header_main-nav-list">
-                                          <li class="header_main-nav--item">
-                                                RPHA 12 CARBON
+                                          <?php foreach ($parent_menu_items as $menu_item) : ?>
+                                                <li class="header_main-nav--item">
+                                                      <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
+                                                            <?= $menu_item->title ?>
+                                                      </a>
+                                                      <?php if ($menu_item->submenu_count > 0) {
+                                                      ?>
+                                                            <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
+                                                      <?php } ?>
 
-                                                <!-- submenu -->
-                                                <div class="header_main-submenu">
-                                                      <ul class="header_main-submenu-list">
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1
-                                                                  </a>
-                                                                  <span class="header_main-submenu__badge">N</span>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                      </ul>
-                                                      <img class="header_main-submenu__image"
-                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
-                                                            alt="" />
-                                                </div>
-                                          </li>
-                                          <li class="header_main-nav--item">
-                                                RPHA 1
-
-                                                <!-- submenu -->
-                                                <div class="header_main-submenu">
-                                                      <ul class="header_main-submenu-list">
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1
-                                                                  </a>
-                                                                  <span class="header_main-submenu__badge">N</span>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                      </ul>
-                                                      <img class="header_main-submenu__image"
-                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
-                                                            alt="" />
-                                                </div>
-                                          </li>
-                                          <li class="header_main-nav--item">
-                                                RPHA 12 CARBON
-                                                <!-- submenu -->
-                                                <div class="header_main-submenu">
-                                                      <ul class="header_main-submenu-list">
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1
-                                                                  </a>
-                                                                  <span class="header_main-submenu__badge">N</span>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                      </ul>
-                                                      <img class="header_main-submenu__image"
-                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
-                                                            alt="" />
-                                                </div>
-                                          </li>
-                                          <li class="header_main-nav--item">
-                                                RPHA 12
-                                                <!-- submenu -->
-                                                <div class="header_main-submenu">
-                                                      <ul class="header_main-submenu-list">
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1
-                                                                  </a>
-                                                                  <span class="header_main-submenu__badge">N</span>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                      </ul>
-                                                      <img class="header_main-submenu__image"
-                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
-                                                            alt="" />
-                                                </div>
-                                          </li>
-                                          <li class="header_main-nav--item">
-                                                RPAH 71 CARBON
-                                                <!-- submenu -->
-                                                <div class="header_main-submenu">
-                                                      <ul class="header_main-submenu-list">
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1
-                                                                  </a>
-                                                                  <span class="header_main-submenu__badge">N</span>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                            <li class="header_main-submenu--item">
-                                                                  <a class="header_main-submenu--item-link" href="">RPHA
-                                                                        1</a>
-                                                            </li>
-                                                      </ul>
-                                                      <img class="header_main-submenu__image"
-                                                            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg?v=1683869270&width=1080"
-                                                            alt="" />
-                                                </div>
-                                          </li>
+                                                      <?php echo render_submenu_by_parent_id($menu_item->ID, $menu_name, $locations) ?>
+                                                </li>
+                                          <?php endforeach; ?>
                                     </ul>
                               </div>
                               <div class="header_main-icon">
