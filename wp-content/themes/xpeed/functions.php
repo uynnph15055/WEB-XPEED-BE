@@ -9,6 +9,7 @@ define("THEME_VER", $theme['Version']);
 define('THEME_URL', get_stylesheet_directory());
 define('TEMP_DIR', get_template_directory());
 define('DIR_URI', get_stylesheet_directory_uri());
+require_once get_template_directory() . '/api/api.php';
 const TEXT_DOMAIN = 'xpeed';
 const CORE = THEME_URL . '/core';
 
@@ -74,19 +75,21 @@ function track_custom_blogs($post_ID)
 add_action('wp_head', 'track_custom_blogs');
 
 // Function to handle Google login callback
-function google_login_callback() {
+function google_login_callback()
+{
     include_once get_template_directory() . '/inc/social-login/google-login.php';
     exit;
 }
 
 // Function to handle Facebook login callback
-function facebook_login_callback() {
+function facebook_login_callback()
+{
     include_once get_template_directory() . '/inc/social-login/facebook-login.php';
     exit;
 }
 
 // Hook to process the login callbacks
-add_action('init', function() {
+add_action('init', function () {
     if (strpos($_SERVER['REQUEST_URI'], 'google-login-callback') !== false) {
         google_login_callback();
     }
@@ -95,4 +98,3 @@ add_action('init', function() {
         facebook_login_callback();
     }
 });
-
