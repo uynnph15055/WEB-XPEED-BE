@@ -1,36 +1,37 @@
 <?php
 // app/Routes/web.php
 
-require_once get_template_directory() . '/app/Controllers/YourController.php';
-// Bao gồm các controller khác nếu có
-
-use Phroute\Phroute\RouteCollector;
-use Phroute\Phroute\Dispatcher;
+require_once get_template_directory() . '/app/Controllers/UserController.php';
 
 function register_routes() {
-    $router = new RouteCollector();
+    // Tạo một instance của UserController
+    $controller = new \app\Controllers\UserController(); // Use the full namespace
 
-    // Định nghĩa các route
-    $router->get('/example', 'YourController@index');
-    $router->get('/example/{id}', 'YourController@show');
+    // Đăng ký route /example (GET)
+    register_rest_route('custom-api/v1', '/example', [
+        'methods'  => 'GET',
+        'callback' => [$controller, 'index'],  // Sử dụng instance thay vì tên class
+    ]);
 
-    // Lấy route
-    $dispatcher = new Dispatcher($router->getData());
+    // Đăng ký route /example/{id} (GET)
+    register_rest_route('custom-api/v1', '/example/(?P<id>\d+)', [
+        'methods'  => 'GET',
+        'callback' => [$controller, 'show'],  // Sử dụng instance thay vì tên class
+    ]);
 
-    // Lấy URI và phương thức của yêu cầu
-    $uri = $_SERVER['REQUEST_URI'];
-    $method = $_SERVER['REQUEST_METHOD'];
+    // Đăng ký route để lấy danh sách người dùng
+    register_rest_route('custom-api/v1', '/users', [  // Correct the route path here
+        'methods'  => 'GET',
+        'callback' => [$controller, 'getUsers'],  // Sử dụng instance thay vì tên class
+    ]);
 
-    // Phân tích và gọi hàm callback
-    try {
-        $response = $dispatcher->dispatch($method, $uri);
-        if ($response) {
-            wp_send_json($response);
-        }
-    } catch (Exception $e) {
-        wp_send_json_error(['message' => $e->getMessage()], 404);
-    }
+        // Đăng ký route cho login (POST)
+        register_rest_route('custom-api/v1', '/login', [
+            'methods'  => 'GET',
+            'callback' => [$controller, 'login'],
+            'permission_callback' => '__return_true',
+        ]);
 }
 
-// Hook vào init
-add_action('init', 'register_routes');
+// Hook vào 'rest_api_init' để đăng ký route
+add_action('rest_api_init', 'register_routes');

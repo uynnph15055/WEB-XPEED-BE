@@ -15,8 +15,11 @@ define('THEME_URL', get_stylesheet_directory());
 define('TEMP_DIR', get_template_directory());
 define('DIR_URI', get_stylesheet_directory_uri());
 
-require_once __DIR__ . '/vendor/autoload.php'; // Bao gồm autoload của Composer
-require_once get_template_directory() . '/app/Routes/web.php'; // Bao gồm web.php
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+// Bao gồm file autoload của Composer
+require_once __DIR__ . '/vendor/autoload.php'; // Đảm bảo đường dẫn chính xác
+require_once get_template_directory() . '/app/Routes/web.php'; // Bao gồm các route
 
 const TEXT_DOMAIN = 'xpeed';
 const CORE = THEME_URL . '/core';
@@ -26,7 +29,7 @@ load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
 // Các hàm khác trong theme của bạn
 // ...
 
-// var_dump data
+// Hàm var_dump data
 if (!function_exists('dd')) {
     function dd() {
         echo '<pre>';
@@ -64,6 +67,32 @@ function track_custom_blogs($post_ID) {
     set_views($post_ID);
 }
 add_action('wp_head', 'track_custom_blogs');
+
+// Hàm thiết lập Eloquent ORM
+function setup_eloquent() {
+    global $wpdb; // Đảm bảo biến $wpdb được gọi đúng cách
+
+    $capsule = new Capsule;
+
+    // Thiết lập kết nối cơ sở dữ liệu WordPress
+    $capsule->addConnection([
+        'driver'    => 'mysql',
+        'host'      => DB_HOST,
+        'database'  => DB_NAME,
+        'username'  => DB_USER,
+        'password'  => DB_PASSWORD,
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => $wpdb->prefix, // Sử dụng tiền tố đúng cách
+    ]);
+
+    // Thiết lập Eloquent ORM để sử dụng
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+}
+
+// Thêm hàm thiết lập vào hook 'init'
+add_action('init', 'setup_eloquent');
 
 // Function to handle Google login callback
 function google_login_callback()
