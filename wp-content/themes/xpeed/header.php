@@ -62,7 +62,7 @@ include 'api/controllers/controller.php';
                                           </a>
                                     </li>
                                     <li class="header_main-icon--item">
-                                          <a href="" class="header_main-icon--item--link">
+                                          <a href="<?php echo home_url('/login'); ?>" class="header_main-icon--item--link">
                                                 <ion-icon name="person-circle-outline"></ion-icon>
                                           </a>
                                     </li>

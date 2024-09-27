@@ -22,6 +22,9 @@
 # # Uploads
 # /wp-content/uploads/
 
+# WooCommerce logs
+/wp-content/uploads/wc-logs/
+
 # # Log files
 # *.log
 

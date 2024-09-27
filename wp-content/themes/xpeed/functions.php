@@ -26,12 +26,25 @@ const CORE = THEME_URL . '/core';
 
 load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
 
-// Các hàm khác trong theme của bạn
-// ...
+$list_files = array(
+    "/includes/class_customizes.php",
+    "/includes/theme_functions_ajax.php",
+    "/includes/theme_functions_helper.php",
+    "/includes/theme_template_main_functions.php",
+    "/includes/theme_template_sidebar.php",
+    "/includes/theme_template_scripts.php",
+    "/includes/theme_functions_api.php",
+    "/includes/theme_functions_job_sync.php",
+);
 
-// Hàm var_dump data
+foreach ($list_files as $file) {
+    require_once(TEMP_DIR . $file);
+}
+
+// var_dump data
 if (!function_exists('dd')) {
-    function dd() {
+    function dd()
+    {
         echo '<pre>';
         array_map(function ($x) {
             var_dump($x);
@@ -41,14 +54,19 @@ if (!function_exists('dd')) {
     }
 }
 
-// Cài đặt view cho blog
-function set_views($post_ID) {
+
+// Set views blogs
+function set_views($post_ID)
+{
     $key = 'views';
-    $count = get_post_meta($post_ID, $key, true); // Lấy số lượt xem
+    $count = get_post_meta($post_ID, $key, true); //retrieves the count
 
     if ($count == '') {
+
         $count = 0;
+
         delete_post_meta($post_ID, $key);
+
         add_post_meta($post_ID, $key, '0');
     } else {
         $count++;
@@ -57,8 +75,8 @@ function set_views($post_ID) {
 }
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
 
-// Theo dõi blog tùy chỉnh
-function track_custom_blogs($post_ID) {
+function track_custom_blogs($post_ID)
+{
     if (!is_single()) return;
     if (empty($post_ID)) {
         global $post;
