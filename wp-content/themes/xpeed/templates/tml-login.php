@@ -91,7 +91,7 @@ get_header();
             });
 
             const data = await response.json();
-
+             console.log('data',data);
             if (response.ok) {
                 messageElement.innerHTML = '<p class="success-message">Đăng nhập thành công!</p>';
                 // Xử lý sau khi đăng nhập thành công (chuyển hướng hoặc lưu thông tin)
