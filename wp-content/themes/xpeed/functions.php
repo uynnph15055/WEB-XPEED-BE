@@ -21,8 +21,26 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 require_once __DIR__ . '/vendor/autoload.php'; // Đảm bảo đường dẫn chính xác
 require_once get_template_directory() . '/app/Routes/web.php'; // Bao gồm các route
 
+
 const TEXT_DOMAIN = 'xpeed';
 const CORE = THEME_URL . '/core';
+
+
+$list_files = array(
+    "/includes/class_customizes.php",
+    "/includes/theme_functions_ajax.php",
+    "/includes/theme_functions_helper.php",
+    "/includes/theme_template_main_functions.php",
+    "/includes/theme_template_sidebar.php",
+    "/includes/theme_template_scripts.php",
+    "/includes/theme_functions_api.php",
+    "/includes/theme_functions_job_sync.php",
+);
+
+foreach ($list_files as $file) {
+    require_once(TEMP_DIR . $file);
+}
+
 
 load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
 
@@ -31,7 +49,8 @@ load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
 
 // Hàm var_dump data
 if (!function_exists('dd')) {
-    function dd() {
+    function dd()
+    {
         echo '<pre>';
         array_map(function ($x) {
             var_dump($x);
@@ -42,7 +61,8 @@ if (!function_exists('dd')) {
 }
 
 // Cài đặt view cho blog
-function set_views($post_ID) {
+function set_views($post_ID)
+{
     $key = 'views';
     $count = get_post_meta($post_ID, $key, true); // Lấy số lượt xem
 
@@ -58,7 +78,8 @@ function set_views($post_ID) {
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
 
 // Theo dõi blog tùy chỉnh
-function track_custom_blogs($post_ID) {
+function track_custom_blogs($post_ID)
+{
     if (!is_single()) return;
     if (empty($post_ID)) {
         global $post;
@@ -69,7 +90,8 @@ function track_custom_blogs($post_ID) {
 add_action('wp_head', 'track_custom_blogs');
 
 // Hàm thiết lập Eloquent ORM
-function setup_eloquent() {
+function setup_eloquent()
+{
     global $wpdb; // Đảm bảo biến $wpdb được gọi đúng cách
 
     $capsule = new Capsule;
