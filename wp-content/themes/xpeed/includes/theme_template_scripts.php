@@ -18,7 +18,7 @@ add_action('wp_enqueue_scripts', 'template_scripts');
 
 function register_my_menu()
 {
-    register_nav_menu('header-menu', __('Menu chính'));
-    register_nav_menu('footer-menu', __('Menu Footer'));
+    register_nav_menu('header-menu', __('Menu chính', 'text-domain'));
+    register_nav_menu('footer-menu', __('Menu Footer', 'text-domain'));
 }
 add_action('init', 'register_my_menu');

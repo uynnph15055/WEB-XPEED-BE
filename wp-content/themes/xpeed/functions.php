@@ -1,5 +1,10 @@
 <?php
 
+// Kiểm tra xem WordPress đã được khởi động chưa
+if (!defined('ABSPATH')) {
+    exit; // Ngăn chặn truy cập trái phép
+}
+
 /**
  * Theme function.
  * Version: 1.0
@@ -9,11 +14,17 @@ define("THEME_VER", $theme['Version']);
 define('THEME_URL', get_stylesheet_directory());
 define('TEMP_DIR', get_template_directory());
 define('DIR_URI', get_stylesheet_directory_uri());
-require_once get_template_directory() . '/api/api.php';
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+// Bao gồm file autoload của Composer
+require_once __DIR__ . '/vendor/autoload.php'; // Đảm bảo đường dẫn chính xác
+require_once get_template_directory() . '/app/Routes/web.php'; // Bao gồm các route
+
+
 const TEXT_DOMAIN = 'xpeed';
 const CORE = THEME_URL . '/core';
 
-load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
 
 $list_files = array(
     "/includes/class_customizes.php",
@@ -30,7 +41,13 @@ foreach ($list_files as $file) {
     require_once(TEMP_DIR . $file);
 }
 
-// var_dump data
+
+load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
+
+// Các hàm khác trong theme của bạn
+// ...
+
+// Hàm var_dump data
 if (!function_exists('dd')) {
     function dd()
     {
@@ -43,18 +60,15 @@ if (!function_exists('dd')) {
     }
 }
 
-// Set views blogs
+// Cài đặt view cho blog
 function set_views($post_ID)
 {
     $key = 'views';
-    $count = get_post_meta($post_ID, $key, true); //retrieves the count
+    $count = get_post_meta($post_ID, $key, true); // Lấy số lượt xem
 
     if ($count == '') {
-
         $count = 0;
-
         delete_post_meta($post_ID, $key);
-
         add_post_meta($post_ID, $key, '0');
     } else {
         $count++;
@@ -63,6 +77,7 @@ function set_views($post_ID)
 }
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
 
+// Theo dõi blog tùy chỉnh
 function track_custom_blogs($post_ID)
 {
     if (!is_single()) return;
@@ -73,6 +88,33 @@ function track_custom_blogs($post_ID)
     set_views($post_ID);
 }
 add_action('wp_head', 'track_custom_blogs');
+
+// Hàm thiết lập Eloquent ORM
+function setup_eloquent()
+{
+    global $wpdb; // Đảm bảo biến $wpdb được gọi đúng cách
+
+    $capsule = new Capsule;
+
+    // Thiết lập kết nối cơ sở dữ liệu WordPress
+    $capsule->addConnection([
+        'driver'    => 'mysql',
+        'host'      => DB_HOST,
+        'database'  => DB_NAME,
+        'username'  => DB_USER,
+        'password'  => DB_PASSWORD,
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => $wpdb->prefix, // Sử dụng tiền tố đúng cách
+    ]);
+
+    // Thiết lập Eloquent ORM để sử dụng
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+}
+
+// Thêm hàm thiết lập vào hook 'init'
+add_action('init', 'setup_eloquent');
 
 // Function to handle Google login callback
 function google_login_callback()
