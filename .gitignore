@@ -20,7 +20,6 @@
 # /wp-content/plugins/hello.php
 
 # # Uploads
-# /wp-content/uploads/
 
 # # Log files
 # *.log
@@ -44,7 +43,7 @@
 /wp-includes/
 
 # Uploads
-/wp-content/uploads/
+/wp-content/uploads/*
 
 # Cache và Tạm thời
 /wp-content/cache/
