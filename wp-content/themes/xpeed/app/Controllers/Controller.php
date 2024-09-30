@@ -1,76 +1,69 @@
 <?php
-$menu_name =  'header-menu';
-$locations = get_nav_menu_locations();
-$menu_id = $locations[$menu_name];
-$menu_items = wp_get_nav_menu_items($menu_id);
 
-$parent_menu_items = array();
-foreach ($menu_items as $menu_item) {
-      if ($menu_item->menu_item_parent == 0) {
-            $submenu_count = 0;
+namespace app\Controllers;
 
-            foreach ($menu_items as $sub_item) {
-                  if ($sub_item->menu_item_parent == $menu_item->ID) {
-                        $submenu_count++;
-                  }
-            }
-
-            $menu_item->submenu_count = $submenu_count;
-            $parent_menu_items[] = $menu_item;
-      }
-}
-
-function containsAtN($string)
+class Controller
 {
-      if (strpos($string, '@N') !== false) {
-            return '<span class="header_main-submenu__badge"
-                                        >N</span
-                                      >';
-      }
-      return '';
-}
+    public function respond($code = 0, $message = null, $data = null, array $trace = null, array $headers = [], $httpCode = 200)
+    {
+        // Thiết lập mã HTTP
+        http_response_code($httpCode);
 
-function render_submenu_by_parent_id($parent_id, $menu_name = 'header-menu', $locations = null)
-{
-      if (isset($locations[$menu_name])) {
-            $menu_id = $locations[$menu_name];
+        // Thiết lập các header
+        foreach ($headers as $key => $value) {
+            header("$key: $value");
+        }
 
-            $menu_items = wp_get_nav_menu_items($menu_id);
+        // Tạo response
+        $response = [
+            'code' => $code,
+            'message' => $message,
+            'data' => $data,
+            'trace' => $trace,
+        ];
 
-            $submenu_items = array();
-            foreach ($menu_items as $menu_item) {
-                  if ($menu_item->menu_item_parent == $parent_id) {
-                        $submenu_count = 0;
+        // Trả về response dưới dạng JSON
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        exit; // Kết thúc script sau khi trả về response
+    }
 
-                        foreach ($menu_items as $sub_item) {
-                              if ($sub_item->menu_item_parent == $menu_item->ID) {
-                                    $submenu_count++;
-                              }
-                        }
+    public function unauthorized($message = 'Unauthorized', array $headers = [], $code = null)
+    {
+        return $this->respond($code, $message, null, null, $headers, 401);
+    }
 
-                        $menu_item->submenu_count = $submenu_count;
-                        $submenu_items[] = $menu_item;
-                  }
-            }
+    public function forbidden($message = 'Forbidden', array $headers = [], $code = null)
+    {
+        return $this->respond($code, $message, null, null, $headers, 403);
+    }
 
-            if (count($submenu_items) > 0) {
-                  echo '<div class="header_main-submenu">
-                                <ul class="header_main-submenu-list">';
-                  foreach ($submenu_items as $submenu_item) {
-                        echo ' <li class="header_main-submenu--item">';
-                        echo '<a class="header_main-submenu--item-link" href="' . esc_url($submenu_item->url) . '">' . esc_html(str_replace('@N', '', $submenu_item->title)) .
-                              containsAtN($submenu_item->title);
-                        echo $submenu_item->submenu_count > 0 ? ' <ion-icon
-                                  class="icon-down"
-                                  name="caret-forward-outline"
-                                ></ion-icon>' : '';
-                        echo  '</a>';
+    public function bad_request($message = 'Invalid request data', array $trace = null, array $headers = [], $code = 1)
+    {
+        return $this->respond($code, $message, null, $trace, $headers, 400);
+    }
 
-                        render_submenu_by_parent_id($submenu_item->ID, $menu_name, $locations);
+    public function not_found($message = 'Not found')
+    {
+        return $this->respond(null, $message, null, null, [], 404);
+    }
 
-                        echo '</li>';
-                  }
-                  echo '</ul>';
-            }
-      }
+    public function method_not_allowed(array $trace = null, $message = 'Method not allowed')
+    {
+        return $this->respond(null, $message, null, $trace, [], 405);
+    }
+
+    public function no_content($message = 'No content', array $headers = [], $code = 1)
+    {
+        return $this->respond($code, $message, null, null, $headers, 204);
+    }
+
+    public function success($message = 'Success', $data = null, array $headers = [], $code = 0, $httpCode = 200)
+    {
+        return $this->respond($code, $message, $data, null, $headers, $httpCode);
+    }
+
+    public function fail($message = 'Fail', $code = 1, array $trace = null, array $headers = [], $httpCode = 500)
+    {
+        return $this->respond($code, $message, null, $trace, $headers, $httpCode);
+    }
 }
