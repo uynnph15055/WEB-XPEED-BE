@@ -1,5 +1,4 @@
 <?php
-$current_language = pll_current_language();
 $menu_name =  'header-menu';
 $locations = get_nav_menu_locations();
 $menu_id = $locations[$menu_name];

@@ -20,7 +20,6 @@
 # /wp-content/plugins/hello.php
 
 # # Uploads
-# /wp-content/uploads/
 
 # # Log files
 # *.log
@@ -39,3 +38,22 @@
 # # Note: If you wish to whitelist themes,
 # # uncomment the next line
 # #/wp-content/themes
+# WordPress Core
+/wp-admin/
+/wp-includes/
+
+# Uploads
+/wp-content/uploads/*
+
+# Cache và Tạm thời
+/wp-content/cache/
+/wp-content/backup-*/
+
+
+wp-content/plugins/polylang/langs/
+wp-content/plugins/polylang/*.json
+wp-content/plugins/polylang/*.po
+wp-content/plugins/polylang/*.mo
+
+# Tệp cấu hình cá nhân
+wp-config.php
