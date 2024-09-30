@@ -15,7 +15,7 @@
 
 # # Example themes
 /wp-content/themes/twenty*/
-
+/wp-content/themes/uploads/
 # # Example plugin
 # /wp-content/plugins/hello.php
 

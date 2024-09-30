@@ -20,14 +20,8 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 // Bao gồm file autoload của Composer
 require_once __DIR__ . '/vendor/autoload.php'; // Đảm bảo đường dẫn chính xác
 require_once get_template_directory() . '/app/Routes/web.php'; // Bao gồm các route
-
 const TEXT_DOMAIN = 'xpeed';
 const CORE = THEME_URL . '/core';
-
-load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
-
-// Các hàm khác trong theme của bạn
-// ...
 
 // Hàm var_dump data
 if (!function_exists('dd')) {
@@ -41,8 +35,6 @@ if (!function_exists('dd')) {
     }
 }
 
-// Cài đặt view cho blog
-function set_views($post_ID) {
     $key = 'views';
     $count = get_post_meta($post_ID, $key, true); // Lấy số lượt xem
 
@@ -57,9 +49,8 @@ function set_views($post_ID) {
 }
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
 
-// Theo dõi blog tùy chỉnh
-function track_custom_blogs($post_ID) {
-    if (!is_single()) return;
+
+if (!is_single()) return;
     if (empty($post_ID)) {
         global $post;
         $post_ID = $post->ID;
@@ -69,7 +60,6 @@ function track_custom_blogs($post_ID) {
 add_action('wp_head', 'track_custom_blogs');
 
 // Hàm thiết lập Eloquent ORM
-function setup_eloquent() {
     global $wpdb; // Đảm bảo biến $wpdb được gọi đúng cách
 
     $capsule = new Capsule;

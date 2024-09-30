@@ -1,6 +1,10 @@
 <?php
 get_header();
 ?>
+<div class="collection__header">
+      <h1 id="collection-title" class="collection__heading"></h1>
+</div>
+
 <div class="collection__container">
       <div class="collection__sidebar">
             <div class="custom-select">
@@ -64,6 +68,23 @@ get_header();
       </div>
 
       <div class="collection__content">
+            <div class="collection__tags">
+                  <a href="#" class="collection__tags__item">
+                        <span class="collection__tags__item__content">MODEL: F70 CARBON</span>
+                        <ion-icon class="collection__tags__item__close" name="close-outline"></ion-icon>
+                  </a>
+
+                  <a href="#" class="collection__tags__item">
+                        <span class="collection__tags__item__content">MODEL: F70 CARBON</span>
+                        <ion-icon class="collection__tags__item__close" name="close-outline"></ion-icon>
+                  </a>
+            </div>
+
+            <div class="collection__content-empty-product">
+                  <div class="empty-product-text">No products</div>
+                  <a href="" class="empty-product-link">필터 초기화</a>
+            </div>
+
             <div class="collection__content-product">
                   <div class="shopify__product">
                         <a href="" class="shopify__product-image-wrapper">

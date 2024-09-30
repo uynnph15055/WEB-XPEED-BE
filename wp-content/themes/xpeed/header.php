@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'api/controllers/controller.php';
+require_once 'app/Controllers/Controller.php';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -28,7 +28,7 @@ include 'api/controllers/controller.php';
             <header class="header">
                   <div class="header_headline">
                         <div class="header_headline-one headline-common">
-                              8월 택배 쉬는 날 배송 공지
+                              Thời gian mở: 8:00 - 22-00
                         </div>
                   </div>
                   <div class="header_main">
