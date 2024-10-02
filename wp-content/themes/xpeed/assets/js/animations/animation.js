@@ -133,14 +133,15 @@ function updateHeader(title, imageUrl = null) {
   const header = document.querySelector(".about__header");
   const titleElement = document.getElementById("about-title");
 
-  titleElement.textContent = title;
-
-  if (imageUrl) {
-    header.classList.add("has-image");
-    header.style.setProperty("--header-image-url", `url(${imageUrl})`);
-  } else {
-    header.classList.remove("has-image");
-    header.style.removeProperty("--header-image-url");
+  if(titleElement && header){
+    titleElement.textContent = title ?? '';
+    if (imageUrl) {
+      header.classList.add("has-image");
+      header.style.setProperty("--header-image-url", `url(${imageUrl})`);
+    } else {
+      header.classList.remove("has-image");
+      header.style.removeProperty("--header-image-url");
+    }
   }
 }
 

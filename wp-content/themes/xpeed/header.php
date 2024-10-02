@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'app/Controllers/Controller.php';
+require_once 'app/Config.php';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
