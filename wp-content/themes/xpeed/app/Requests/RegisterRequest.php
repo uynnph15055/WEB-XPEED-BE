@@ -28,10 +28,10 @@ class RegisterRequest
     public function rules()
     {
         return [
-            'username' => 'required|alpha_dash|min:3|max:20|unique:users,username',
+            'username' => 'required|min:3|max:20|unique:users,username',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-            'password_confirmation' => 'required',
+            'password' => 'required|min:6',
+            'address' => 'required',
         ];
     }
 

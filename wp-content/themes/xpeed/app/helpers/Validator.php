@@ -15,7 +15,7 @@ class Validator
                     $this->$method($field, $value);
                 } else {
                     // Nếu phương thức chưa được định nghĩa, báo lỗi
-                    $this->errors[$field][] = "Rule $method không hợp lệ.";
+                    $this->errors[$field][] = "Rule $method is invalid.";
                 }
             }
         }
@@ -32,7 +32,7 @@ class Validator
     public function required($field, $value)
     {
         if (is_null($value) || $value === '') {
-            $this->errors[$field][] = "$field là bắt buộc.";
+            $this->errors[$field][] = "$field is required.";
         }
     }
 
@@ -40,7 +40,7 @@ class Validator
     public function email($field, $value)
     {
         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            $this->errors[$field][] = "$field không phải là email hợp lệ.";
+            $this->errors[$field][] = "$field is not a valid email.";
         }
     }
 
@@ -48,7 +48,7 @@ class Validator
     public function active_url($field, $value)
     {
         if (!filter_var($value, FILTER_VALIDATE_URL)) {
-            $this->errors[$field][] = "$field không phải là URL hợp lệ.";
+            $this->errors[$field][] = "$field is not a valid url.";
         }
     }
 

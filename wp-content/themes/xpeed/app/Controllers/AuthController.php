@@ -55,7 +55,7 @@ class AuthController extends BaseController
         // Thực hiện xác thực
         if (!$registerRequest->validate()) {
             // Nếu xác thực thất bại, trả về thông báo lỗi
-            return $this->badRequest('Dữ liệu không hợp lệ.', $registerRequest->errors());
+            return $this->failData( 'Dữ liệu không hợp lệ.', $registerRequest->errors());
         }
 
         // Lấy dữ liệu hợp lệ
