@@ -84,6 +84,24 @@
             </div>
       </div>
 </footer>
+<button id="backToTop" class="back_top">
+      <ion-icon name="caret-up-outline"></ion-icon>
+</button>
+
+<div class="language">
+      <div class="language-selected">
+            <img src="assets/images/icons/flag_vi.svg" alt="language image" class="language-selected--img" />
+      </div>
+
+      <ul class="language-list">
+            <li class="language-item" title="VI">
+                  <img src="assets/images/icons/flag_vi.svg" alt="language image" class="language-selected--img" />
+            </li>
+            <li class="language-item" title="EN">
+                  <img src="assets/images/icons/flag_us.svg" alt="language image" class="language-selected--img" />
+            </li>
+      </ul>
+</div>
 </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>

@@ -41,17 +41,17 @@ require_once 'app/Controllers/Controller.php';
                               <div class="header_main-nav">
                                     <ul class="header_main-nav-list">
                                           <?php foreach ($parent_menu_items as $menu_item) : ?>
-                                                <li class="header_main-nav--item">
-                                                      <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
-                                                            <?= $menu_item->title ?>
-                                                      </a>
-                                                      <?php if ($menu_item->submenu_count > 0) {
+                                          <li class="header_main-nav--item">
+                                                <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
+                                                      <?= $menu_item->title ?>
+                                                </a>
+                                                <?php if ($menu_item->submenu_count > 0) {
                                                       ?>
-                                                            <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
-                                                      <?php } ?>
+                                                <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
+                                                <?php } ?>
 
-                                                      <?php echo render_submenu_by_parent_id($menu_item->ID, $menu_name, $locations) ?>
-                                                </li>
+                                                <?php echo render_submenu_by_parent_id($menu_item->ID, $menu_name, $locations) ?>
+                                          </li>
                                           <?php endforeach; ?>
                                     </ul>
                               </div>
@@ -66,10 +66,131 @@ require_once 'app/Controllers/Controller.php';
                                                 <ion-icon name="person-circle-outline"></ion-icon>
                                           </a>
                                     </li>
-                                    <li class="header_main-icon--item">
-                                          <a href="" class="header_main-icon--item--link">
+                                    <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
+                                          <button class="header_main-icon--item--button">
                                                 <ion-icon name="cart-outline"></ion-icon>
-                                          </a>
+                                          </button>
+                                          <div class="header_main-cart-count">2</div>
+                                          <div class="header__cart-overlay"></div>
+                                          <div class="header__cart">
+                                                <div class="header__cart-content">
+                                                      <!-- <div class="header__cart-content--empty">
+                      Giỏ hàng chưa có sản phẩm nào!
+                    </div> -->
+                                                      <div class="header__cart-content--having">
+                                                            <h4 class="cart-content__title">Cart</h4>
+                                                            <div class="cart-content__list">
+                                                                  <div class="cart-content__item">
+                                                                        <div class="cart-content__item-container-img">
+                                                                              <div class="cart-content__item-wrap-img">
+                                                                                    <img class="cart-content__item-img"
+                                                                                          src="https://bikegear.in/image/cache/catalog/products/HJC%20Helmets/hjc-f31-solid-semi-flat-black-helmet/1-hjc-f31-solid-semi-flat-black-helmet-800x800.png"
+                                                                                          alt="" />
+                                                                              </div>
+                                                                              <div class="cart-content__item-quantity">
+                                                                                    <div
+                                                                                          class="cart-content__item-quantity-controls">
+                                                                                          <button
+                                                                                                class="cart-content__item-quantity-decrease">
+                                                                                                -
+                                                                                          </button>
+                                                                                          <input value="1" min="1"
+                                                                                                class="cart-content__item-quantity-input" />
+                                                                                          <button
+                                                                                                class="cart-content__item-quantity-increase">
+                                                                                                +
+                                                                                          </button>
+                                                                                    </div>
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="cart-content__item-desc">
+                                                                              <div class="cart-content__item-info">
+                                                                                    <h3
+                                                                                          class="cart-content__item-title">
+                                                                                          i91 CARST/MC1SF
+                                                                                    </h3>
+                                                                                    <div
+                                                                                          class="cart-content__item-price">
+                                                                                          <span
+                                                                                                class="cart-content__item-price-item">319.000</span>
+                                                                                          <span
+                                                                                                class="cart-content__item-quantity-item">x
+                                                                                                2</span>
+                                                                                    </div>
+                                                                                    <div
+                                                                                          class="cart-content__item-property">
+                                                                                          <span
+                                                                                                class="cart-content__item-property-text">Kích
+                                                                                                thước: M</span>
+                                                                                    </div>
+                                                                              </div>
+                                                                              <button
+                                                                                    class="cart-content__item-action-delete">
+                                                                                    Xoá
+                                                                              </button>
+                                                                        </div>
+                                                                  </div>
+                                                                  <div class="cart-content__item">
+                                                                        <div class="cart-content__item-container-img">
+                                                                              <div class="cart-content__item-wrap-img">
+                                                                                    <img class="cart-content__item-img"
+                                                                                          src="https://bikegear.in/image/cache/catalog/products/HJC%20Helmets/hjc-f31-solid-semi-flat-black-helmet/1-hjc-f31-solid-semi-flat-black-helmet-800x800.png"
+                                                                                          alt="" />
+                                                                              </div>
+                                                                              <div class="cart-content__item-quantity">
+                                                                                    <div
+                                                                                          class="cart-content__item-quantity-controls">
+                                                                                          <button
+                                                                                                class="cart-content__item-quantity-decrease">
+                                                                                                -
+                                                                                          </button>
+                                                                                          <input value="1" min="1"
+                                                                                                class="cart-content__item-quantity-input" />
+                                                                                          <button
+                                                                                                class="cart-content__item-quantity-increase">
+                                                                                                +
+                                                                                          </button>
+                                                                                    </div>
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="cart-content__item-desc">
+                                                                              <div class="cart-content__item-info">
+                                                                                    <h3
+                                                                                          class="cart-content__item-title">
+                                                                                          i91 CARST/MC1SF
+                                                                                    </h3>
+                                                                                    <div
+                                                                                          class="cart-content__item-price">
+                                                                                          <span
+                                                                                                class="cart-content__item-price-item">319.000</span>
+                                                                                          <span
+                                                                                                class="cart-content__item-quantity-item">x
+                                                                                                2</span>
+                                                                                    </div>
+                                                                                    <div
+                                                                                          class="cart-content__item-property">
+                                                                                          <span
+                                                                                                class="cart-content__item-property-text">Kích
+                                                                                                thước: M</span>
+                                                                                    </div>
+                                                                              </div>
+                                                                              <button
+                                                                                    class="cart-content__item-action-delete">
+                                                                                    Xoá
+                                                                              </button>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="cart-content__footer">
+                                                                  <a class="cart-content__footer-link" href="cart.html">
+                                                                        <button class="button button--primary">
+                                                                              Xem tất cả
+                                                                        </button>
+                                                                  </a>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
                                     </li>
                               </div>
                         </div>
