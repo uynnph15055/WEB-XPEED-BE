@@ -27,6 +27,7 @@ class RegisterRequest
     // Định nghĩa các quy tắc xác thực
     public function rules()
     {
+
         return [
             'username' => 'required|min:3|max:20',
             'email' => 'required|email',

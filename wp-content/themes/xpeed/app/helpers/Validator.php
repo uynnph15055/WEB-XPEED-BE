@@ -11,15 +11,19 @@ class Validator
             $value = isset($data[$field]) ? $data[$field] : null;
 
             foreach (explode('|', $rule) as $method) {
+
                 if (method_exists($this, $method)) {
+                    var_dump($method);
                     $this->$method($field, $value);
                 } else {
+
                     // Nếu phương thức chưa được định nghĩa, báo lỗi
                     $this->errors[$field][] = "Rule $method is invalid.";
                 }
             }
-        }
 
+        }
+        die;
         return empty($this->errors);
     }
 
@@ -79,6 +83,7 @@ class Validator
     // Quy tắc: min (cho số và chuỗi)
     public function min($field, $value, $min)
     {
+
         if (is_numeric($value) && $value < $min) {
             $this->errors[$field][] = "$field phải lớn hơn hoặc bằng $min.";
         } elseif (is_string($value) && strlen($value) < $min) {

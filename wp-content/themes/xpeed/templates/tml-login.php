@@ -38,7 +38,7 @@ get_header();
                         <a class="auth-wrapper__link" href="">Forgot your password?</a>
                     </div>
                     <div class="auth-wrapper__link-item">
-                        <a class="auth-wrapper__link" href="./register">Sign Up</a>
+                        <a class="auth-wrapper__link" href="../register">Sign Up</a>
                     </div>
                 </div>
                 <div class="auth-wrapper__divider">
