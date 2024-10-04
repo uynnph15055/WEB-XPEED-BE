@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'app/Controllers/Controller.php';
+require_once 'app/Config.php';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -18,6 +18,9 @@ require_once 'app/Controllers/Controller.php';
       <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
       <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
       <script src="https://unpkg.com/scrollreveal"></script>
+      <script>
+            const baseUrl = "<?php echo home_url(); ?>";
+      </script>
       <?php
       wp_head()
       ?>
@@ -41,17 +44,17 @@ require_once 'app/Controllers/Controller.php';
                               <div class="header_main-nav">
                                     <ul class="header_main-nav-list">
                                           <?php foreach ($parent_menu_items as $menu_item) : ?>
-                                          <li class="header_main-nav--item">
-                                                <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
-                                                      <?= $menu_item->title ?>
-                                                </a>
-                                                <?php if ($menu_item->submenu_count > 0) {
+                                                <li class="header_main-nav--item">
+                                                      <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
+                                                            <?= $menu_item->title ?>
+                                                      </a>
+                                                      <?php if ($menu_item->submenu_count > 0) {
                                                       ?>
-                                                <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
-                                                <?php } ?>
+                                                            <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
+                                                      <?php } ?>
 
-                                                <?php echo render_submenu_by_parent_id($menu_item->ID, $menu_name, $locations) ?>
-                                          </li>
+                                                      <?php echo render_submenu_by_parent_id($menu_item->ID, $menu_name, $locations) ?>
+                                                </li>
                                           <?php endforeach; ?>
                                     </ul>
                               </div>
@@ -62,8 +65,8 @@ require_once 'app/Controllers/Controller.php';
                                           </a>
                                     </li>
                                     <li class="header_main-icon--item">
-                                          <a href="" class="header_main-icon--item--link">
-                                                <ion-icon name="person-circle-outline"></ion-icon>
+                                          <a href="./login" class="header_main-icon--item--link">
+                                                <ion-icon name="lock-closed-outline"></ion-icon>
                                           </a>
                                     </li>
                                     <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
@@ -74,9 +77,7 @@ require_once 'app/Controllers/Controller.php';
                                           <div class="header__cart-overlay"></div>
                                           <div class="header__cart">
                                                 <div class="header__cart-content">
-                                                      <!-- <div class="header__cart-content--empty">
-                      Giỏ hàng chưa có sản phẩm nào!
-                    </div> -->
+
                                                       <div class="header__cart-content--having">
                                                             <h4 class="cart-content__title">Cart</h4>
                                                             <div class="cart-content__list">
@@ -196,3 +197,4 @@ require_once 'app/Controllers/Controller.php';
                         </div>
                   </div>
             </header>
+      </div>
