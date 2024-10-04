@@ -4,9 +4,9 @@
 namespace app\Controllers;
 
 use app\models\UserModel;
-use app\Controllers\Controller as BaseController;
+use app\Controllers\Controller;
 
-class UserController extends BaseController
+class UserController extends Controller
 {
     // Phương thức để lấy danh sách người dùng
     public function index($request)
@@ -15,5 +15,4 @@ class UserController extends BaseController
         $users = UserModel::paginate(1);
         return $this->success('Thành công', $users);
     }
-
 }
