@@ -88,17 +88,22 @@
       <ion-icon name="caret-up-outline"></ion-icon>
 </button>
 
+<div class="overlay"></div>
+
 <div class="language">
-      <div class="language-selected">
-            <img src="assets/images/icons/flag_vi.svg" alt="language image" class="language-selected--img" />
+      <div class="language-selected ">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/flag_vi.svg" alt="language image"
+                  class="language-selected--img" />
       </div>
 
       <ul class="language-list">
             <li class="language-item" title="VI">
-                  <img src="assets/images/icons/flag_vi.svg" alt="language image" class="language-selected--img" />
+                  <img src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/flag_vi.svg"
+                        alt="language image" class="language-selected--img" />
             </li>
             <li class="language-item" title="EN">
-                  <img src="assets/images/icons/flag_us.svg" alt="language image" class="language-selected--img" />
+                  <img src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/flag_us.svg"
+                        alt="language image" class="language-selected--img" />
             </li>
       </ul>
 </div>

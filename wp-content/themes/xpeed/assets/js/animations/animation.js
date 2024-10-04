@@ -4,11 +4,12 @@ $(document).ready(function () {
   let lastScrollTop = 46;
   $(window).scroll(function () {
     const currentScrollTop = $(this).scrollTop();
+    $(".header__cart").removeClass("is-active");
+    $(".overlay").removeClass("is-active");
+    $(".language-list").removeClass("show");
 
     if (currentScrollTop > lastScrollTop) {
       $(".header_main").addClass("sub-header");
-      $(".header_main").css("transform", "translateY(0");
-      $(".header_main").css("transition", "all 0.5s ease");
       $("#backToTop").fadeIn();
     } else if (currentScrollTop < 46) {
       $(".header_main").css({
@@ -18,8 +19,6 @@ $(document).ready(function () {
       $(".header_main").removeClass("sub-header");
       $("#backToTop").fadeOut();
     } else {
-      $(".header_main").css("transform", "translateY(0");
-      $(".header_main").css("transition", "all 0.5s ease");
       $(".header_main").removeClass("sub-header");
     }
 
@@ -32,17 +31,38 @@ $(document).ready(function () {
   });
 
   $("#show-cart").on("click", function () {
-    if (
-      $(".header__cart").hasClass("is-active") ||
-      $("header__cart-overlay").hasClass("is-active")
-    ) {
+    if ($(this).find(".header__cart").hasClass("is-active")) {
       $(this).find(".header__cart").removeClass("is-active");
-      $(this).find(".header__cart-overlay").removeClass("is-active");
+      $(".overlay").removeClass("is-active");
     } else {
       $(this).find(".header__cart").addClass("is-active");
-      $(this).find(".header__cart-overlay").addClass("is-active");
+      $(".overlay").addClass("is-active");
     }
   });
+
+  $(".overlay").on("click", function () {
+    $(".header__cart").removeClass("is-active");
+    $(".overlay").removeClass("is-active");
+    $(".language-list").removeClass("show");
+  });
+
+  // -------Header-------
+
+  const $languageSelected = $(".language-selected");
+  $languageSelected.on("click", function () {
+    if ($(".language-list").hasClass("show")) {
+      $(".language-list").removeClass("show");
+      $(".overlay").removeClass("is-active");
+    } else {
+      $(".language-list").addClass("show");
+      $(".overlay").addClass("is-active");
+    }
+  });
+
+  // $(document).on("click", function () {
+  //   $(".header__cart").removeClass("is-active");
+  //   $(".header__cart-overlay").removeClass("is-active");
+  // });
 
   // ---------------------------------------------------------------HOME--------------------------------------------------------------
   // Slider Banner
