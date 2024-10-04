@@ -1,8 +1,4 @@
 $(document).ready(function () {
-    const getDomain = () => {
-        const domain = window.location.hostname;
-        return domain;
-    };
     const login = () => {
         $('#auth-wrapper-login__form').on('submit', function (event) {
             event.preventDefault(); // Ngăn chặn hành động mặc định của form
@@ -19,14 +15,14 @@ $(document).ready(function () {
             messagePassword.html('');
 
             $.ajax({
-                url: 'http://localhost/WEB-XPEED-BE/wp-json/custom-api/v1/login',
+                url: baseUrl+'/wp-json/custom-api/v1/login',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ username: username, password: password }),
                 success: function (data) {
                     messageElement.html('<p class="success-message">Đăng nhập thành công!</p>');
                     // Xử lý sau khi đăng nhập thành công (chuyển hướng hoặc lưu thông tin)
-                    window.location.href = ""; // Ví dụ: chuyển hướng về trang chính
+                    window.location.href = baseUrl; // Ví dụ: chuyển hướng về trang chính
                 },
                 error: function (xhr) {
                     if(xhr.responseJSON.data.username || xhr.responseJSON.data.password){
@@ -70,30 +66,50 @@ $(document).ready(function () {
             messageAddress.html('');
 
             $.ajax({
-                url: 'http://localhost/WEB-XPEED-BE/wp-json/custom-api/v1/register',
+                url: baseUrl+'/wp-json/custom-api/v1/register',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (data) {
                     messageElement.html('<p class="success-message">Đăng ký thành công!</p>');
-                    window.location.href = "";
+                    window.location.href = baseUrl+"/login";
                 },
                 error: function (xhr) {
-                    if(xhr.responseJSON.data){
-                        console.log("xhr.responseJSON.data",xhr.responseJSON.data.username,xhr.responseJSON.data.username[0]);
-                        messageUsername.html(`<p class="error-message">${xhr.responseJSON.data.username[0] ?? ""}</p>`);
-                        messagePassword.html(`<p class="error-message">${xhr.responseJSON.data.password[0] ?? ""}</p>`);
-                        messageEmail.html(`<p class="error-message">${xhr.responseJSON.data.email[0] ?? ""}</p>`);
-                        messageAddress.html(`<p class="error-message">${xhr.responseJSON.data.address[0] ?? ""}</p>`);
+                    if (xhr.responseJSON && xhr.responseJSON.data) {
+                        const data = xhr.responseJSON.data;
+                        messageUsername.html(`<p class="error-message">${Array.isArray(data.username) && data.username.length > 0 ? data.username[0] : ""}</p>`);
+                        messagePassword.html(`<p class="error-message">${Array.isArray(data.password) && data.password.length > 0 ? data.password[0] : ""}</p>`);
+                        messageEmail.html(`<p class="error-message">${Array.isArray(data.email) && data.email.length > 0 ? data.email[0] : ""}</p>`);
+                        messageAddress.html(`<p class="error-message">${Array.isArray(data.address) && data.address.length > 0 ? data.address[0] : ""}</p>`);
                     }
+
                     else if(xhr.responseJSON.message){
                         const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Đăng ký thất bại.';
                         messageElement.html(`<p class="error-message">${errorMessage}</p>`); // Hiển thị thông báo lỗi
                     }
+
                 }
             }).fail(function () {
             });
         });
     };
     register();
+
+    const logout = () => {
+        $('#profile-logout__action').on('click', function (event) {
+            $.ajax({
+                url: baseUrl+'/wp-json/custom-api/v1/logout',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({}),
+                success: function (data) {
+                    window.location.href = baseUrl;
+                },
+                error: function (xhr) {
+                }
+            }).fail(function () {
+            });
+        });
+    };
+    logout();
 });

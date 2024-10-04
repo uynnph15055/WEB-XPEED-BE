@@ -55,41 +55,32 @@ class AuthController extends BaseController
         // Thực hiện xác thực
         if (!$registerRequest->validate()) {
             // Nếu xác thực thất bại, trả về thông báo lỗi
-            return $this->failData( 'Dữ liệu không hợp lệ.', $registerRequest->errors());
+            return $this->failData( 'Dữ liệu không hợp lệ.', $registerRequest->errors(),1, null, [], 400);
         }
 
         // Lấy dữ liệu hợp lệ
         $validatedData = $registerRequest->validated();
         // Lấy dữ liệu từ request
-        $name = $request->get_param('name');
+        $userName = $request->get_param('username');
         $email = $request->get_param('email');
         $password = $request->get_param('password');
+        $address = $request->get_param('address');
         $user_url = home_url();
 
-        // Kiểm tra xem email đã tồn tại chưa
-        if (email_exists($email)) {
-            return $this->fail('Email đã tồn tại.', 1, null, [], 400);
-        }
-
         // Tạo người dùng mới
-        $user_id = wp_create_user($email, $password, $email);
+        $user_id = wp_create_user($userName, $password, $email);
+            if(!empty($user_id)){
+                UserModel::find($user_id)->update([
+                    'ID' => $user_id,
+                    'display_name' => $userName,
+                    'user_url' => $user_url, // Cập nhật user_url
+                    'user_address' => $address
+                ]);
 
-        // Kiểm tra xem việc tạo người dùng có thành công không
-        if (is_wp_error($user_id)) {
-            return $this->fail('Email đã tồn tại.', 1, null, [], 500);
-        }
-
-        // Cập nhật thông tin người dùng, bao gồm user_url
-        wp_update_user([
-            'ID' => $user_id,
-            'display_name' => $name,
-            'user_url' => $user_url, // Cập nhật user_url
-        ]);
-
-        // Trả về thông báo thành công
-        return $this->success(
-            'Đăng ký thành công.',
-            ['ID' => $user_id, 'email' => $email, 'user_url' => $user_url]);
-
+                // Trả về thông báo thành công
+                return $this->success(
+                    'Đăng ký thành công.',
+                    ['ID' => $user_id, 'email' => $email, 'user_url' => $user_url]);
+            }
     }
 }

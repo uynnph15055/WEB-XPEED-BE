@@ -16,8 +16,7 @@ class RegisterRequest
         $this->data = [
             'username' => $request->get_param('username'),
             'email' => $request->get_param('email'),
-            'password' => $request->get_param('password'),
-            'password_confirmation' => $request->get_param('password_confirmation'),
+            'password' => $request->get_param('password')
         ];
 
         // Khởi tạo validator
@@ -27,12 +26,10 @@ class RegisterRequest
     // Định nghĩa các quy tắc xác thực
     public function rules()
     {
-
         return [
-            'username' => 'required|min:3|max:20',
-            'email' => 'required|email',
-            'password' => 'required',
-            'address' => 'required',
+            'username' => 'required|min:10|max:100|unique:app\models\UserModel,user_login',
+            'email' => 'required|email|unique:app\models\UserModel,user_email',
+            'password' => 'required|min:10'
         ];
     }
 

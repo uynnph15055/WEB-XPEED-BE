@@ -18,6 +18,9 @@ require_once 'app/Config.php';
       <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
       <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
       <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+        const baseUrl = "<?php echo home_url(); ?>";
+    </script>
       <?php
       wp_head()
       ?>
@@ -61,11 +64,17 @@ require_once 'app/Config.php';
                                                 <ion-icon name="search-outline"></ion-icon>
                                           </a>
                                     </li>
-                                    <li class="header_main-icon--item">
-                                          <a href="" class="header_main-icon--item--link">
-                                                <ion-icon name="person-circle-outline"></ion-icon>
+                                  <li class="header_main-icon--item">
+                                      <?php if (!is_user_logged_in()): ?>
+                                          <a href="./login" class="header_main-icon--item--link">
+                                              <ion-icon name="lock-closed-outline"></ion-icon>
                                           </a>
-                                    </li>
+                                      <?php else: ?>
+                                          <a href="./profile" class="header_main-icon--item--link">
+                                              <ion-icon name="person-circle-outline"></ion-icon>
+                                          </a>
+                                      <?php endif; ?>
+                                  </li>
                                     <li class="header_main-icon--item">
                                           <a href="" class="header_main-icon--item--link">
                                                 <ion-icon name="cart-outline"></ion-icon>

@@ -1,6 +1,8 @@
 <?php
 namespace app\helpers;
 
+use Illuminate\Support\Facades\DB;
+
 class Validator
 {
     protected $errors = [];
@@ -9,21 +11,25 @@ class Validator
     {
         foreach ($rules as $field => $rule) {
             $value = isset($data[$field]) ? $data[$field] : null;
-
             foreach (explode('|', $rule) as $method) {
+                // Tách tên phương thức và tham số
+                $methodParts = explode(':', $method);
+                $methodName = $methodParts[0]; // tên phương thức
+                $methodParams = isset($methodParts[1]) ? $methodParts[1] : null; // tham số, nếu có
 
-                if (method_exists($this, $method)) {
-                    var_dump($method);
-                    $this->$method($field, $value);
-                } else {
-
-                    // Nếu phương thức chưa được định nghĩa, báo lỗi
-                    $this->errors[$field][] = "Rule $method is invalid.";
+                if (method_exists($this, $methodName)) {
+                    // Gọi phương thức với tham số, nếu có
+                    if ($methodParams !== null) {
+                        $this->$methodName($field, $value, $methodParams);
+                    } else {
+                        $this->$methodName($field, $value);
+                    }
+                }
+                if (!empty($this->errors[$field])) {
+                    break; // dừng kiểm tra nếu có lỗi
                 }
             }
-
         }
-        die;
         return empty($this->errors);
     }
 
@@ -35,7 +41,7 @@ class Validator
     // Quy tắc: required
     public function required($field, $value)
     {
-        if (is_null($value) || $value === '') {
+        if (empty($value)) {
             $this->errors[$field][] = "$field is required.";
         }
     }
@@ -52,7 +58,7 @@ class Validator
     public function active_url($field, $value)
     {
         if (!filter_var($value, FILTER_VALIDATE_URL)) {
-            $this->errors[$field][] = "$field is not a valid url.";
+            $this->errors[$field][] = "$field is not a valid URL.";
         }
     }
 
@@ -60,7 +66,7 @@ class Validator
     public function alpha($field, $value)
     {
         if (!ctype_alpha($value)) {
-            $this->errors[$field][] = "$field chỉ được chứa các ký tự chữ cái.";
+            $this->errors[$field][] = "$field may only contain letters.";
         }
     }
 
@@ -68,7 +74,7 @@ class Validator
     public function numeric($field, $value)
     {
         if (!is_numeric($value)) {
-            $this->errors[$field][] = "$field phải là số.";
+            $this->errors[$field][] = "$field must be a number.";
         }
     }
 
@@ -76,18 +82,16 @@ class Validator
     public function in($field, $value, $options)
     {
         if (!in_array($value, $options)) {
-            $this->errors[$field][] = "$field phải nằm trong danh sách: " . implode(', ', $options);
+            $this->errors[$field][] = "$field must be one of the following: " . implode(', ', $options);
         }
     }
 
     // Quy tắc: min (cho số và chuỗi)
     public function min($field, $value, $min)
     {
-
-        if (is_numeric($value) && $value < $min) {
-            $this->errors[$field][] = "$field phải lớn hơn hoặc bằng $min.";
-        } elseif (is_string($value) && strlen($value) < $min) {
-            $this->errors[$field][] = "$field phải có ít nhất $min ký tự.";
+        $min = (int)$min;
+        if (strlen($value) < $min) {
+            $this->errors[$field][] = "$field must be at least $min characters.";
         }
     }
 
@@ -95,9 +99,9 @@ class Validator
     public function max($field, $value, $max)
     {
         if (is_numeric($value) && $value > $max) {
-            $this->errors[$field][] = "$field phải nhỏ hơn hoặc bằng $max.";
+            $this->errors[$field][] = "$field must be less than or equal to $max.";
         } elseif (is_string($value) && strlen($value) > $max) {
-            $this->errors[$field][] = "$field không được vượt quá $max ký tự.";
+            $this->errors[$field][] = "$field may not exceed $max characters.";
         }
     }
 
@@ -105,7 +109,7 @@ class Validator
     public function confirmed($field, $value, $confirmation_value)
     {
         if ($value !== $confirmation_value) {
-            $this->errors[$field][] = "$field không trùng khớp với phần xác nhận.";
+            $this->errors[$field][] = "$field does not match the confirmation.";
         }
     }
 
@@ -113,7 +117,7 @@ class Validator
     public function date($field, $value)
     {
         if (strtotime($value) === false) {
-            $this->errors[$field][] = "$field không phải là ngày hợp lệ.";
+            $this->errors[$field][] = "$field is not a valid date.";
         }
     }
 
@@ -121,7 +125,7 @@ class Validator
     public function after($field, $value, $after_date)
     {
         if (strtotime($value) <= strtotime($after_date)) {
-            $this->errors[$field][] = "$field phải sau ngày $after_date.";
+            $this->errors[$field][] = "$field must be after $after_date.";
         }
     }
 
@@ -129,7 +133,20 @@ class Validator
     public function before($field, $value, $before_date)
     {
         if (strtotime($value) >= strtotime($before_date)) {
-            $this->errors[$field][] = "$field phải trước ngày $before_date.";
+            $this->errors[$field][] = "$field must be before $before_date.";
+        }
+    }
+
+    // Quy tắc: unique
+    public function unique($field, $value, $params)
+    {
+        // Tách tên model và cột từ tham số
+        [$modelClass, $column] = explode(',', $params);
+
+        // Kiểm tra xem giá trị đã tồn tại trong model không
+        $exists = $modelClass::where($column, $value)->exists();
+        if ($exists) {
+            $this->errors[$field][] = "$field already exists.";
         }
     }
 }
