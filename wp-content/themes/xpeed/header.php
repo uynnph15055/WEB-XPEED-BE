@@ -65,10 +65,16 @@ require_once 'app/Config.php';
                                           </a>
                                     </li>
                                     <li class="header_main-icon--item">
+                                      <?php if (!is_user_logged_in()): ?>
                                           <a href="./login" class="header_main-icon--item--link">
-                                                <ion-icon name="lock-closed-outline"></ion-icon>
+                                              <ion-icon name="lock-closed-outline"></ion-icon>
                                           </a>
-                                    </li>
+                                      <?php else: ?>
+                                          <a href="./profile" class="header_main-icon--item--link">
+                                              <ion-icon name="person-circle-outline"></ion-icon>
+                                          </a>
+                                      <?php endif; ?>
+                                  </li>
                                     <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
                                           <button class="header_main-icon--item--button">
                                                 <ion-icon name="cart-outline"></ion-icon>
