@@ -47,6 +47,7 @@ get_header();
                         <button
                                 class="auth-wrapper__social-button auth-wrapper__social-button--google"
                                 type="button"
+                                onclick="window.location.href='<?php echo home_url('/google-login-callback'); ?>'"
                         >
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -64,6 +65,7 @@ get_header();
                         <button
                                 class="auth-wrapper__social-button auth-wrapper__social-button--facebook"
                                 type="button"
+                                onclick="window.location.href='<?php echo home_url('/facebook-login-callback'); ?>'"
                         >
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
