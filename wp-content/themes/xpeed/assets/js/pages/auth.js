@@ -31,8 +31,8 @@ $(document).ready(function () {
         $('#auth-wrapper-login__form'),
         'login',
         {
-            username: 'required|min:10|max:100',
-            password: 'required|min:10|max:100'
+            username: 'required',
+            password: ''
         },
         baseUrl);
 

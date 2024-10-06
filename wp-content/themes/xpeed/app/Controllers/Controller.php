@@ -66,7 +66,7 @@ class Controller
     {
         return $this->respond($code, $message, null, $trace, $headers, $httpCode);
     }
-    public function failData($message = 'Fail', $data = null ,$code = 1, array $trace = null, array $headers = [], $httpCode = 500)
+    public function failData($message = 'Fail', $data = null, $code = 1, array $trace = null, array $headers = [], $httpCode = 500)
     {
         return $this->respond($code, $message, $data, $trace, $headers, $httpCode);
     }

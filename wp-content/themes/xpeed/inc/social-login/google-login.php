@@ -63,5 +63,3 @@ function handle_google_login()
         exit;
     }
 }
-
-handle_google_login();
