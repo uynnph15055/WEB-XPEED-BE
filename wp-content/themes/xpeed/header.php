@@ -19,7 +19,7 @@ require_once 'app/Config.php';
       <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
       <script src="https://unpkg.com/scrollreveal"></script>
       <script>
-            const baseUrl = "<?php echo home_url(); ?>";
+      const baseUrl = "<?php echo home_url(); ?>";
       </script>
       <?php
       wp_head()
@@ -44,17 +44,17 @@ require_once 'app/Config.php';
                               <div class="header_main-nav">
                                     <ul class="header_main-nav-list">
                                           <?php foreach ($parent_menu_items as $menu_item) : ?>
-                                                <li class="header_main-nav--item">
-                                                      <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
-                                                            <?= $menu_item->title ?>
-                                                      </a>
-                                                      <?php if ($menu_item->submenu_count > 0) {
+                                          <li class="header_main-nav--item">
+                                                <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
+                                                      <?= $menu_item->title ?>
+                                                </a>
+                                                <?php if ($menu_item->submenu_count > 0) {
                                                       ?>
-                                                            <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
-                                                      <?php } ?>
+                                                <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
+                                                <?php } ?>
 
-                                                      <?php echo render_submenu_by_parent_id($menu_item->ID, $menu_name, $locations) ?>
-                                                </li>
+                                                <?php echo render_submenu_by_parent_id($menu_item->ID, $menu_name, $locations) ?>
+                                          </li>
                                           <?php endforeach; ?>
                                     </ul>
                               </div>
@@ -65,16 +65,16 @@ require_once 'app/Config.php';
                                           </a>
                                     </li>
                                     <li class="header_main-icon--item">
-                                      <?php if (!is_user_logged_in()): ?>
+                                          <?php if (!is_user_logged_in()): ?>
                                           <a href="./login" class="header_main-icon--item--link">
-                                              <ion-icon name="lock-closed-outline"></ion-icon>
+                                                <ion-icon name="lock-closed-outline"></ion-icon>
                                           </a>
-                                      <?php else: ?>
+                                          <?php else: ?>
                                           <a href="./profile" class="header_main-icon--item--link">
-                                              <ion-icon name="person-circle-outline"></ion-icon>
+                                                <ion-icon name="person-circle-outline"></ion-icon>
                                           </a>
-                                      <?php endif; ?>
-                                  </li>
+                                          <?php endif; ?>
+                                    </li>
                                     <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
                                           <button class="header_main-icon--item--button">
                                                 <ion-icon name="cart-outline"></ion-icon>

@@ -12,7 +12,7 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
       <main class="home-wrapper">
             <!-- banner -->
             <div class="banner">
-                  <div class="banner_item">
+                  <div class="banner_item is-active">
                         <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
                         <div class="over_lay">
                               <div class="banner-content containerX">
@@ -29,7 +29,7 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
                         </div>
                   </div>
 
-                  <div class="banner_item">
+                  <div class="banner_item is-active">
                         <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
                         <div class="over_lay">
                               <div class="banner-content containerX">
@@ -64,7 +64,7 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
                         </div>
                   </div>
 
-                  <div class="banner_item">
+                  <div class="banner_item is-active">
                         <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
                         <div class="over_lay">
                               <div class="banner-content containerX">
@@ -81,22 +81,6 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
                         </div>
                   </div>
 
-                  <div class="banner_item">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO QUARTARARO 2024
-                                          </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
 
                   <ul class="banner_dots">
                         <li class="banner_dots-item is-active"></li>
@@ -123,7 +107,7 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
                                     </div>
                               </div>
                               <div class="mosaic__grid-item mosaic__grid-item--small">
-                                    <img src="https://rt6moto.co.kr/cdn/shop/files/main-c10.jpg?v=1677676335&width=1500"
+                                    <img src="https://rt6moto.co.kr/cdn/shop/files/MAIN-COLLABO.jpg?v=1683087359&width=1000"
                                           alt="Limited Edition" class="mosaic__image mosaic__image--small" />
                                     <div class="mosaic__overlay">
                                           <h4 class="mosaic__title">LIMITED EDITION</h4>
@@ -137,7 +121,7 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
                                     </div>
                               </div>
                               <div class="mosaic__grid-item mosaic__grid-item--small">
-                                    <img src="https://rt6moto.co.kr/cdn/shop/files/main-c10.jpg?v=1677676335&width=1500"
+                                    <img src="https://rt6moto.co.kr/cdn/shop/files/MAIN-SMART.jpg?v=1683087480&width=1000"
                                           alt="Smart HJC" class="mosaic__image mosaic__image--small" />
                                     <div class="mosaic__overlay">
                                           <h4 class="mosaic__title">SMART HJC</h4>
@@ -166,27 +150,27 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
                               <div class="shopify__product-list">
                                     <?php
                                     foreach ($productFirst as $product):
-                                          $categories = wp_get_post_terms($product->get_id(), 'product_cat');
                                           $tags = wp_get_post_terms($product->get_id(), 'product_tag'); ?>
-                                          <div class="shopify__product-item">
+                                          <a href="<?= esc_url(get_permalink($product->get_id())) ?>" class="shopify__product-item">
                                                 <div class="shopify__product-image-wrapper">
-                                                      <span
-                                                            class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?></span>
-                                                      <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ?>"
-                                                            alt="<?= esc_attr($product->get_name()) ?>"
+                                                      <?php if (isset($tags[0]->name)) {  ?>
+                                                            <span
+                                                                  class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?  esc_html($tags[0]->name) : '' ?></span>
+                                                      <?php } ?>
+                                                      <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ? esc_url(wp_get_attachment_url($product->get_image_id())) : '' ?>"
+                                                            alt="<?= esc_attr($product->get_name()) ?  esc_attr($product->get_name()) : '' ?>"
                                                             class="shopify__product-image" />
                                                 </div>
                                                 <div class="shopify__product-details">
                                                       <h3 class="shopify__product-title">
-                                                            <a href="" class="shopify__product-link">
-                                                                  <?= $product->get_name() ?>
-                                                            </a>
+                                                            <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
                                                       </h3>
-                                                      <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?></p>
-                                                      <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ?>
+                                                      <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
+                                                      </p>
+                                                      <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
                                                       </span>đ
                                                 </div>
-                                          </div>
+                                          </a>
                                     <?php
                                     endforeach;
                                     ?>
@@ -200,7 +184,8 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
                         </div>
                   <?php endif; ?>
 
-                  <?php if (isset($productSecond) && count($productSecond) > 0): ?>
+                  <?php if (isset($productSecond) && count($productSecond) > 0):
+                  ?>
                         <div id="shopify-2" class="shopify-section">
                               <div class="shopify__image-container">
                                     <img src=<?= wp_get_attachment_url(get_term_meta($categories[1]->term_id, 'thumbnail_id', true)) ?>
@@ -212,27 +197,26 @@ require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
                               <div class="shopify__product-list">
                                     <?php
                                     foreach ($productSecond as $product):
-                                          $categories = wp_get_post_terms($product->get_id(), 'product_cat');
                                           $tags = wp_get_post_terms($product->get_id(), 'product_tag'); ?>
-                                          <div class="shopify__product-item">
+                                          <a href="<?= esc_url(get_permalink($product->get_id())) ?>" class="shopify__product-item">
                                                 <div class="shopify__product-image-wrapper">
-                                                      <span
-                                                            class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?></span>
-                                                      <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ?>"
-                                                            alt="<?= esc_attr($product->get_name()) ?>"
+                                                      <?php if (isset($tags[0]->name)) {  ?>
+                                                            <span
+                                                                  class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?  esc_html($tags[0]->name) : '' ?></span>
+                                                      <?php } ?>
+                                                      <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ? esc_url(wp_get_attachment_url($product->get_image_id())) : '' ?>"
+                                                            alt="<?= esc_attr($product->get_name()) ?  esc_attr($product->get_name()) : '' ?>"
                                                             class="shopify__product-image" />
                                                 </div>
                                                 <div class="shopify__product-details">
                                                       <h3 class="shopify__product-title">
-                                                            <a href="" class="shopify__product-link">
-                                                                  <?= $product->get_name() ?>
-                                                            </a>
+                                                            <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
                                                       </h3>
-                                                      <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?></p>
-                                                      <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ?>
+                                                      <p class="shopify__product-cate"><?= esc_html($categories[1]->name) ?></p>
+                                                      <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
                                                       </span>đ
                                                 </div>
-                                          </div>
+                                          </a>
                                     <?php
                                     endforeach;
                                     ?>

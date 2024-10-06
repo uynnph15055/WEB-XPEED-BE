@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * Template Name: Product List
+ * Author: Uynn
+ */
 get_header();
 ?>
 <div class="collection__header">
@@ -80,10 +85,10 @@ get_header();
                   </a>
             </div>
 
-            <div class="collection__content-empty-product">
+            <!-- <div class="collection__content-empty-product">
                   <div class="empty-product-text">No products</div>
                   <a href="" class="empty-product-link">필터 초기화</a>
-            </div>
+            </div> -->
 
             <div class="collection__content-product">
                   <div class="shopify__product">

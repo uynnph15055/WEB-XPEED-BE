@@ -21,7 +21,7 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', 'web_xpeed_hjc');
+define('DB_NAME', 'fix_database');
 
 /** Database username */
 define('DB_USER', 'root');
@@ -59,7 +59,8 @@ define('LOGGED_IN_SALT',   'put your unique phrase here');
 define('NONCE_SALT',       'put your unique phrase here');
 
 /**#@-*/
-
+define('WP_DEBUG_LOG', true);
+define('WP_DEBUG_DISPLAY', false);
 /**
  * WordPress database table prefix.
  *

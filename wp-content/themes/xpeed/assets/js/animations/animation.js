@@ -87,23 +87,6 @@ $(document).ready(function () {
       ".banner_item .banner-content__heading, .banner_item .banner-content__subheading, .banner_item .banner_image"
     ).removeClass("is-visible");
 
-    // Áp dụng ScrollReveal cho các phần tử trong slide hiện tại
-    ScrollReveal().reveal($currentSlide.find(".banner-content__heading"), {
-      origin: "bottom",
-      distance: "40px",
-      duration: 2000,
-      easing: "ease-in-out",
-      reset: true,
-    });
-
-    ScrollReveal().reveal($currentSlide.find(".banner-content__subheading"), {
-      origin: "bottom",
-      distance: "30px",
-      duration: 2500,
-      easing: "ease-in-out",
-      reset: true,
-    });
-
     ScrollReveal().reveal($currentSlide.find(".banner_image"), {
       opacity: 0,
       duration: 500,
