@@ -65,8 +65,9 @@ require_once 'app/Config.php';
                                           </a>
                                     </li>
                                     <li class="header_main-icon--item">
-                                          <a href="./login" class="header_main-icon--item--link">
-                                                <ion-icon name="lock-closed-outline"></ion-icon>
+                                          <a href="http://localhost/WEB-XPEED-BE/login"
+                                                class="header_main-icon--item--link">
+                                                <ion-icon name="person-circle-outline"></ion-icon>
                                           </a>
                                     </li>
                                     <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">

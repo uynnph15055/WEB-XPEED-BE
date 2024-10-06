@@ -360,7 +360,7 @@ template {
 .hide-pc {
   display: none !important;
 }
-@media only screen and (max-width: 980.98px) {
+@media only screen and (max-width: 768.98px) {
   .hide-pc {
     display: block !important;
   }
@@ -369,7 +369,7 @@ template {
 .hide-sp {
   display: block !important;
 }
-@media only screen and (max-width: 980.98px) {
+@media only screen and (max-width: 768.98px) {
   .hide-sp {
     display: none !important;
   }
@@ -378,10 +378,20 @@ template {
 .hide-flex {
   display: flex !important;
 }
-@media only screen and (max-width: 980.98px) {
+@media only screen and (max-width: 768.98px) {
   .hide-flex {
     display: none !important;
   }
+}
+
+.over_lay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .containerX {
@@ -389,12 +399,12 @@ template {
   margin: 0 auto;
   padding: 0 40px;
 }
-@media only screen and (min-width: 980.98px) and (max-width: 1365.98px) {
+@media only screen and (min-width: 768.98px) and (max-width: 1365.98px) {
   .containerX {
     padding: 0 px2vw-pc(40px);
   }
 }
-@media only screen and (max-width: 980.98px) {
+@media only screen and (max-width: 768.98px) {
   .containerX {
     padding: 0 px2vw-sp(40px);
   }
@@ -699,7 +709,6 @@ template {
   margin-bottom: 0;
 }
 .language .language-list .language-item .language-selected--img {
-  height: 24px;
   display: block;
   border-radius: 4px;
 }
@@ -737,9 +746,9 @@ template {
   display: flex;
   justify-content: center;
 }
-@media only screen and (max-width: 980.98px) {
+@media only screen and (max-width: 768.98px) {
   .title {
-    font-size: 2.0408163265vw;
+    font-size: 2.6041666667vw;
   }
 }
 
@@ -788,7 +797,7 @@ template {
 .header .header_main-nav-list .header_main-nav--item {
   position: relative;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   padding: 0px 20px;
   cursor: pointer;
 }
@@ -807,7 +816,7 @@ template {
   transform: translateY(20px);
   transition: transform 0.3s ease, opacity 0.3s ease;
   position: absolute;
-  top: calc(100% + 28px + 8px);
+  top: calc(100% + 28px + 6px);
   left: 0;
   background: #fff;
   z-index: 100;
@@ -2885,24 +2894,21 @@ template {
 .blogs__header {
   position: relative;
   min-height: 30vh;
-  background-color: #d3d3d3; /* Màu xám */
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   overflow: hidden;
-  background-image: var(--header-image-url, none); /* Đặt ảnh qua biến CSS */
-  background-size: cover;
-  background-position: center;
-  padding: 32px;
 }
-.blogs__header::before {
+.blogs__header .blogs__header-img {
   position: absolute;
-  inset: 0;
-  content: "";
-  background-color: rgba(0, 0, 0, 0.6);
+  top: -50%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 .blogs__header .blogs__heading {
+  position: absolute;
   max-width: 80%;
   text-align: center;
   color: #fff;
@@ -3755,6 +3761,47 @@ template {
 }
 .about .about__group--second {
   padding-top: 100px;
+}
+
+.blogs-detail__header {
+  position: relative;
+  min-height: 30vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.blogs-detail__header .blogs-detail__content {
+  position: absolute;
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.blogs-detail__header .blogs-detail__header-img {
+  position: absolute;
+  top: -50%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+.blogs-detail__header .blogs-detail__heading {
+  text-align: center;
+  color: #fff;
+  font-size: 75px;
+  font-weight: 900;
+  z-index: 2;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.blogs-detail__header .blogs-detail__desc {
+  margin-bottom: 8px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+  z-index: 2;
 }
 
 .blog__details {
