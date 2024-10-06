@@ -662,10 +662,20 @@ template {
 }
 .pagination-number-list .pagination-number {
   margin-left: 16px;
-  text-decoration: underline;
 }
 .pagination-number-list .pagination-number:first-child {
   margin-left: 0;
+}
+.pagination-number-list .current {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background-color: #000;
+  font-size: 13px;
+  color: #fff;
 }
 .pagination-number-list .pagination-number--active {
   text-decoration: none;
@@ -4123,5 +4133,3 @@ template {
 .cart .cart__container .car-content .cart__actions-checkout:hover {
   background-color: #333;
 }
-
-/*# sourceMappingURL=main.css.map */

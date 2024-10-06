@@ -5,6 +5,7 @@
  * Author: Uynn
  */
 get_header();
+require_once dirname(__DIR__) . '/app/Controllers/BlogController.php';
 ?>
 
 <div class="blogs__header">
@@ -17,69 +18,55 @@ get_header();
 <div class="blogs__container">
       <div class="blogs__content">
             <div class="blogs__list">
-                  <a href="http://localhost/WEB-XPEED-BE/test-1234/" class="blogs__item">
+                  <?php
+                  if (empty($blogs)) {
+                        echo "Không có bài viết";
+                        return;
+                  } else {
+                        foreach ($blogs as $blog) : ?>
+                  <a href="<?= $blog["link"] ?>" class="blogs__item">
                         <div class="blogs__image-wrapper">
-                              <img class="blogs__image"
-                                    src="https://rt6moto.co.kr/cdn/shop/articles/1_ec5cf67a-f507-4efe-a898-99e1bbd6b06b.jpg?v=1692755011&width=550"
-                                    alt="" />
+                              <img class="blogs__image" src="<?= $blog["thumbnail"] ?>" alt="" />
                         </div>
                         <div class="blogs__details">
-                              <h3 class="blogs__title">쇼룸 안내</h3>
+                              <h3 class="blogs__title"><?= $blog["title"] ?></h3>
                               <div class="blogs__description">
-                                    <p class="blogs__text">편의를 위해 최선을 다하는 HJC 쇼룸</p>
-                                    <p class="blogs__link" href="#">자세히 보기</p>
+                                    <p class="blogs__text"><?= $blog["excerpt"] ?></p>
+                                    <p class="blogs__link"><?= date('d/m/Y', strtotime($blog["date"]))  ?></p>
                               </div>
                         </div>
                   </a>
-                  <a href="http://localhost/WEB-XPEED-BE/test-1234/" class="blogs__item">
-                        <div class="blogs__image-wrapper">
-                              <img class="blogs__image"
-                                    src="https://rt6moto.co.kr/cdn/shop/articles/1_ec5cf67a-f507-4efe-a898-99e1bbd6b06b.jpg?v=1692755011&width=550"
-                                    alt="" />
-                        </div>
-                        <div class="blogs__details">
-                              <h3 class="blogs__title">쇼룸 안내</h3>
-                              <div class="blogs__description">
-                                    <p class="blogs__text">편의를 위해 최선을 다하는 HJC 쇼룸</p>
-                                    <p class="blogs__link" href="#">자세히 보기</p>
-                              </div>
-                        </div>
-                  </a>
-                  <a href="http://localhost/WEB-XPEED-BE/test-1234/" class="blogs__item">
-                        <div class="blogs__image-wrapper">
-                              <img class="blogs__image"
-                                    src="https://rt6moto.co.kr/cdn/shop/articles/1_ec5cf67a-f507-4efe-a898-99e1bbd6b06b.jpg?v=1692755011&width=550"
-                                    alt="" />
-                        </div>
-                        <div class="blogs__details">
-                              <h3 class="blogs__title">쇼룸 안내</h3>
-                              <div class="blogs__description">
-                                    <p class="blogs__text">편의를 위해 최선을 다하는 HJC 쇼룸</p>
-                                    <p class="blogs__link" href="#">자세히 보기</p>
-                              </div>
-                        </div>
-                  </a>
+                  <?php endforeach;
+                  }   ?>
             </div>
             <div class="blogs__content-pagination">
                   <div class="pagination-action">
-                        <a href="" class="pagination-action-icon">
+                        <?php if ($previous_page_link): ?>
+                        <a href="<?php echo esc_url($previous_page_link); ?>" class="pagination-action-icon"
+                              aria-label="Previous Page">
                               <div class="pagination-action-icon-child">
                                     <ion-icon name="arrow-back-outline"></ion-icon>
                               </div>
                         </a>
+                        <?php endif; ?>
 
-                        <a href="" class="pagination-action-icon">
+                        <?php if ($next_page_link): ?>
+                        <a href="<?php echo esc_url($next_page_link); ?>" class="pagination-action-icon"
+                              aria-label="Next Page">
                               <div class="pagination-action-icon-child">
                                     <ion-icon name="arrow-forward-outline"></ion-icon>
                               </div>
                         </a>
+                        <?php endif; ?>
                   </div>
 
-                  <div class="pagination-number-list">
-                        <a href="" class="pagination-number pagination-number--active">1</a>
-                        <a href="" class="pagination-number">2</a>
-                        <a href="" class="pagination-number">3</a>
+                  <?php if (!empty($pagination_links)): ?>
+                  <div class="pagination-number-list" style="gap: 20px">
+                        <?php foreach ($pagination_links as $index => $pagination_link) :
+                                    echo $pagination_link; ?>
+                        <?php endforeach; ?>
                   </div>
+                  <?php endif; ?>
             </div>
       </div>
       <div class="blogs__sidebar">
