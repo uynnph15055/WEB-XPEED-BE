@@ -56,4 +56,4 @@ wp-content/plugins/polylang/*.po
 wp-content/plugins/polylang/*.mo
 
 # Tệp cấu hình cá nhân
-wp-config.php
+./wp-config.php
