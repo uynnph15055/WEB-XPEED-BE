@@ -18,15 +18,21 @@ class AuthController extends BaseController
         // Thực hiện xác thực
         if (!$loginRequest->validate()) {
             // Nếu xác thực thất bại, trả về thông báo lỗi
-            return $this->failData( 'Dữ liệu không hợp lệ.', $loginRequest->errors());
+            return $this->failData('Dữ liệu không hợp lệ.', $loginRequest->errors());
         }
-        // Lấy dữ liệu từ request
 
-        $username = $request->get_param('username');
+        // Lấy dữ liệu từ request
+        $loginInput = $request->get_param('username'); // Có thể là email hoặc username
         $password = $request->get_param('password');
 
-        // Kiểm tra xem có tồn tại user không
-        $user = get_user_by('login', $username);
+        // Kiểm tra xem input là email hay username
+        if (filter_var($loginInput, FILTER_VALIDATE_EMAIL)) {
+            // Nếu là email, tìm user theo email
+            $user = get_user_by('email', $loginInput);
+        } else {
+            // Nếu không phải email, tìm user theo username
+            $user = get_user_by('login', $loginInput);
+        }
 
         // Nếu không tồn tại user hoặc mật khẩu không chính xác
         if (!$user || !wp_check_password($password, $user->user_pass, $user->ID)) {
@@ -40,6 +46,7 @@ class AuthController extends BaseController
         // Trả về thông tin người dùng
         return $this->success('Đăng nhập thành công.', $user);
     }
+
 
 
     public function logout($request)
