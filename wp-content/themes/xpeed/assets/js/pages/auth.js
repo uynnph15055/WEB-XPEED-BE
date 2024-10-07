@@ -8,7 +8,9 @@ $(document).ready(function () {
         $('.error-message').html(''); // Xóa hết các phần tử có class "error-message"
     };
     
-    const handleErrors = (errors) => {
+    const handleErrors = (respons) => {
+        if(respons?.message){ alert(respons?.message); }
+        const errors = respons?.data ?? {};
         Object.entries(errors).forEach(([f, e]) => {
             $(`#auth-wrapper-${f}__message`).html(`<p class="error-message">${e}</p>`);
         });
@@ -23,7 +25,7 @@ $(document).ready(function () {
             if (Object.keys(errors).length) return handleErrors(errors);
             APIHandler.post(`${baseUrl}/wp-json/custom-api/v1/${url}`, data)
                 .done(() => window.location.href = successRedirect)
-                .fail(xhr => handleErrors(xhr.responseJSON?.data || {}));
+                .fail(xhr => handleErrors(xhr.responseJSON || {}));
         });
     };
 
