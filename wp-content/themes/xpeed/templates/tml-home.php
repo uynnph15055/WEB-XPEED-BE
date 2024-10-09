@@ -5,7 +5,30 @@
  * Author: Uynn
  */
 get_header();
-require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
+
+use app\Controllers\ProductController;
+
+$product = new ProductController();
+$categories = $product->categories;
+
+// -----------
+$cateLinkFirst = isset($product->categories[0]) ? $product->getCategoryLink($product->categories[0]->term_id) : null;
+$cateLinkSecond = isset($product->categories[1]) ? $product->getCategoryLink($product->categories[1]->term_id) : null;
+$cateLinkThird = isset($product->categories[2]) ? $product->getCategoryLink($product->categories[2]->term_id) : null;
+
+// -----------
+
+$cateNameFirst = isset($product->categories[0]) ? $product->categories[0]->name : null;
+$cateNameSecond = isset($product->categories[1]) ? $product->categories[1]->name : null;
+$cateNameThird = isset($product->categories[2]) ? $product->categories[2]->name : null;
+
+// ----------
+$productFirst = isset($product->categories[0]) ? $product->getProductLimitItemPageHome($product->categories[0]->term_id)
+      : null;
+$productSecond = isset($product->categories[1]) ?
+      $product->getProductLimitItemPageHome($product->categories[1]->term_id) : null;
+$productThird = isset($product->categories[2]) ? $product->getProductLimitItemPageHome($product->categories[2]->term_id)
+      : null;
 ?>
 <main class="home-wrapper">
       <!-- banner -->

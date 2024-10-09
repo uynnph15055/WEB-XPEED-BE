@@ -7,7 +7,51 @@ function register_routes()
 {
     // Tạo một instance của UserController
     $userController = new \app\Controllers\UserController(); // Use the full namespace
-    $authController = new \app\Controllers\AuthController(); // Use the full namespace
+    $authController = new \app\Controllers\AuthController();
+    $productController = new \app\Controllers\ProductController();
+
+    register_rest_route('custom/v1', '/products', array(
+        'methods' => 'GET',
+        'callback' => [$productController, 'getListProducts'],
+        'args' => array(
+            'category' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_string($param);
+                },
+            ),
+            'size' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_string($param);
+                },
+            ),
+            'min_price' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_numeric($param);
+                },
+            ),
+            'max_price' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_numeric($param);
+                },
+            ),
+            'page' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_numeric($param);
+                },
+            ),
+            'per_page' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_numeric($param);
+                },
+            ),
+        ),
+    ));
 
     // Đăng ký route để lấy danh sách người dùng
     register_rest_route('custom-api/v1', '/users', [  // Correct the route path here
@@ -22,7 +66,7 @@ function register_routes()
         'permission_callback' => '__return_true',
     ]);
 
-// Đăng ký route cho đăng ký (POST)
+    // Đăng ký route cho đăng ký (POST)
     register_rest_route('custom-api/v1', '/register', [
         'methods' => 'POST',
         'callback' => [$authController, 'register'],
