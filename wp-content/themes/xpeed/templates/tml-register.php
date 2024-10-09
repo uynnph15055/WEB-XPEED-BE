@@ -8,51 +8,51 @@ get_header();
 ?>
     <main class="auth-wrapper">
         <div class="auth-wrapper__container">
-            <h2 class="auth-wrapper__title">Register</h2>
-            <form class="auth-wrapper__form" id = 'auth-wrapper-register__form'>
+            <h2 class="auth-wrapper__title">Đăng ký</h2>
+            <form class="auth-wrapper__form" id='auth-wrapper-register__form'>
                 <input
                         class="auth-wrapper__input auth-wrapper__input--name"
                         type="text"
                         name="username"
-                        placeholder="Enter username"
+                        placeholder="Nhập tên người dùng"
                 />
                 <div id="auth-wrapper-username__message" class="auth-wrapper__message" style="color: red;"></div>
                 <input
                         class="auth-wrapper__input auth-wrapper__input--email"
                         type="text"
                         name="email"
-                        placeholder="Enter email"
+                        placeholder="Nhập email"
                 />
                 <div id="auth-wrapper-email__message" class="auth-wrapper__message" style="color: red;"></div>
                 <input
                         class="auth-wrapper__input auth-wrapper__input--password"
                         type="text"
                         name="password"
-                        placeholder="Enter password"
+                        placeholder="Nhập mật khẩu"
                 />
                 <div id="auth-wrapper-password__message" class="auth-wrapper__message" style="color: red;"></div>
                 <input
                         class="auth-wrapper__input auth-wrapper__input--address"
                         type="text"
                         name="address"
-                        placeholder="Enter address"
+                        placeholder="Nhập địa chỉ"
                 />
                 <div id="auth-wrapper-address__message" class="auth-wrapper__message" style="color: red;"></div>
                 <button
                         class="auth-wrapper__button auth-wrapper__button--submit button button--primary"
                         type="submit"
                 >
-                    Submit
+                    Gửi
                 </button>
             </form>
             <div class="auth-wrapper__links auth-wrapper__links--register">
                 <div class="auth-wrapper__divider">
-                    <div class="auth-wrapper__divider-text">OR</div>
+                    <div class="auth-wrapper__divider-text">HOẶC</div>
                     <div class="auth-wrapper__social-buttons">
                         <button
                                 class="auth-wrapper__social-button auth-wrapper__social-button--google"
                                 type="button"
-                                 onclick="window.location.href='<?php echo home_url('/google-login-callback'); ?>'"
+                                onclick="window.location.href='<?php echo home_url('/google-login-callback'); ?>'"
                         >
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +70,7 @@ get_header();
                         <button
                                 class="auth-wrapper__social-button auth-wrapper__social-button--facebook"
                                 type="button"
-                                 onclick="window.location.href='<?php echo home_url('/facebook-login-callback'); ?>'"
+                                onclick="window.location.href='<?php echo home_url('/facebook-login-callback'); ?>'"
                         >
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +85,6 @@ get_header();
                                 />
                             </svg>
                         </button>
-     
                     </div>
                 </div>
             </div>

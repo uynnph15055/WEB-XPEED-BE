@@ -4,9 +4,13 @@
  * Template Name: Home
  * Author: Uynn
  */
+
+use app\Controllers\HomeController;
+
 get_header();
 require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
-require_once dirname(__DIR__) . '/app/Controllers/HomeController.php';
+
+$homeController = new HomeController;
 ?>
 <main class="home-wrapper">
       <!-- banner -->
