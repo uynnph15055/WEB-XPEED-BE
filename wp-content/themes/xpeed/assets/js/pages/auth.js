@@ -4,6 +4,7 @@ import Validator from '../validation.js';
 
 // main.js
 $(document).ready(function () {
+    console.log('xin chào');
     const clearErrors = () => {
         $('.error-message').html(''); // Xóa hết các phần tử có class "error-message"
     };

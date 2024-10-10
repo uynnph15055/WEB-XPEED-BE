@@ -47,8 +47,6 @@ class AuthController extends BaseController
         return $this->success('Đăng nhập thành công.', $user);
     }
 
-
-
     public function logout($request)
     {
         wp_logout();
@@ -62,7 +60,7 @@ class AuthController extends BaseController
         // Thực hiện xác thực
         if (!$registerRequest->validate()) {
             // Nếu xác thực thất bại, trả về thông báo lỗi
-            return $this->failData( 'Dữ liệu không hợp lệ.', $registerRequest->errors(),1, null, [], 400);
+            return $this->failData('Dữ liệu không hợp lệ.', $registerRequest->errors(), 1, null, [], 400);
         }
 
         // Lấy dữ liệu hợp lệ
@@ -76,18 +74,19 @@ class AuthController extends BaseController
 
         // Tạo người dùng mới
         $user_id = wp_create_user($userName, $password, $email);
-            if(!empty($user_id)){
-                UserModel::find($user_id)->update([
-                    'ID' => $user_id,
-                    'display_name' => $userName,
-                    'user_url' => $user_url, // Cập nhật user_url
-                    'user_address' => $address
-                ]);
+        if (!empty($user_id)) {
+            UserModel::find($user_id)->update([
+                'ID' => $user_id,
+                'display_name' => $userName,
+                'user_url' => $user_url, // Cập nhật user_url
+                'user_address' => $address
+            ]);
 
-                // Trả về thông báo thành công
-                return $this->success(
-                    'Đăng ký thành công.',
-                    ['ID' => $user_id, 'email' => $email, 'user_url' => $user_url]);
-            }
+            // Trả về thông báo thành công
+            return $this->success(
+                'Đăng ký thành công.',
+                ['ID' => $user_id, 'email' => $email, 'user_url' => $user_url]
+            );
+        }
     }
 }
