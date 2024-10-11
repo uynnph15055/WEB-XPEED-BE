@@ -9,7 +9,7 @@ function register_routes()
     // Tạo một instance của UserController
     $userController = new \app\Controllers\UserController(); // Use the full namespace
     $authController = new \app\Controllers\AuthController(); // Use the full namespace
-    $productController = new \app\Controllers\AuthContProductControllerroller(); // Use the full namespace
+    $productController = new \app\Controllers\ProductController(); // Use the full namespace
 
     // Đăng ký route để lấy danh sách người dùng
     register_rest_route('custom-api/v1', '/users', [  // Correct the route path here

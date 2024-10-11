@@ -6,7 +6,7 @@ namespace app\Controllers;
 use app\Controllers\Controller as BaseController;
 
 
-class ProductController  extends BaseController
+class ProductController extends BaseController
 
 {
     public $categories;
@@ -54,24 +54,23 @@ class ProductController  extends BaseController
 
     public function getProductInfo()
     {
-        // Lấy URL hiện tại
+        // Get the current URL
         $current_url = home_url(add_query_arg(NULL, NULL));
 
-        // Tách URL để lấy slug
+        // Parse URL to get the slug
         $url_parts = parse_url($current_url);
-        $path = $url_parts['path']; // Lấy đường dẫn
-        $slug = basename($path); // Lấy phần cuối cùng trong đường dẫn làm slug
+        $path = $url_parts['path'];
+        $slug = basename($path);
 
-        // Lấy ID sản phẩm từ slug
+        // Retrieve product by slug
         $product = get_page_by_path($slug, OBJECT, 'product');
 
-        // Kiểm tra nếu sản phẩm tồn tại
         if ($product) {
             $product_id = $product->ID;
             $wc_product = wc_get_product($product_id);
 
             if ($wc_product) {
-                // Lấy thông tin category của sản phẩm
+                // Retrieve product categories
                 $category_ids = $wc_product->get_category_ids();
                 $categories = [];
 
@@ -87,12 +86,12 @@ class ProductController  extends BaseController
                     }
                 }
 
-                // Lấy ảnh gallery
+                // Get gallery and main image
                 $gallery_images = array_map('wp_get_attachment_url', $wc_product->get_gallery_image_ids());
                 $main_image = $wc_product->get_image_id() ? wp_get_attachment_url($wc_product->get_image_id()) : ($gallery_images[0] ?? '');
 
-                // Lấy sản phẩm Upsells
-                $upsell_ids = $wc_product->get_upsell_ids(); // Lấy ID các sản phẩm upsell
+                // Retrieve Upsell Products
+                $upsell_ids = $wc_product->get_upsell_ids();
                 $upsell_products = [];
 
                 if (!empty($upsell_ids)) {
@@ -100,7 +99,7 @@ class ProductController  extends BaseController
                         $upsell_product = wc_get_product($upsell_id);
 
                         if ($upsell_product) {
-                            // Lấy danh sách categories của sản phẩm upsell
+                            // Get upsell product categories
                             $upsell_category_ids = $upsell_product->get_category_ids();
                             $upsell_categories = [];
 
@@ -122,40 +121,58 @@ class ProductController  extends BaseController
                                 'price' => $upsell_product->get_price(),
                                 'image_url' => wp_get_attachment_url($upsell_product->get_image_id()),
                                 'link' => get_permalink($upsell_product->get_id()),
-                                'categories' => $upsell_categories, // Danh sách categories của sản phẩm upsell
+                                'categories' => $upsell_categories,
                             ];
                         }
                     }
                 }
 
-                // Lấy thông tin sản phẩm vào mảng
+                // Retrieve product attributes
+                $attributes = [];
+                foreach ($wc_product->get_attributes() as $attribute) {
+                    if ($attribute->is_taxonomy()) {
+
+                        $attribute_values = wc_get_product_terms($wc_product->get_id(), $attribute->get_name(), ['fields' => 'names']);
+                        $attributes[$attribute["name"]] = [
+                            'name' => wc_attribute_label($attribute->get_name()),
+                            'value' => implode(', ', $attribute_values),
+                        ];
+                    } else {
+                        $attributes[$attribute["name"]] = [
+                            'name' => wc_attribute_label($attribute->get_name()),
+                            'value' => implode(', ', $attribute->get_options()),
+                        ];
+                    }
+                }
+
+                // Retrieve product meta data
+                $meta_data = [];
+                foreach ($wc_product->get_meta_data() as $meta) {
+                    $meta_data[] = [
+                        'key' => $meta->key,
+                        'value' => $meta->value,
+                    ];
+                }
+
+                // Return product information
                 return [
+                    'id' => $wc_product->get_id(),
                     'name' => $wc_product->get_name(),
                     'price' => $wc_product->get_price(),
                     'short_description' => $wc_product->get_short_description(),
                     'full_description' => $wc_product->get_description(),
                     'main_image' => $main_image,
                     'gallery_images' => $gallery_images,
-                    'stock_quantity' => $wc_product->get_stock_quantity(), // Số lượng sản phẩm
-                    'attributes' => array_map(function ($attribute) {
-                        return [
-                            'name' => wc_attribute_label($attribute->get_name()),
-                            'value' => implode(', ', $attribute->get_options()),
-                        ];
-                    }, $wc_product->get_attributes()),
-                    'meta_data' => array_map(function ($meta) {
-                        return [
-                            'key' => $meta->key,
-                            'value' => $meta->value,
-                        ];
-                    }, $wc_product->get_meta_data()),
-                    'categories' => $categories, // Thông tin về category của sản phẩm
-                    'upsell_products' => $upsell_products, // Sản phẩm upsell với các thông tin: image, link, name, category, giá
+                    'stock_quantity' => $wc_product->get_stock_quantity(),
+                    'attributes' => $attributes,
+                    'meta_data' => $meta_data,
+                    'categories' => $categories,
+                    'upsell_products' => $upsell_products,
                 ];
             }
         }
 
-        return []; // Trả về mảng rỗng nếu không tìm thấy sản phẩm
+        return [];
     }
 
     public function getProductPrice($request)
@@ -163,28 +180,25 @@ class ProductController  extends BaseController
         // Lấy các tham số từ request
         $product_id = $request->get_param('product_id');
         $attributes = $request->get_param('attributes');
+        $attributeKey = $request->get_param('attributeKey');
 
-        // Kiểm tra sản phẩm tồn tại
+        // Kiểm tra sản phẩm tồn tại và là sản phẩm biến thể
         $product = wc_get_product($product_id);
         if (!$product || !$product->is_type('variable')) {
             return $this->fail('Sản phẩm không tồn tại hoặc không phải sản phẩm biến thể.');
         }
 
-        // Lấy tất cả các biến thể của sản phẩm
+        // Lấy các biến thể có sẵn
         $variations = $product->get_available_variations();
 
-        // Duyệt qua các biến thể để tìm biến thể khớp với các thuộc tính
+        // Tìm biến thể khớp với các thuộc tính
         foreach ($variations as $variation) {
-            $match = true;
-            foreach ($attributes as $attribute_name => $attribute_value) {
-                if ($variation['attributes']['attribute_' . $attribute_name] != $attribute_value) {
-                    $match = false;
-                    break;
-                }
-            }
+            $matched = array_reduce(array_keys($attributes), function ($carry, $attribute_name) use ($variation, $attributeKey, $attributes) {
+                return $carry && ($variation['attributes']['attribute_' . $attributeKey] == $attributes[$attribute_name]);
+            }, true);
 
-            // Nếu khớp, trả về giá
-            if ($match) {
+            // Nếu tìm thấy biến thể phù hợp, trả về giá
+            if ($matched) {
                 return $this->success('Thành công', [
                     'price' => $variation['display_price'],
                     'regular_price' => $variation['display_regular_price'],
@@ -192,9 +206,9 @@ class ProductController  extends BaseController
                 ]);
             }
         }
-
         return $this->fail('Không tìm thấy biến thể phù hợp.');
     }
+
 }
 
 
