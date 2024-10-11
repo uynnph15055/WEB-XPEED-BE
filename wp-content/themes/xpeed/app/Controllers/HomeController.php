@@ -46,4 +46,3 @@ class HomeController extends BaseController
         }
     }
 }
-$homeController = new HomeController;
