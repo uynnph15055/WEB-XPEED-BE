@@ -19,7 +19,6 @@
  * @package WordPress
  */
 
-
 define('DB_NAME', 'educa_crm_staging');
 
 /** Database username */

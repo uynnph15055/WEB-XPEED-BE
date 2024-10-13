@@ -138,7 +138,6 @@ class ProductController
                   unset($args['meta_query']);
             }
 
-            dd($args);
             $query = new WP_Query($args);
             $products = array();
 
