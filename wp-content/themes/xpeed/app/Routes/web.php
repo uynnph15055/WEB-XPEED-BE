@@ -1,6 +1,7 @@
 <?php
 // app/Routes/web.php
 
+
 require_once get_template_directory() . '/app/Controllers/UserController.php';
 
 function register_routes()
@@ -10,20 +11,20 @@ function register_routes()
     $authController = new \app\Controllers\AuthController();
     $productController = new \app\Controllers\ProductController();
 
-    register_rest_route('custom/v1', '/products', array(
+    register_rest_route('custom-api/v1', '/products', array(
         'methods' => 'GET',
         'callback' => [$productController, 'getListProducts'],
         'args' => array(
             'category' => array(
                 'required' => false,
                 'validate_callback' => function ($param) {
-                    return is_string($param);
+                    return is_string($param) || is_array($param);
                 },
             ),
             'size' => array(
                 'required' => false,
                 'validate_callback' => function ($param) {
-                    return is_string($param);
+                    return is_string($param) || is_array($param);
                 },
             ),
             'min_price' => array(
@@ -52,11 +53,16 @@ function register_routes()
             ),
         ),
     ));
-
     // Đăng ký route để lấy danh sách người dùng
     register_rest_route('custom-api/v1', '/users', [  // Correct the route path here
         'methods' => 'GET',
         'callback' => [$userController, 'index'],  // Sử dụng instance thay vì tên class
+    ]);
+
+    register_rest_route('custom-api/v1', '/get-product-price', [
+        'methods' => 'POST',
+        'callback' => [$productController, 'getProductPrice'],
+        'permission_callback' => '__return_true',
     ]);
 
     // Đăng ký route cho login (POST)

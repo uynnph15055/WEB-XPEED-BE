@@ -6,16 +6,16 @@ namespace app\Controllers;
 use WP_Query;
 use app\Controllers\Controller as BaseController;
 
-class HomeController extends BaseController
+class BranchStoreController extends BaseController
 {
     public $count = 'xin chào';
 
     // Phương thức để lấy danh sách bài viết xã hội
-    public function getSocial($numberPost = -1)
+    public function getAll($numberPost = -1)
     {
         // Điều kiện truy vấn
         $args = array(
-            'post_type' => 'home-social',
+            'post_type' => 'branch-store',
             'posts_per_page' => $numberPost,
         );
 
@@ -31,7 +31,7 @@ class HomeController extends BaseController
                 $posts[] = [
                     'title'   => get_the_title(),
                     'content' => get_the_content(),
-                    'link'    => get_permalink(),
+                    'link' => get_the_excerpt(), // Lấy excerpt
                     'image'   => get_the_post_thumbnail_url(get_the_ID(), 'full'), // Lấy ảnh đại diện
                 ];
             }

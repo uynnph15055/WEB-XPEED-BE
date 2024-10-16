@@ -4,6 +4,9 @@
  * Template Name: Home
  * Author: Uynn
  */
+
+use app\Controllers\HomeController;
+
 get_header();
 
 use app\Controllers\ProductController;
@@ -29,6 +32,9 @@ $productSecond = isset($product->categories[1]) ?
       $product->getProductLimitItemPageHome($product->categories[1]->term_id) : null;
 $productThird = isset($product->categories[2]) ? $product->getProductLimitItemPageHome($product->categories[2]->term_id)
       : null;
+require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
+
+$homeController = new HomeController;
 ?>
 <main class="home-wrapper">
       <!-- banner -->
