@@ -64,7 +64,7 @@ if (!function_exists('dd')) {
 function set_views($post_ID)
 {
     $key = 'views';
-    $count = get_post_meta($post_ID, $key, true); // Lấy số lượt xem
+    $count = get_post_meta($post_ID, $key, true);
 
     if ($count == '') {
         $count = 0;
