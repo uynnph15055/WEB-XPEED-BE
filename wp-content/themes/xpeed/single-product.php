@@ -6,6 +6,7 @@
  */
 
 use app\Controllers\ProductController;
+use app\Controllers\CartController;
 
 get_header();
 $productController = new ProductController();

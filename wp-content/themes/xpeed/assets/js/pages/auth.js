@@ -24,8 +24,17 @@ $(document).ready(function () {
             const data = Object.fromEntries(new FormData(this).entries());
             const errors = Validator.validate(data, rules);
             if (Object.keys(errors).length) return handleErrors(errors);
-            APIHandler.post(`${baseUrl}/wp-json/custom-api/v1/${url}`, data)
-                .done(() => window.location.href = successRedirect)
+            APIHandler.post(`/wp-json/custom-api/v1/${url}`, data)
+                .done(() => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Yêu cầu của bạn đã thực hiện thành công",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.href = successRedirect
+                    });
+                })
                 .fail(xhr => handleErrors(xhr.responseJSON || {}));
         });
     };
@@ -51,5 +60,5 @@ $(document).ready(function () {
         baseUrl + "/login"
     );
 
-    $('#profile-logout__action').on('click', () => APIHandler.post(`${baseUrl}/wp-json/custom-api/v1/logout`, {}).done(() => window.location.href = baseUrl));
+    $('#profile-logout__action').on('click', () => APIHandler.post(`/wp-json/custom-api/v1/logout`, {}).done(() => window.location.href = baseUrl));
 });

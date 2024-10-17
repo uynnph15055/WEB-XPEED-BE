@@ -5,7 +5,6 @@ namespace app\Controllers;
 
 use app\Controllers\Controller as BaseController;
 
-
 class ProductController extends BaseController
 
 {
@@ -175,7 +174,7 @@ class ProductController extends BaseController
         return [];
     }
 
-    public function getProductPrice($request)
+    public function getProductByAttributes($request)
     {
         // Lấy các tham số từ request
         $product_id = $request->get_param('product_id');
@@ -196,14 +195,10 @@ class ProductController extends BaseController
             $matched = array_reduce(array_keys($attributes), function ($carry, $attribute_name) use ($variation, $attributeKey, $attributes) {
                 return $carry && ($variation['attributes']['attribute_' . $attributeKey] == $attributes[$attribute_name]);
             }, true);
-
+            $variation['product_name'] = $product->get_name();
             // Nếu tìm thấy biến thể phù hợp, trả về giá
             if ($matched) {
-                return $this->success('Thành công', [
-                    'price' => $variation['display_price'],
-                    'regular_price' => $variation['display_regular_price'],
-                    'sale_price' => $variation['display_sale_price'],
-                ]);
+                return $this->success('Thành công', $variation);
             }
         }
         return $this->fail('Không tìm thấy biến thể phù hợp.');
