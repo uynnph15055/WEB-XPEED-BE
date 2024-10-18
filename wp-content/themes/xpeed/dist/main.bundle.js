@@ -24,9 +24,10 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!*****************************!*\
   !*** ./assets/js/common.js ***!
   \*****************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("\n\n//# sourceURL=webpack://xpeed/./assets/js/common.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   BASE_URL: () => (/* binding */ BASE_URL)\n/* harmony export */ });\nvar BASE_URL = \"http://localhost/WEB-XPEED-BE\";\n\n//# sourceURL=webpack://xpeed/./assets/js/common.js?");
 
 /***/ }),
 
@@ -37,7 +38,7 @@ eval("\n\n//# sourceURL=webpack://xpeed/./assets/js/common.js?");
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ \"./assets/js/common.js\");\n/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _pages_home_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./pages/home.js */ \"./assets/js/pages/home.js\");\n/* harmony import */ var _pages_home_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_pages_home_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _pages_auth_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/auth.js */ \"./assets/js/pages/auth.js\");\n/* harmony import */ var _pages_product_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/product.js */ \"./assets/js/pages/product.js\");\n\n\n\n\n\n//# sourceURL=webpack://xpeed/./assets/js/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ \"./assets/js/common.js\");\n/* harmony import */ var _pages_home_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./pages/home.js */ \"./assets/js/pages/home.js\");\n/* harmony import */ var _pages_home_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_pages_home_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _pages_auth_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/auth.js */ \"./assets/js/pages/auth.js\");\n/* harmony import */ var _pages_product_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/product.js */ \"./assets/js/pages/product.js\");\n\n\n\n\n\n//# sourceURL=webpack://xpeed/./assets/js/main.js?");
 
 /***/ }),
 
