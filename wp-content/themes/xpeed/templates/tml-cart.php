@@ -9,11 +9,11 @@ if (!is_user_logged_in()) {
     exit;
 }
 use app\Controllers\CartController;
-
-get_header();
 $cartController = new CartController();
 $carts = $cartController->getCartHandler();
 $totalCarts = 0;
+get_header();
+
 ?>
     <div class="cart">
         <div class="cart__container">

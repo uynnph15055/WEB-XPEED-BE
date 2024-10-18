@@ -4,7 +4,7 @@ namespace app\Controllers;
 
 
 use app\Controllers\Controller as BaseController;
-
+use Illuminate\Database\Capsule\Manager as DB;
 class CartController extends BaseController
 
 {
@@ -80,17 +80,6 @@ class CartController extends BaseController
     }
 
 
-    private function addOrUpdateCartItem(&$cart, $attribute_key, $cart_item)
-    {
-        // Nếu sản phẩm và thuộc tính đã tồn tại, tăng số lượng
-        if (isset($cart[$attribute_key])) {
-            $cart[$attribute_key]['quantity'] += $cart_item['quantity'];
-        } else {
-            // Thêm sản phẩm mới vào giỏ hàng
-            $cart[$attribute_key] = $cart_item;
-        }
-    }
-
     public function getCartHandler()
     {
         // Lấy thông tin giỏ hàng từ session
@@ -108,6 +97,7 @@ class CartController extends BaseController
         $cart_data = array_merge($cookie_cart, $session_cart);
 
         $detailed_cart = [];
+        $total_price = 0;  // Khởi tạo biến tổng tiền
 
         foreach ($cart_data as $item) {
             // Lấy product ID và attributes
@@ -119,15 +109,22 @@ class CartController extends BaseController
             $product = wc_get_product($product_id);
 
             if ($product) {
+                // Giá sản phẩm hoặc biến thể
+                $price = $product->get_price();
+
                 // Khởi tạo thông tin sản phẩm
                 $product_data = [
                     'product_id'      => $product_id,
                     'name'            => $product->get_name(),
-                    'price'           => $product->get_price(),
+                    'price'           => $price,
                     'image'           => wp_get_attachment_image_url($product->get_image_id(), 'full'),
                     'purchased_quantity' => $quantity,
                     'attributes'      => $attributes,
+                    'total_item_price' => $price * $quantity, // Tổng giá cho từng sản phẩm
                 ];
+
+                // Tính tổng giá cho từng sản phẩm và cộng dồn vào tổng tiền giỏ hàng
+                $total_price += $price * $quantity;
 
                 // Nếu sản phẩm là biến thể
                 if ($product->is_type('variation')) {
@@ -142,8 +139,13 @@ class CartController extends BaseController
             }
         }
 
-        // Trả về thông tin chi tiết của giỏ hàng
-        return $this->success('Thông tin giỏ hàng:', $detailed_cart);
+        // Trả về thông tin chi tiết của giỏ hàng kèm tổng tiền
+        return $this->success('Thông tin giỏ hàng:', [
+            'cart_items' => $detailed_cart,
+            'total_price' => $total_price // Tổng tiền của giỏ hàng
+        ]);
     }
+
+
 
 }
