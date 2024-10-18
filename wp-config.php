@@ -19,8 +19,6 @@
  * @package WordPress
  */
 
-// ** Database settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
 define('DB_NAME', 'educa_crm_staging');
 
 /** Database username */
@@ -31,13 +29,6 @@ define('DB_PASSWORD', 'BKiS2jiL6H52BABg');
 
 /** Database hostname */
 define('DB_HOST', '192.168.1.248');
-
-/** Database charset to use in creating database tables. */
-define('DB_CHARSET', 'utf8');
-
-/** The database collate type. Don't change this if in doubt. */
-define('DB_COLLATE', '');
-
 /**#@+
  * Authentication unique keys and salts.
  *

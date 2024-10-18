@@ -6,6 +6,11 @@ require_once get_template_directory() . '/app/Controllers/UserController.php';
 
 function register_routes()
 {
+    // Tạo một instance của UserController
+    $userController = new \app\Controllers\UserController(); // Use the full namespace
+    $authController = new \app\Controllers\AuthController(); // Use the full namespace
+    $productController = new \app\Controllers\ProductController(); // Use the full namespace
+
     // Đăng ký route để lấy danh sách người dùng
     register_rest_route('custom-api/v1', '/users', [  // Correct the route path here
         'methods' => 'GET',
@@ -35,7 +40,7 @@ function register_routes()
         'permission_callback' => '__return_true',
     ]);
 
-// Đăng ký route cho đăng ký (POST)
+    // Đăng ký route cho đăng ký (POST)
     register_rest_route('custom-api/v1', '/register', [
         'methods' => 'POST',
         'callback' => [new \app\Controllers\AuthController(), 'register'],

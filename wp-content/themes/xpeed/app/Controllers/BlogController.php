@@ -9,8 +9,11 @@ class BlogController
       public $paged = 1;
       public $blogs;
       public $total_pages;
+      public $blog_slug;
+
       public function __construct()
       {
+            $this->blog_slug = url_to_postid(basename($_SERVER['REQUEST_URI']));
             $this->paged  = (get_query_var('paged')) ? get_query_var('paged') : 1;
             $this->blogs = $this->getBlogs();
       }
@@ -45,6 +48,38 @@ class BlogController
             wp_reset_postdata();
 
             return $posts_array;
+      }
+
+      public function getBlogMoreView()
+      {
+            $args = array(
+                  'post_type' => 'post',
+                  'posts_per_page' => 3,
+                  'meta_key' => 'views',
+                  'orderby' => 'meta_value_num',
+                  'order' => 'DESC',
+            );
+
+            $query = new WP_Query($args);
+            $postTops = [];
+
+            if ($query->have_posts()) {
+                  while ($query->have_posts()) {
+                        $query->the_post();
+                        $postTops[] = array(
+                              'ID' => get_the_ID(),
+                              'title' => get_the_title(),
+                              'url' => get_permalink(),
+                              'excerpt' => get_the_excerpt(),
+                              'views' => get_post_meta(get_the_ID(), 'views', true),
+                              'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'), // Lấy URL hình ảnh đại diện
+                        );
+                  }
+            }
+
+            wp_reset_postdata();
+
+            return $postTops;
       }
 
       public function paginationLinks()
@@ -97,12 +132,16 @@ class BlogController
                   'next_page_link' => $next_page_link,
             ];
       }
-}
 
-$blog = new BlogController();
-$blogs = $blog->blogs;
-$paged = $blog->paged;
-$pagination = $blog->paginationLinks();
-$pagination_links =  $pagination_links = $pagination['pagination_links'];
-$previous_page_link = $pagination['previous_page_link'];
-$next_page_link = $pagination['next_page_link'];
+      public function getBlogDetails()
+      {
+            $blogs_details = [];
+            if ($this->blog_slug) {
+                  $blogs_details = get_post($this->blog_slug);
+            } else {
+                  $blogs_details = [];
+            }
+
+            return $blogs_details;
+      }
+}

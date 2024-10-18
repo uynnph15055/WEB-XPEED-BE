@@ -66,8 +66,27 @@ get_header();
                         <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
                   </div>
 
-                  <div class="custom-select__options custom-select__options--visible">
-                        <div class="custom-select__option">Option</div>
+                  <div class="custom-range">
+                        <div class="price-range" data-price-range="" style="display: block;">
+                              <div class="price-range-input-wrapper">
+                                    <div class="price-range-input">
+                                          <span class="price-range-currency">₩</span>
+                                          <input data-min-range-input="" data-range-input="" class="input"
+                                                name="filter.v.price.gte" id="filter-PRICE" type="number"
+                                                placeholder="MIN" min="0" max="339000" />
+                                          <label class="price-range-label visually-hidden"
+                                                for="filter-PRICE">From</label>
+                                    </div>
+                                    <span class="price-range-separator">–</span>
+                                    <div class="price-range-input">
+                                          <span class="price-range-currency">₩</span>
+                                          <input data-max-range-input="" data-range-input="" class="input"
+                                                name="filter.v.price.lte" id="filter-PRICE" type="number"
+                                                placeholder="MAX" min="0" max="339000" />
+                                          <label class="price-range-label visually-hidden" for="filter-PRICE">To</label>
+                                    </div>
+                              </div>
+                        </div>
                   </div>
             </div>
       </div>
@@ -90,149 +109,18 @@ get_header();
                   <a href="" class="empty-product-link">필터 초기화</a>
             </div> -->
 
-            <div class="collection__content-product">
-                  <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
-                              <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
-                              <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
-                                    alt="" class="shopify__product-image" />
-                        </a>
+            <div class="collection__content-product" id="collection__content-product-wapper">
+            </div>
 
-                        <div class="shopify__product-details">
-                              <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
-                              </h3>
-
-                              <p class="shopify__product-cate">FULL FACE</p>
-
-                              <span class="shopify__product-price">₩ 299,000</span>
-                        </div>
-                  </div>
-
-                  <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
-                              <span class="shopify__product-badge shopify__product-badge--sale">Sale</span>
-                              <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
-                                    alt="" class="shopify__product-image" />
-                        </a>
-
-                        <div class="shopify__product-details">
-                              <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
-                              </h3>
-
-                              <p class="shopify__product-cate">FULL FACE</p>
-
-                              <span class="shopify__product-price">₩ 299,000</span>
-                        </div>
-                  </div>
-
-                  <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
-                              <span class="shopify__product-badge shopify__product-badge--out">SOLD OUT</span>
-                              <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
-                                    alt="" class="shopify__product-image" />
-                        </a>
-
-                        <div class="shopify__product-details">
-                              <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
-                              </h3>
-
-                              <p class="shopify__product-cate">FULL FACE</p>
-
-                              <span class="shopify__product-price">₩ 299,000</span>
-                        </div>
-                  </div>
-
-                  <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
-                              <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
-                              <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
-                                    alt="" class="shopify__product-image" />
-                        </a>
-
-                        <div class="shopify__product-details">
-                              <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
-                              </h3>
-
-                              <p class="shopify__product-cate">FULL FACE</p>
-
-                              <span class="shopify__product-price">₩ 299,000</span>
-                        </div>
-                  </div>
-
-                  <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
-                              <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
-                              <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
-                                    alt="" class="shopify__product-image" />
-                        </a>
-
-                        <div class="shopify__product-details">
-                              <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
-                              </h3>
-
-                              <p class="shopify__product-cate">FULL FACE</p>
-
-                              <span class="shopify__product-price">₩ 299,000</span>
-                        </div>
-                  </div>
-
-                  <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
-                              <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
-                              <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
-                                    alt="" class="shopify__product-image" />
-                        </a>
-
-                        <div class="shopify__product-details">
-                              <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
-                              </h3>
-
-                              <p class="shopify__product-cate">FULL FACE</p>
-
-                              <span class="shopify__product-price">₩ 299,000</span>
-                        </div>
-                  </div>
-
-                  <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
-                              <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
-                              <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
-                                    alt="" class="shopify__product-image" />
-                        </a>
-
-                        <div class="shopify__product-details">
-                              <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
-                              </h3>
-
-                              <p class="shopify__product-cate">FULL FACE</p>
-
-                              <span class="shopify__product-price">₩ 299,000</span>
-                        </div>
-                  </div>
-
-                  <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
-                              <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
-                              <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
-                                    alt="" class="shopify__product-image" />
-                        </a>
-
-                        <div class="shopify__product-details">
-                              <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
-                              </h3>
-
-                              <p class="shopify__product-cate">FULL FACE</p>
-
-                              <span class="shopify__product-price">₩ 299,000</span>
-                        </div>
+            <div id="card__product-loading-wapper" class="under-active">
+                  <div class="card__product-loading">
+                        <?php for ($i = 0; $i < 8; $i++) : ?>
+                              <div class="card-product">
+                                    <div class="card-product__skeleton card-product__img"></div>
+                                    <div class="card-product__skeleton card-product__title"></div>
+                                    <div class="card-product__skeleton card-product__description"></div>
+                              </div>
+                        <?php endfor; ?>
                   </div>
             </div>
 
@@ -260,4 +148,5 @@ get_header();
             </div>
       </div>
 </div>
+
 <?php get_footer();
