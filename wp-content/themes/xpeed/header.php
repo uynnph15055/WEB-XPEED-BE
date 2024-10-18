@@ -190,7 +190,7 @@ require_once 'app/Config.php';
                                         </div>
                                     </div>
                                     <div class="cart-content__footer">
-                                        <a class="cart-content__footer-link" href="cart.html">
+                                        <a class="cart-content__footer-link" href="<?php echo home_url('cart'); ?>">
                                             <button class="button button--primary">
                                                 Xem tất cả
                                             </button>
