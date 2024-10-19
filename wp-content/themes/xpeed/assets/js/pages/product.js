@@ -1,6 +1,7 @@
 // Import APIHandler
 import APIHandler from "../apiHandler.js";
-import { BASE_URL } from "../common.js";
+import { BASE_URL } from "../variable.js";
+import { formatVND } from "../common.js";
 
 $(document).ready(function () {
   // Bắt sự kiện khi người dùng thay đổi thuộc tính sản phẩm (size, color, etc.)
@@ -89,6 +90,7 @@ $(document).ready(function () {
   }
 
   //   ------------------------------PRODUCT LIST-------------------------
+
   $("#card__product-loading-wapper").removeClass("under-active");
   $.ajax({
     url: `${BASE_URL}/wp-json/custom-api/v1/products`,
@@ -100,18 +102,26 @@ $(document).ready(function () {
           var productHtml = `
               <div class="shopify__product">
                 <a href="${product.url}" class="shopify__product-image-wrapper">
-                  <span class="shopify__product-badge shopify__product-badge--new">${product.first_tag}</span>
-                  <img src="${product.image}" alt="${product.title}" class="shopify__product-image" />
+                  <span class="shopify__product-badge shopify__product-badge--new">${
+                    product.first_tag
+                  }</span>
+                  <img src="${product.image}" alt="${
+            product.title
+          }" class="shopify__product-image" />
                 </a>
         
                 <div class="shopify__product-details">
                   <h3 class="shopify__product-title">
-                    <a href="${product.url}" class="shopify__product-link">${product.title}</a>
+                    <a href="${product.url}" class="shopify__product-link">${
+            product.title
+          }</a>
                   </h3>
         
                   <p class="shopify__product-cate">${product.first_category}</p>
         
-                  <span class="shopify__product-price">${product.price.toLocaleString('vi-VN')}đ</span>
+                  <span class="shopify__product-price">${formatVND(
+                    product.price
+                  )}</span>
                 </div>
               </div>
             `;

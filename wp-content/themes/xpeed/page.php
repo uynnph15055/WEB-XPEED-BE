@@ -4,61 +4,67 @@
  * Template Name: Product List
  * Author: Uynn
  */
+
 get_header();
+
+use app\Controllers\ProductController;
+
+$product = new ProductController();
 ?>
-<div class="collection__header">
-      <h1 id="collection-title" class="collection__heading"></h1>
+
+<div class="header-overlay header-overlay--height-more collection__header">
+      <img class="header-overlay__img collection__header-img"
+            src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg" alt="" />
+      <h1 id="collection-title" class="header-overlay__heading collection__heading">
+            FULL FACE
+      </h1>
 </div>
 
 <div class="collection__container">
       <div class="collection__sidebar">
-            <div class="custom-select">
-                  <div class="custom-select__button">
-                        <button class="custom-select__title">MODEL</button>
-                        <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
-                  </div>
+            <?php
+            if (isset($product->categories) && count($product->categories) > 0):
+            ?>
+                  <div class="custom-select">
+                        <div class="custom-select__button">
+                              <button class="custom-select__title">MODEL</button>
+                              <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
+                        </div>
 
-                  <div class="custom-select__options custom-select__options--visible">
-                        <label for="rpha1" class="custom-select__option">
-                              <input type="checkbox" name="rpha1" id="rpha1" />
-                              <span class="custom-select__option-label">RPHA 1</span>
-                        </label>
-                  </div>
-            </div>
 
-            <div class="custom-select">
-                  <div class="custom-select__button">
-                        <button class="custom-select__title">SIZE</button>
-                        <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
+                        <div class="custom-select__options custom-select__options--visible">
+                              <?php foreach ($product->categories as $item): ?>
+                                    <label for="<?= $item->slug ?>" class="custom-select__option">
+                                          <input type="checkbox" name="category" id="<?= $item->slug ?>"
+                                                value="<?= $item->slug ?>" />
+                                          <span class="custom-select__option-label"><?= $item->name ?></span>
+                                    </label>
+                              <?php endforeach; ?>
+                        </div>
                   </div>
+            <?php endif; ?>
 
-                  <div class="custom-select__options custom-select__options--visible">
-                        <label for="xs" class="custom-select__option">
-                              <input type="checkbox" name="xs" id="xs" />
-                              <span class="custom-select__option-label">XS</span>
-                        </label>
-                        <label for="s" class="custom-select__option">
-                              <input type="checkbox" name="s" id="s" />
-                              <span class="custom-select__option-label">S</span>
-                        </label>
-                        <label for="m" class="custom-select__option">
-                              <input type="checkbox" name="m" id="m" />
-                              <span class="custom-select__option-label">M</span>
-                        </label>
-                        <label for="l" class="custom-select__option">
-                              <input type="checkbox" name="l" id="l" />
-                              <span class="custom-select__option-label">L</span>
-                        </label>
-                        <label for="xl" class="custom-select__option">
-                              <input type="checkbox" name="xl" id="xl" />
-                              <span class="custom-select__option-label">XL</span>
-                        </label>
-                        <label for="2xl" class="custom-select__option">
-                              <input type="checkbox" name="2xl" id="2xl" />
-                              <span class="custom-select__option-label">2XL</span>
-                        </label>
+            <?php
+            if (isset($product->attributes) && count($product->attributes) > 0):
+            ?>
+                  <div class="custom-select">
+                        <div class="custom-select__button">
+                              <button class="custom-select__title">SIZE</button>
+                              <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
+                        </div>
+
+
+                        <div class="custom-select__options custom-select__options--visible">
+                              <?php foreach ($product->attributes as $item): ?>
+                                    <label for="<?= $item['slug'] ?>" class="custom-select__option">
+                                          <input type="checkbox" id="<?= $item['slug'] ?>" name="<?= $item['slug'] ?>"
+                                                value="<?= $item['slug'] ?>" />
+                                          <span class="custom-select__option-label"><?= $item['name'] ?></span>
+                                    </label>
+                              <?php endforeach; ?>
+                        </div>
                   </div>
-            </div>
+            <?php endif; ?>
 
             <div class="custom-select">
                   <div class="custom-select__button">

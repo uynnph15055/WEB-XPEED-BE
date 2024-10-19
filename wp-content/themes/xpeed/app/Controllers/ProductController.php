@@ -12,10 +12,37 @@ class ProductController extends BaseController
 
 {
       public $categories;
+      public $attributes;
+      public $attribute_slug = 'pa_size';
+      public $default_cate;
 
       public function __construct()
       {
             $this->categories = $this->getProductCategories();
+            $this->attributes = $this->getAttributes();
+      }
+
+      public function getAttributes()
+      {
+            $terms = get_terms(array(
+                  'taxonomy' => $this->attribute_slug,
+                  'hide_empty' => false,
+            ));
+
+            $attribute_values = [];
+
+            if (!empty($terms) && !is_wp_error($terms)) {
+                  foreach ($terms as $term) {
+                        $attribute_values[] = array(
+                              'name' => $term->name,
+                              'slug' => $term->slug,
+                        );
+                  }
+            } else {
+                  return [];
+            }
+
+            return $attribute_values;
       }
 
       private function getProductCategories()
@@ -279,7 +306,7 @@ class ProductController extends BaseController
             if (!empty($size)) {
                   $sizes = explode(',', $size);
                   $args['meta_query'][] = array(
-                        'key'     => 'attribute_pa_kich-thuoc',
+                        'key'     => 'attribute_pa_size',
                         'value'   => $sizes,
                         'compare' => '='
                   );
