@@ -8,7 +8,9 @@ if (!is_user_logged_in()) {
     wp_redirect(home_url('/login'));
     exit;
 }
+
 use app\Controllers\CartController;
+
 $cartController = new CartController();
 $carts = $cartController->getCartHandler();
 $totalCarts = 0;
@@ -44,8 +46,14 @@ get_header();
                                 </div>
                                 <div class="cart__item-details">
                                     <span class="cart__item-name"><?= $cart["product_name"] ?? '' ?></span>
-                                    <span class="cart__item-size" data-variation-size="<?= $cart["variation"] ?? '' ?>"><?= $cart["variation_title"] ?? '' ?></span>
-                                    <span class="cart__item-stock-quantity" style="display: none"><?= $cart["stock_quantity"] ?? '' ?></span>
+                                    <span class="cart__item-size"
+                                          data-variation-size="<?= $cart["variation"] ?? '' ?>"
+                                          data-variation-key="<?= $cart["variation_key"] ?? '' ?>"
+                                    >
+                                        <?= $cart["variation_title"] ?? '' ?>
+                                    </span>
+                                    <span class="cart__item-stock-quantity"
+                                          style="display: none"><?= $cart["stock_quantity"] ?? '' ?></span>
                                     <span class="cart__item-details-price"><?= number_format($cart["price"]) ?? '' ?> đ</span>
                                 </div>
                             </td>

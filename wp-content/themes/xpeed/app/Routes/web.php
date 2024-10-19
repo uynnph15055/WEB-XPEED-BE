@@ -28,6 +28,13 @@ function register_routes()
         'callback' => [new \app\Controllers\CartController(), 'addToCartHandler'],
         'permission_callback' => '__return_true'
     ));
+
+    register_rest_route('custom-api/v1', '/update-cart', array(
+        'methods' => 'POST',
+        'callback' => [new \app\Controllers\CartController(), 'updateCartHandler'],
+        'permission_callback' => '__return_true'
+    ));
+
     register_rest_route('custom-api/v1', '/cart', [
         'methods' => 'GET',
         'callback' => [new \app\Controllers\CartController(), 'getCartHandler'],

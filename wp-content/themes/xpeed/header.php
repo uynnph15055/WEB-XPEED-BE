@@ -28,6 +28,9 @@ require_once 'app/Config.php';
 </head>
 
 <body>
+<div class="wp-loading-overlay" style="display: none">
+    <div class="wp-loading"></div>
+</div>
 <div class="container home">
     <header class="header">
         <div class="header_headline">
