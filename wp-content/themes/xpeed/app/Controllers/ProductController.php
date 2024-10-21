@@ -2,11 +2,10 @@
 
 namespace app\Controllers;
 
-use WP_Query;
 use WP_REST_Response;
+use WP_Query;
 
 use app\Controllers\Controller as BaseController;
-
 
 class ProductController extends BaseController
 
@@ -14,12 +13,112 @@ class ProductController extends BaseController
       public $categories;
       public $attributes;
       public $attribute_slug = 'pa_size';
-      public $default_cate;
 
       public function __construct()
       {
             $this->categories = $this->getProductCategories();
             $this->attributes = $this->getAttributes();
+      }
+
+      public function getProductCategoriesApi()
+      {
+            return new WP_REST_Response(array(
+                  'categories' => $this->categories,
+            ), 200);
+      }
+
+      public function getAttributesApi()
+      {
+            return new WP_REST_Response(array(
+                  'attributes' => $this->attributes,
+            ), 200);
+      }
+
+      function getListProducts($data)
+      {
+            $category = isset($data['category']) ? sanitize_text_field($data['category']) : '';
+            $size = isset($data['size']) ? sanitize_text_field($data['size']) : '';
+            $min_price = isset($data['min_price']) ? floatval($data['min_price']) : 0;
+            $max_price = isset($data['max_price']) ? floatval($data['max_price']) : PHP_INT_MAX;
+            $page = isset($data['page']) ? intval($data['page']) : 1;
+            $per_page = isset($data['per_page']) ? intval($data['per_page']) : 10;
+
+            $args = array(
+                  'post_type' => 'product',
+                  'posts_per_page' => $per_page,
+                  'paged' => $page,
+                  'tax_query' => array(),
+                  'meta_query' => array('relation' => 'AND'),
+            );
+
+            if (!empty($category)) {
+                  $categories = explode(',', $category);
+                  $args['tax_query'][] = array(
+                        'taxonomy' => 'product_cat',
+                        'field'    => 'slug',
+                        'terms'    => $categories,
+                  );
+            }
+
+            if (!empty($size)) {
+                  $sizes = explode(',', $size);
+                  $args['meta_query'][] = array(
+                        'key'     => 'attribute_pa_size',
+                        'value'   => $sizes,
+                        'compare' => '='
+                  );
+            }
+
+            if ($min_price || $max_price < PHP_INT_MAX) {
+                  $args['meta_query'][] = array(
+                        'key'     => '_price',
+                        'value'   => array($min_price, $max_price),
+                        'compare' => 'BETWEEN',
+                        'type'    => 'NUMERIC'
+                  );
+            }
+
+            if (empty($args['tax_query'])) {
+                  unset($args['tax_query']);
+            }
+            if (empty($args['meta_query'])) {
+                  unset($args['meta_query']);
+            }
+
+            $query = new WP_Query($args);
+            $products = array();
+
+            if ($query->have_posts()) {
+                  while ($query->have_posts()) {
+                        $query->the_post();
+                        $terms = get_the_terms(get_the_ID(), 'product_cat');
+                        $first_category = !empty($terms) && !is_wp_error($terms) ? reset($terms)->name : '';
+
+                        $tags = get_the_terms(get_the_ID(), 'product_tag');
+                        $first_tag = !empty($tags) && !is_wp_error($tags) ? reset($tags)->name : '';
+
+                        $sale_price = get_post_meta(get_the_ID(), '_sale_price', true);
+
+                        $products[] = array(
+                              'ID' => get_the_ID(),
+                              'title' => get_the_title(),
+                              'url' => get_permalink(),
+                              'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
+                              'price' => get_post_meta(get_the_ID(), '_price', true),
+                              'sale_price' => $sale_price ? $sale_price : null,
+                              'first_category' => $first_category,
+                              'first_tag' => $first_tag,
+                        );
+                  }
+            }
+
+            wp_reset_postdata();
+
+            return new WP_REST_Response(array(
+                  'current_page' => $page,
+                  'total_pages' => $query->max_num_pages,
+                  'products' => $products,
+            ), 200);
       }
 
       public function getAttributes()
@@ -204,7 +303,7 @@ class ProductController extends BaseController
             return [];
       }
 
-      public function getProductPrice($request)
+      public function getProductByAttributes($request)
       {
             // Lấy các tham số từ request
             $product_id = $request->get_param('product_id');
@@ -225,142 +324,12 @@ class ProductController extends BaseController
                   $matched = array_reduce(array_keys($attributes), function ($carry, $attribute_name) use ($variation, $attributeKey, $attributes) {
                         return $carry && ($variation['attributes']['attribute_' . $attributeKey] == $attributes[$attribute_name]);
                   }, true);
-
+                  $variation['product_name'] = $product->get_name();
                   // Nếu tìm thấy biến thể phù hợp, trả về giá
                   if ($matched) {
-                        return $this->success('Thành công', [
-                              'price' => $variation['display_price'],
-                              'regular_price' => $variation['display_regular_price'],
-                              'sale_price' => $variation['display_sale_price'],
-                        ]);
-                  }
-                  return false;
-            }
-      }
-
-
-      function getNewProducts($limit = 3)
-      {
-            $args = array(
-                  'post_type' => 'product',
-                  'posts_per_page' => $limit,
-                  'tax_query' => array(
-                        array(
-                              'taxonomy' => 'product_tag',
-                              'field'    => 'slug',
-                              'terms'    => 'NEW',
-                        ),
-                  ),
-            );
-
-            $query = new WP_Query($args);
-            $new_products = array();
-
-            if ($query->have_posts()) {
-                  while ($query->have_posts()) {
-                        $query->the_post();
-                        $terms = get_the_terms(get_the_ID(), 'product_cat');
-                        $first_category = !empty($terms) && !is_wp_error($terms) ? reset($terms)->name : '';
-                        $new_products[] = array(
-                              'ID' => get_the_ID(),
-                              'title' => get_the_title(),
-                              'url' => get_permalink(),
-                              'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
-                              'price' => get_post_meta(get_the_ID(), '_price', true),
-                              'first_category' => $first_category,
-                        );
+                        return $this->success('Thành công', $variation);
                   }
             }
-
-            wp_reset_postdata();
-
-            return $new_products;
-      }
-
-      function getListProducts($data)
-      {
-            $category = isset($data['category']) ? sanitize_text_field($data['category']) : '';
-            $size = isset($data['size']) ? sanitize_text_field($data['size']) : '';
-            $min_price = isset($data['min_price']) ? floatval($data['min_price']) : 0;
-            $max_price = isset($data['max_price']) ? floatval($data['max_price']) : PHP_INT_MAX;
-            $page = isset($data['page']) ? intval($data['page']) : 1;
-            $per_page = isset($data['per_page']) ? intval($data['per_page']) : 10;
-
-            $args = array(
-                  'post_type' => 'product',
-                  'posts_per_page' => $per_page,
-                  'paged' => $page,
-                  'tax_query' => array(),
-                  'meta_query' => array('relation' => 'AND'),
-            );
-
-            if (!empty($category)) {
-                  $categories = explode(',', $category);
-                  $args['tax_query'][] = array(
-                        'taxonomy' => 'product_cat',
-                        'field'    => 'slug',
-                        'terms'    => $categories,
-                  );
-            }
-
-            if (!empty($size)) {
-                  $sizes = explode(',', $size);
-                  $args['meta_query'][] = array(
-                        'key'     => 'attribute_pa_size',
-                        'value'   => $sizes,
-                        'compare' => '='
-                  );
-            }
-
-            if ($min_price || $max_price < PHP_INT_MAX) {
-                  $args['meta_query'][] = array(
-                        'key'     => '_price',
-                        'value'   => array($min_price, $max_price),
-                        'compare' => 'BETWEEN',
-                        'type'    => 'NUMERIC'
-                  );
-            }
-
-            if (empty($args['tax_query'])) {
-                  unset($args['tax_query']);
-            }
-            if (empty($args['meta_query'])) {
-                  unset($args['meta_query']);
-            }
-
-            $query = new WP_Query($args);
-            $products = array();
-
-            if ($query->have_posts()) {
-                  while ($query->have_posts()) {
-                        $query->the_post();
-                        $terms = get_the_terms(get_the_ID(), 'product_cat');
-                        $first_category = !empty($terms) && !is_wp_error($terms) ? reset($terms)->name : '';
-
-                        $tags = get_the_terms(get_the_ID(), 'product_tag');
-                        $first_tag = !empty($tags) && !is_wp_error($tags) ? reset($tags)->name : '';
-
-                        $sale_price = get_post_meta(get_the_ID(), '_sale_price', true);
-
-                        $products[] = array(
-                              'ID' => get_the_ID(),
-                              'title' => get_the_title(),
-                              'url' => get_permalink(),
-                              'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
-                              'price' => get_post_meta(get_the_ID(), '_price', true),
-                              'sale_price' => $sale_price ? $sale_price : null,
-                              'first_category' => $first_category,
-                              'first_tag' => $first_tag,
-                        );
-                  }
-            }
-
-            wp_reset_postdata();
-
-            return new WP_REST_Response(array(
-                  'current_page' => $page,
-                  'total_pages' => $query->max_num_pages,
-                  'products' => $products,
-            ), 200);
+            return $this->fail('Không tìm thấy biến thể phù hợp.');
       }
 }

@@ -4,6 +4,11 @@ namespace app\Controllers;
 
 class Controller
 {
+    public function getCurrentUrl()
+    {
+        $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        return $current_url;
+    }
     public function respond($code = 0, $message = null, $data = null, array $trace = null, array $headers = [], $httpCode = 200)
     {
         // Thiết lập mã HTTP
