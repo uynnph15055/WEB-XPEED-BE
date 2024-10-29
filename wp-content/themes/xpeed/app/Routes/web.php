@@ -11,6 +11,58 @@ function register_routes()
     $authController = new \app\Controllers\AuthController(); // Use the full namespace
     $productController = new \app\Controllers\ProductController(); // Use the full namespace
 
+    register_rest_route('custom-api/v1', '/products', array(
+        'methods' => 'GET',
+        'callback' => [$productController, 'getListProducts'],
+        'args' => array(
+            'category' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_string($param) || is_array($param);
+                },
+            ),
+            'size' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_string($param) || is_array($param);
+                },
+            ),
+            'min_price' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_numeric($param);
+                },
+            ),
+            'max_price' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_numeric($param);
+                },
+            ),
+            'page' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_numeric($param);
+                },
+            ),
+            'per_page' => array(
+                'required' => false,
+                'validate_callback' => function ($param) {
+                    return is_numeric($param);
+                },
+            ),
+        ),
+    ));
+
+    register_rest_route('custom-api/v1', '/categories', array(
+        'methods' => 'GET',
+        'callback' => [$productController, 'getProductCategoriesApi'],
+    ));
+
+    register_rest_route('custom-api/v1', '/attributes', array(
+        'methods' => 'GET',
+        'callback' => [$productController, 'getAttributesApi'],
+    ));
     // Đăng ký route để lấy danh sách người dùng
     register_rest_route('custom-api/v1', '/users', [  // Correct the route path here
         'methods' => 'GET',
