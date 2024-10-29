@@ -29,6 +29,12 @@ function register_routes()
         'permission_callback' => '__return_true'
     ));
 
+    register_rest_route('custom-api/v1', '/remove-cart-item', [
+        'methods' => 'POST',
+        'callback' => [new \app\Controllers\CartController(), 'removeCartItem'],
+        'permission_callback' => '__return_true',
+    ]);
+
     register_rest_route('custom-api/v1', '/update-cart', array(
         'methods' => 'POST',
         'callback' => [new \app\Controllers\CartController(), 'updateCartHandler'],

@@ -149,7 +149,6 @@ class CartController extends BaseController
         }
     }
 
-
     public function getCartHandler()
     {
         // Lấy thông tin giỏ hàng từ session và cookie
@@ -160,7 +159,7 @@ class CartController extends BaseController
 
         // Kiểm tra nếu giỏ hàng trống
         if (empty($cart_data)) {
-            return $this->fail('Giỏ hàng trống.');
+            return [];
         }
 
         $detailed_cart = [];
@@ -230,4 +229,49 @@ class CartController extends BaseController
         return $detailed_cart;
     }
 
+    public function removeCartItem($request)
+    {
+        // Khởi động session nếu chưa
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Lấy dữ liệu từ request (productId và variation)
+        $product_id = $request->get_param('productId');
+        $variation = $request->get_param('variation');
+        // Kiểm tra dữ liệu hợp lệ
+        if (empty($product_id) || empty($variation) || !is_array($variation)) {
+            return $this->fail('Dữ liệu không hợp lệ.');
+        }
+
+        // Kiểm tra xem giỏ hàng trong session có tồn tại không
+        if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+            return $this->fail('Giỏ hàng trống.');
+        }
+
+        // Lấy giỏ hàng từ cookie nếu có
+        $cart_cookie = isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : [];
+
+        // Tạo chuỗi để kiểm tra kết hợp product_id và attributes
+        $attribute_key = $product_id . '-' . json_encode($variation);
+
+        // Xóa sản phẩm trong session
+        if (isset($_SESSION['cart'][$attribute_key])) {
+            unset($_SESSION['cart'][$attribute_key]);
+        }
+
+        // Xóa sản phẩm trong cookie
+        if (isset($cart_cookie[$attribute_key])) {
+            unset($cart_cookie[$attribute_key]);
+        }
+
+        // Cập nhật lại cookie giỏ hàng
+        setcookie('cart', json_encode($cart_cookie), time() + (86400 * 30), "/");
+
+        // Trả về kết quả thành công với dữ liệu giỏ hàng sau khi đã xóa
+        return $this->success('Sản phẩm đã được xóa khỏi giỏ hàng.', [
+            'session_cart' => $_SESSION['cart'],
+            'cookie_cart' => $cart_cookie
+        ]);
+    }
 }

@@ -117,4 +117,33 @@ $(document).ready(function() {
                });
        }
     });
+
+    $('.cart__item-action-delete').on('click', function () {
+        userLoading.show();
+        const productId = $(this).closest('.cart__item').data('product-id');
+        const variationSize = $(this).closest('.cart__item').find('.cart__item-size').data('variation-size');
+        const $itemRow = $(this).closest('.cart__item'); // Dòng sản phẩm cần xóa
+        const data = {
+            productId: productId,
+            variation: {
+                pa_size: variationSize
+            }
+        };
+        APIHandler.post('/wp-json/custom-api/v1/remove-cart-item', data)
+            .done(function (response) {
+                userLoading.hide();
+                $itemRow.remove();
+                calculateTotalCart();
+            })
+            .fail(function () {
+                userLoading.hide();
+                Swal.fire({
+                    icon: "error",
+                    title: "Xóa sản phẩm không thành công. Vui lòng thử lại.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+    });
+
 });
