@@ -130,14 +130,13 @@ $(document).ready(function () {
     }
 
     // Tạo đối tượng dữ liệu để gửi tới server
-    const data = ["data"][
+    const data = [
       {
         productId: productId,
         quantity: quantity,
         variation: selectedAttributes,
       }
     ];
-
     // Gọi API để thêm sản phẩm vào giỏ hàng
     APIHandler.post("/wp-json/custom-api/v1/add-to-cart", data)
       .done(function (response) {
