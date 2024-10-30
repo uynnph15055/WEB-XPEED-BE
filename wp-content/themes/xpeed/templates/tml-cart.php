@@ -76,13 +76,6 @@ get_header();
 
                 <div class="cart__actions">
                     <div class="cart__actions-note">
-                        <h5 class="cart__actions-note-title">
-                            Ghi chú đặt hàng bổ sung
-                        </h5>
-                        <textarea
-                                class="cart__actions-message"
-                                placeholder="Tin nhắn thêm cho đơn hàng"
-                        ></textarea>
                     </div>
 
                     <div class="cart__actions-action">
@@ -91,7 +84,7 @@ get_header();
                             <button class="button button--primary-cart">
                                 Cập nhật giỏ hàng
                             </button>
-                            <button class="button button--primary">Thanh toán</button>
+                            <button class="button button--primary" onclick="window.location.href='<?php echo home_url('payment'); ?>'">Thanh toán</button>
                         </div>
                     </div>
                 </div>

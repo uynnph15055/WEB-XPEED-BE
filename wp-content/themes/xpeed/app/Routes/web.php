@@ -7,8 +7,6 @@ require_once get_template_directory() . '/app/Controllers/UserController.php';
 function register_routes()
 {
     // Tạo một instance của UserController
-    $userController = new \app\Controllers\UserController(); // Use the full namespace
-    $authController = new \app\Controllers\AuthController(); // Use the full namespace
     $productController = new \app\Controllers\ProductController(); // Use the full namespace
 
     register_rest_route('custom-api/v1', '/products', array(
@@ -72,6 +70,12 @@ function register_routes()
     register_rest_route('custom-api/v1', '/get-product-price', [
         'methods' => 'POST',
         'callback' => [new \app\Controllers\ProductController(), 'getProductByAttributes'],
+        'permission_callback' => '__return_true',
+    ]);
+
+    register_rest_route('custom-api/v1', '/process-payment', [
+        'methods' => 'POST',
+        'callback' => [new \app\Controllers\PaymentController(), 'processPayment'],
         'permission_callback' => '__return_true',
     ]);
 
