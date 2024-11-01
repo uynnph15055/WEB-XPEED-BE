@@ -26,7 +26,7 @@ class PaymentController extends BaseController
      */
     public function processPayment($request)
     {
-        $amount = $request->get_param('amount');
+        $amount = (float)$request->get_param('amount');
         $orderInfo = $request->get_param('orderInfo') ?? 'MoMo Payment';
         $shippingInfo = $request->get_param('shippingInfo') ?? '';
         if (!empty($shippingInfo)) {
@@ -41,7 +41,8 @@ class PaymentController extends BaseController
         $orderId = time(); // Mã đơn hàng duy nhất
         $requestId = time(); // Mã yêu cầu duy nhất
         $redirectUrl = home_url('checkout-result'); // URL chuyển hướng sau khi thanh toán
-        $ipnUrl = home_url('checkout-result'); // URL nhận thông báo từ MoMo
+        //$ipnUrl = home_url('checkout-result'); // URL chuyển hướng sau khi thanh toán
+        $ipnUrl = "http://localhost/WEB-XPEED-BE/wp-json/custom-api/v1/path-to-handle-ipn"; // URL nhận thông báo từ MoMo
         $extraData = ""; // Dữ liệu bổ sung nếu có
         $requestType = "payWithATM"; // payWithATM /  captureWallet
         // Tạo chữ ký (signature) cho yêu cầu
@@ -112,5 +113,51 @@ class PaymentController extends BaseController
         } else {
             return false;
         }
+    }
+
+    public function createOrder()
+    {
+        // Lấy thông tin giao hàng từ session
+        $shippingInfo = $_SESSION['shippingInfo'] ?? [];
+        if (empty($shippingInfo)) {
+            return []; // Không có thông tin giao hàng
+        }
+        // Lấy dữ liệu từ cookie 'order'
+        $orderData = isset($_COOKIE['order']) ? json_decode(stripslashes($_COOKIE['order']), true) : [];
+        if (empty($orderData)) {
+            return []; // Không có đơn hàng
+        }
+
+        // Tạo một đơn hàng mới
+        $order = wc_create_order();
+
+        // Duyệt qua dữ liệu đơn hàng và thêm sản phẩm vào đơn hàng
+        foreach ($orderData as $item) {
+            $product = wc_get_product($item['product_id']);
+            if (!$product) continue; // Bỏ qua nếu sản phẩm không tồn tại
+
+            // Kiểm tra sản phẩm có biến thể không
+            if ($product->is_type('variable')) {
+                $variation_id = $this->get_variation_id($item['product_id'], $item['attributes']);
+                if ($variation_id) {
+                    $order->add_product(wc_get_product($variation_id), $item['quantity']);
+                }
+            } else {
+                $order->add_product($product, $item['quantity']);
+            }
+        }
+
+        // Cập nhật thông tin địa chỉ giao hàng và thanh toán
+        $this->updateOrderAddresses($order, $shippingInfo);
+
+        // Cập nhật thông tin đơn hàng
+        $order->set_payment_method('momo'); // Thay thế bằng phương thức thanh toán thực tế của bạn
+        $order->set_payment_method_title('MoMo Payment');
+        $order->update_status('completed'); // Thiết lập trạng thái đơn hàng
+
+        // Xóa cookie 'order' sau khi đã xử lý
+        setcookie('order', '', time() - 3600, "/"); // Hết hạn cookie 'order'
+
+        return $order;
     }
 }

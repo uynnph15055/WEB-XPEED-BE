@@ -4,6 +4,7 @@ namespace app\Controllers;
 
 use app\Controllers\Controller as BaseController;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Str;
 
 class CheckoutController extends BaseController
 {
@@ -108,14 +109,13 @@ class CheckoutController extends BaseController
         return $detailed_order;
     }
 
-    public function handlePaymentSuccess($paymentData)
+    public function handlePaymentSuccess($orderId)
     {
         // Lấy thông tin giao hàng từ session
         $shippingInfo = $_SESSION['shippingInfo'] ?? [];
         if (empty($shippingInfo)) {
             return []; // Không có thông tin giao hàng
         }
-
         // Lấy dữ liệu từ cookie 'order'
         $orderData = isset($_COOKIE['order']) ? json_decode(stripslashes($_COOKIE['order']), true) : [];
         if (empty($orderData)) {
@@ -145,7 +145,7 @@ class CheckoutController extends BaseController
         $this->updateOrderAddresses($order, $shippingInfo);
 
         // Lưu orderId vào đơn hàng
-        $order->set_meta_data('orderId', $paymentData['orderId']); // Lưu orderId vào meta data của đơn hàng
+        $order->set_meta_data('orderId', $orderId); // Lưu orderId vào meta data của đơn hàng
 
         // Cập nhật thông tin đơn hàng
         $order->set_payment_method('momo'); // Thay thế bằng phương thức thanh toán thực tế của bạn
@@ -208,6 +208,36 @@ class CheckoutController extends BaseController
         }
 
         return null; // Trả về null nếu không tìm thấy biến thể
+    }
+
+    /**
+     * Xử lý thông báo IPN từ MoMo
+     */
+    public function handleIPN()
+    {
+        // Lấy dữ liệu từ POST
+        $data = file_get_contents('php://input');
+        $result = json_decode($data, true);
+
+        // Lưu log vào file log trong thư mục wp-content
+        $logFile = WP_CONTENT_DIR . '/momo_ipn_log.txt'; // Đường dẫn đến file log
+
+        // Ghi log với tên hàm và dữ liệu
+        $logMessage = date('Y-m-d H:i:s') . " - " . __FUNCTION__ . " - " . json_encode($result) . PHP_EOL;
+        file_put_contents($logFile, $logMessage, FILE_APPEND);
+
+        // Kiểm tra kết quả thanh toán
+        if ($result && isset($result['orderId']) && isset($result['errorCode']) && $result['errorCode'] == '0') {
+            // Xử lý thành công
+            // ...
+            $this->handlePaymentSuccess($result['orderId']);
+            // Chuyển hướng tới URL redirectUrl
+            header('Location: ' . home_url('checkout-result'));
+            exit;
+        } else {
+            // Xử lý lỗi nếu có
+            // ...
+        }
     }
 
 }

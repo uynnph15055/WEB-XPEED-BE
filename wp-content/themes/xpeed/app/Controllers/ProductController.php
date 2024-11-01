@@ -193,9 +193,9 @@ class ProductController extends BaseController
             // Retrieve product by slug
             $product = get_page_by_path($slug, OBJECT, 'product');
 
-            if ($product) {
+            if (true) {
                   $product_id = $product->ID;
-                  $wc_product = wc_get_product($product_id);
+                  $wc_product = wc_get_product(143);
 
                   if ($wc_product) {
                         // Retrieve product categories
@@ -260,10 +260,10 @@ class ProductController extends BaseController
                         foreach ($wc_product->get_attributes() as $attribute) {
                               if ($attribute->is_taxonomy()) {
 
-                                    $attribute_values = wc_get_product_terms($wc_product->get_id(), $attribute->get_name(), ['fields' => 'names']);
+                                    $attribute_values = $wc_product->get_available_variations();
                                     $attributes[$attribute["name"]] = [
                                           'name' => wc_attribute_label($attribute->get_name()),
-                                          'value' => implode(', ', $attribute_values),
+                                          'value' => $attribute_values,
                                     ];
                               } else {
                                     $attributes[$attribute["name"]] = [
@@ -281,7 +281,6 @@ class ProductController extends BaseController
                                     'value' => $meta->value,
                               ];
                         }
-
                         // Return product information
                         return [
                               'id' => $wc_product->get_id(),
@@ -317,6 +316,7 @@ class ProductController extends BaseController
             }
 
             // Lấy các biến thể có sẵn
+          $product = wc_get_product($product_id);
             $variations = $product->get_available_variations();
 
             // Tìm biến thể khớp với các thuộc tính

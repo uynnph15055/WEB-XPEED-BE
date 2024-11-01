@@ -85,6 +85,12 @@ function register_routes()
         'permission_callback' => '__return_true'
     ));
 
+    register_rest_route('custom-api/v1', '/path-to-handle-ipn', [
+        'methods' => 'POST',
+        'callback' => [new \app\Controllers\CheckoutController(), 'handleIPN'],
+        'permission_callback' => '__return_true',
+    ]);
+
     register_rest_route('custom-api/v1', '/remove-cart-item', [
         'methods' => 'POST',
         'callback' => [new \app\Controllers\CartController(), 'removeCartItem'],

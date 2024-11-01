@@ -8,7 +8,8 @@
 use app\Controllers\CheckoutController;
 
 $checkoutController = new CheckoutController();
-$checkoutController->moveCartToOrder();
+$orderId = $checkoutController->moveCartToOrder();
+dd('a');
 $orders = $checkoutController->getOrderHandler();
 $totalCarts = 0;
 get_header();
@@ -30,7 +31,7 @@ get_header();
                     <div class="payment_address">
                         <h3 class="payment_address--title">Địa chỉ giao hàng</h3>
 
-                        <input type="text" class="payment_form--input" name="name" placeholder="Tên" />
+                        <input type="text" class="payment_form--input" name="name" placeholder="Tên"/>
 
                         <input
                                 type="text"

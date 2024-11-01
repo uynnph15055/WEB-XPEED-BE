@@ -39,10 +39,12 @@ $product = $productController->getProductInfo();
                     <p class="product-detail__price"><?= number_format($product["price"]) ?? '' ?> đ</p>
                     <div class="product-detail__size" data-product-id="<?= $product["id"] ?? 0 ?>">
                         <?php foreach ($product["attributes"] as $key => $attribute) { ?>
-                            <label class="product-detail__size-label"> <?= $attribute["name"] ?? '' ?></label>
+
+                            <label class="product-detail__size-label"> <?= $attribute['name'] ?? '' ?></label>
 
                             <div class="product-detail__size-options" data-attribute-key="<?= $key ?>">
-                                <?php foreach (explode(", ", $attribute["value"]) as $item) { ?>
+                                <?php foreach ($attribute["value"] as $item) { ?>
+                                    <?php dd($key,$attribute) ?>
                                     <input type="radio" name="<?= $key ?>" id="<?= $key ?>-<?= strtolower($item) ?>" value="<?=  strtolower($item) ?>"
                                            class="product-detail__size-option"/>
                                     <label for="<?= $key ?>-<?= strtolower($item) ?>"
