@@ -1,5 +1,7 @@
 import APIHandler from '../apiHandler.js';
-$(document).ready(function() {
+
+$(document).ready(function () {
+    var isPayment = true;
     // Hàm tính tổng tiền cho sản phẩm
     function calculateTotalForItem($itemRow) {
         const price = parseInt($itemRow.find('.cart__item-details-price').text().replace(/\D/g, ''));
@@ -14,7 +16,7 @@ $(document).ready(function() {
     // Hàm tính tổng tiền toàn bộ giỏ hàng
     function calculateTotalCart() {
         let totalCarts = 0;
-        $('.cart__item').each(function() {
+        $('.cart__item').each(function () {
             const totalItem = calculateTotalForItem($(this));
             totalCarts += totalItem;
         });
@@ -22,18 +24,19 @@ $(document).ready(function() {
     }
 
     // Sự kiện click nút giảm số lượng
-    $('.cart__item-quantity-decrease').on('click', function() {
+    $('.cart__item-quantity-decrease').on('click', function () {
         const $quantityInput = $(this).closest('.cart__item').find('.cart__item-quantity-input');
         let quantity = parseInt($quantityInput.val());
         if (quantity > 1) {
             quantity--;
             $quantityInput.val(quantity);
+            isPayment = false;
             calculateTotalCart(); // Cập nhật tổng tiền giỏ hàng
         }
     });
 
     // Sự kiện click nút tăng số lượng
-    $('.cart__item-quantity-increase').on('click', function() {
+    $('.cart__item-quantity-increase').on('click', function () {
         const $itemRow = $(this).closest('.cart__item');
         const $quantityInput = $itemRow.find('.cart__item-quantity-input');
         const stockQuantity = parseInt($itemRow.find('.cart__item-stock-quantity').text()); // Lấy số lượng tồn kho
@@ -43,6 +46,7 @@ $(document).ready(function() {
         if (quantity < stockQuantity) {
             quantity++;
             $quantityInput.val(quantity);
+            isPayment = false;
             calculateTotalCart(); // Cập nhật tổng tiền giỏ hàng
         } else {
             Swal.fire({
@@ -55,12 +59,13 @@ $(document).ready(function() {
     });
 
     // Sự kiện khi thay đổi trực tiếp số lượng trong input
-    $('.cart__item-quantity-input').on('input', function() {
+    $('.cart__item-quantity-input').on('input', function () {
         const $itemRow = $(this).closest('.cart__item');
         const stockQuantity = parseInt($itemRow.find('.cart__item-stock-quantity').text());
         const quantity = parseInt($(this).val());
 
         if (quantity && quantity > 0 && quantity <= stockQuantity) {
+            isPayment = false;
             calculateTotalCart(); // Cập nhật tổng tiền giỏ hàng
         } else {
             // Nếu số lượng nhập vào lớn hơn tồn kho, đặt lại giá trị bằng tồn kho
@@ -74,13 +79,13 @@ $(document).ready(function() {
             });
         }
     });
+
     // Cập nhật lại giỏ hàng ngay khi trang load
     calculateTotalCart();
 
-    $('.button--primary-cart').on('click', function() {
+    $('.button--primary-cart').on('click', function () {
         const products = [];
-
-        $('.cart__item').each(function() {
+        $('.cart__item').each(function () {
             const productId = $(this).data('product-id');
             const quantity = $(this).find('.cart__item-quantity-input').val();
             const variation = {
@@ -93,25 +98,27 @@ $(document).ready(function() {
                 variation: variation
             });
         });
-       if(products){
-           APIHandler.post('/wp-json/custom-api/v1/update-cart', products)
-               .done(function (response) {
-                   Swal.fire({
-                       icon: "success",
-                       title: "Giỏ hàng đã được cập nhật!",
-                       showConfirmButton: false,
-                       timer: 1500
-                   });
-               })
-               .fail(function () {
-                   Swal.fire({
-                       icon: "error",
-                       title: "Không thể cập nhật giỏ hàng. Vui lòng thử lại sau.",
-                       showConfirmButton: false,
-                       timer: 1500
-                   });
-               });
-       }
+        if (products) {
+            APIHandler.post('/wp-json/custom-api/v1/update-cart', products)
+                .done(function (response) {
+                    isPayment = true;
+                    Swal.fire({
+                        icon: "success",
+                        title: "Giỏ hàng đã được cập nhật!",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                })
+                .fail(function (err) {
+
+                    Swal.fire({
+                        icon: "error",
+                        title: err.responseJSON.message ?? "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    });
+                });
+        }
     });
 
     $('.cart__item-action-delete').on('click', function () {
@@ -141,4 +148,34 @@ $(document).ready(function() {
             });
     });
 
+    $('#paymentBtn').on('click', function () {
+        console.log(baseUrl+'/payment')
+            if (!isPayment) {
+                Swal.fire({
+                    icon: "error",
+                    title:"Cập nhật giỏ hàng trước khi thanh toán.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+            }else{
+                window.location.href= baseUrl+'/payment';
+            }
+
+    });
+
+    showAlertFromUrlParam('errorPayment');
+    function showAlertFromUrlParam(paramName) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get(paramName);
+
+        if (message) {
+            Swal.fire({
+                icon: "error",
+                title: decodeURIComponent(message),
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+        }
+    }
 });

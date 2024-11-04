@@ -44,11 +44,13 @@ $product = $productController->getProductInfo();
 
                             <div class="product-detail__size-options" data-attribute-key="<?= $key ?>">
                                 <?php foreach ($attribute["value"] as $item) { ?>
-                                    <?php dd($key,$attribute) ?>
-                                    <input type="radio" name="<?= $key ?>" id="<?= $key ?>-<?= strtolower($item) ?>" value="<?=  strtolower($item) ?>"
+                                    <input type="radio" name="<?= $key ?>"
+                                           data-attribute='<?= json_encode($item) ?>'
+                                           id="<?= $key ?>-<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
+                                           value="<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
                                            class="product-detail__size-option"/>
-                                    <label for="<?= $key ?>-<?= strtolower($item) ?>"
-                                           class="product-detail__size-label-option"><?=  $item ?></label>
+                                    <label for="<?= $key ?>-<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
+                                           class="product-detail__size-label-option"><?= strtoupper($item["attributes"]["attribute_" . $key]) ?></label>
                                 <?php } ?>
                             </div>
 
@@ -113,6 +115,9 @@ $product = $productController->getProductInfo();
         </div>
     <?php } ?>
 </main>
+<script>
+    const product = <?= json_encode($product["attributes"], JSON_HEX_TAG) ?>;
+</script>
 <?php
 get_footer();
 ?>

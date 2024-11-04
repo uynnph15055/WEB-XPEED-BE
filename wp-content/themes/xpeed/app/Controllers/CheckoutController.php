@@ -25,15 +25,40 @@ class CheckoutController extends BaseController
         if (empty($cart_data)) {
             return false; // Trả về false nếu không có dữ liệu
         }
+        foreach ($cart_data as $item) {
 
+            $product_id = $item['product_id'];
+            $product = wc_get_product($product_id);
+
+            if (!$product) {
+                $referer_url = remove_query_arg('errorPayment', wp_get_referer());
+                wp_redirect($referer_url . '?errorPayment=' . urlencode("Không tìm thấy sản phẩm"));
+                continue;
+            }
+            // Kiểm tra số lượng tồn kho
+            $stock_quantity = $product->get_stock_quantity();
+
+            if ($item['quantity'] > $stock_quantity) {
+                // Đặt thông báo lỗi vào một biến
+                $error_message = 'Số lượng yêu cầu vượt quá số lượng còn lại trong kho.';
+                // Sử dụng wp_redirect để quay lại trang trước
+                $referer_url = remove_query_arg('errorPayment', wp_get_referer());
+
+                wp_redirect($referer_url . '?errorPayment=' . urlencode($error_message));
+                exit;
+            }
+        }
+        $orderId = bin2hex(random_bytes(32));
+
+        $orders[$orderId] = $cart_data;
+        dd($orderId,$orders);
         // Sao chép dữ liệu giỏ hàng vào cookie order
         setcookie('order', json_encode($cart_data), time() + 3600, "/"); // Lưu 1 giờ
 
         // Xóa dữ liệu giỏ hàng trong session và cookie
         unset($_SESSION['cart']);
-        setcookie('cart', '', time() - 3600, "/"); // Hết hạn cookie giỏ hàng
-
-        return true; // Trả về true nếu thành công
+        setcookie('cart', '', time() - 3600, "/");
+        return $orderId;
     }
 
     public function getOrderHandler()
@@ -185,7 +210,7 @@ class CheckoutController extends BaseController
         // Tìm biến thể sản phẩm dựa trên thuộc tính
         $args = [
             'post_parent' => $product_id,
-            'post_type'   => 'product_variation',
+            'post_type' => 'product_variation',
             'post_status' => 'publish',
             'numberposts' => -1,
         ];
