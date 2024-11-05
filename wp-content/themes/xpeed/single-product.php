@@ -11,13 +11,14 @@ use app\Controllers\CartController;
 get_header();
 $productController = new ProductController();
 $product = $productController->getProductInfo();
+
 ?>
 <main class="product-single-wrapper">
     <div class="product-single">
         <div class="product-content">
             <!-- Phần bên trái, để trống -->
             <div class="product-content__left">
-                <img src="https://cdn.shopify.com/s/files/1/0669/5803/3208/files/RPHA_12_FQ20_DIABLO_banner.jpg?v=1725274055"
+                <img src="<?= $product["main_image"] ?? '' ?>"
                      alt=""/>
             </div>
 
@@ -34,9 +35,18 @@ $product = $productController->getProductInfo();
                             <span class="product-detail__badge product-detail__badge--new">MỚI</span>
                         </div>
                     </div>
-                    <h1 class="product-detail__title"><?= $product["name"] ?? '' ?></h1>
+
+                    <h1 class="product-detail__title"
+                        data-product='<?= json_encode($product) ?>'
+                        data-product-type="<?= $product["productType"]?>">
+                        <?= $product["name"] ?? '' ?>
+                    </h1>
                     <p class="product-detail__series"><?= $product["categories"][0]["name"] ?? '' ?></p>
                     <p class="product-detail__price"><?= number_format($product["price"]) ?? '' ?> đ</p>
+
+
+                    <!--*****************************************-->
+                    <?php if(!empty($product["attributes"])) { ?>
                     <div class="product-detail__size" data-product-id="<?= $product["id"] ?? 0 ?>">
                         <?php foreach ($product["attributes"] as $key => $attribute) { ?>
 
@@ -56,7 +66,8 @@ $product = $productController->getProductInfo();
 
                         <?php } ?>
                     </div>
-
+                    <?php } ?>
+                    <!--*****************************************-->
                     <div class="product-detail__quantity">
                         <label class="product-detail__quantity-label">Số lượng</label>
                         <div class="product-detail__quantity-controls">

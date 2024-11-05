@@ -17,6 +17,8 @@ $(document).ready(function() {
             const amount = $('.payment_cart--summary-total-value').text().replace(/\D/g, '');
             const orderInfo = "Thanh toán đơn hàng";
             const shippingInfo = collectShippingInfo();
+            const orderId = $('.payment_form').data('orderid');
+            console.log('handlePayment',orderId )
             localStorage.setItem('shippingInfo', JSON.stringify({
                 ...shippingInfo,
                 provinceId: $('#provinceSelect').val(), // Lưu ID tỉnh
@@ -27,10 +29,11 @@ $(document).ready(function() {
                 APIHandler.post('/wp-json/custom-api/v1/process-payment', {
                     amount,
                     orderInfo,
+                    orderId,
                     shippingInfo
                 })
                     .done(handlePaymentResponse)
-                    .fail(() => showError("Xảy ra lỗi khi xử lý thanh toán."));
+                    .fail((error) => showError(error.responseJSON.message ?? "Xảy ra lỗi khi xử lý thanh toán."));
             } else {
                 showError("Giỏ hàng rỗng, vui lòng kiểm tra lại.");
             }
@@ -66,8 +69,8 @@ $(document).ready(function() {
         }
     }
     function handlePaymentResponse(response) {
-        if (response && response.payUrl) {
-            window.location.href = response.payUrl;
+        if (response && response.data.payUrl) {
+            window.location.href = response.data.payUrl;
         } else {
             showError("Không thể tạo yêu cầu thanh toán.");
         }

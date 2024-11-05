@@ -33,18 +33,18 @@ class CartController extends BaseController
         $cart_cookie = isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : [];
 
         // Lặp qua từng sản phẩm trong request và thêm vào giỏ hàng
+
         foreach ($cart_items as $item) {
             $product_id = $item['productId'];
             $quantity = $item['quantity'];
             $variation = $item['variation'];
-
             // Kiểm tra dữ liệu từng sản phẩm
             if (empty($product_id) || !$quantity) {
                 continue;  // Bỏ qua sản phẩm không hợp lệ
             }
 
             // Tạo chuỗi để kiểm tra kết hợp product_id và attributes
-            $attribute_key = $product_id . '-' . json_encode($variation);
+            $attribute_key = !empty($variation) ? $product_id . '-' . json_encode($variation) : $product_id;
 
             // Tạo mảng sản phẩm để thêm vào giỏ hàng
             $cart_item = [
@@ -61,6 +61,7 @@ class CartController extends BaseController
             $stock_quantity = $product->get_stock_quantity();
 
             // Thêm hoặc cập nhật sản phẩm trong session và cookie
+
             $this->addOrUpdateCartItem($_SESSION['cart'], $attribute_key, $cart_item);
             $this->addOrUpdateCartItem($cart_cookie, $attribute_key, $cart_item);
             if ($cart_cookie[$attribute_key]['quantity'] > $stock_quantity) {
@@ -86,7 +87,9 @@ class CartController extends BaseController
         } else {
             // Nếu chưa có, thêm mới
             $cart[$attribute_key] = $cart_item;
+
         }
+
     }
 
     public function updateCartHandler($request)
@@ -172,16 +175,18 @@ class CartController extends BaseController
     }
 
     function getCartHandler() {
+
         $cart_items = [];
-        $data = array_merge(
-            isset($_SESSION['cart']) ? $_SESSION['cart'] : [],
-            isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []
-        );
+        $data = (isset($_SESSION['cart']) ? $_SESSION['cart'] : [])
+            + (isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []);
+
 
         // Kiểm tra nếu giỏ hàng trống
         if (empty($data)) {
             return [];
         }
+
+
         foreach ($data as $key => $item) {
             // Lấy product_id và variation_key
             $product_id = $item['product_id'];
@@ -189,6 +194,8 @@ class CartController extends BaseController
 
             // Lấy thông tin sản phẩm
             $product = wc_get_product($product_id);
+
+            $thumbnail_url = wp_get_attachment_url($product->get_image_id());
 
             if ($product) {
                 // Lấy thông tin biến thể nếu có
@@ -224,13 +231,14 @@ class CartController extends BaseController
                     'attribute' => $attributeValue,
                     'price' => $price,
                     'stock_quantity' => $stock_quantity,
-                    'image' => $image,
+                    'image' => $image ?? $thumbnail_url,
                     'total' => $total,
                 ];
 
             }
         }
 
+        //return $this->success(data:$cart_items);
         return $cart_items;
     }
 
@@ -245,7 +253,7 @@ class CartController extends BaseController
         $product_id = $request->get_param('productId');
         $variation = $request->get_param('variation');
         // Kiểm tra dữ liệu hợp lệ
-        if (empty($product_id) || empty($variation) || !is_array($variation)) {
+        if (empty($product_id)) {
             return $this->fail('Dữ liệu không hợp lệ.');
         }
 
@@ -258,8 +266,7 @@ class CartController extends BaseController
         $cart_cookie = isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : [];
 
         // Tạo chuỗi để kiểm tra kết hợp product_id và attributes
-        $attribute_key = $product_id . '-' . json_encode($variation);
-
+        $attribute_key = !empty($variation) ? $product_id . '-' . json_encode($variation) : $product_id;
         // Xóa sản phẩm trong session
         if (isset($_SESSION['cart'][$attribute_key])) {
             unset($_SESSION['cart'][$attribute_key]);

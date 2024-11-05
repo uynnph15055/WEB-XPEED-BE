@@ -29,9 +29,13 @@ $paymentData = [
 // Kiểm tra nếu thanh toán thành công
 if ($paymentData['resultCode'] == '0') {
     // Gọi hàm xử lý đơn hàng
-//   $checkoutController->handlePaymentSuccess($paymentData);
+    $order = $checkoutController->handlePaymentSuccess($paymentData['orderId']);
+    if ($order == false) {
 
-    if (true) {
+    }
+
+
+    if ( $order !== false) {
         // Hiển thị thông báo thành công
         echo '<h1>Thanh toán thành công!</h1>';
         echo '<p>Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đang được xử lý.</p>';

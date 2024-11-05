@@ -6,8 +6,9 @@
  */
 
 use app\Controllers\CartController;
-
+session_start();
 $cartController = new CartController();
+
 $carts = $cartController->getCartHandler();
 $totalCarts = 0;
 get_header();

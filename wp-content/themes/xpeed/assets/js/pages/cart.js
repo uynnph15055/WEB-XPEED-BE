@@ -126,11 +126,11 @@ $(document).ready(function () {
         const productId = $(this).closest('.cart__item').data('product-id');
         const variationSize = $(this).closest('.cart__item').find('.cart__item-size').data('variation-size');
         const $itemRow = $(this).closest('.cart__item'); // Dòng sản phẩm cần xóa
+        const variation = variationSize ? { pa_size: variationSize} : null;
+
         const data = {
             productId: productId,
-            variation: {
-                pa_size: variationSize
-            }
+            variation
         };
         APIHandler.post('/wp-json/custom-api/v1/remove-cart-item', data)
             .done(function (response) {
@@ -149,7 +149,7 @@ $(document).ready(function () {
     });
 
     $('#paymentBtn').on('click', function () {
-        console.log(baseUrl+'/payment')
+
             if (!isPayment) {
                 Swal.fire({
                     icon: "error",
@@ -158,7 +158,22 @@ $(document).ready(function () {
                     timer: 3000,
                 });
             }else{
-                window.location.href= baseUrl+'/payment';
+                APIHandler.get('/wp-json/custom-api/v1/order/create')
+                    .done(function (response) {
+                           window.location.href= baseUrl+'/payment?token='+response.data.orderId ?? '';
+                    })
+                    .fail(function (error) {
+                        Swal.fire({
+                            icon: "error",
+                            title: error.responseJSON.message ?? "Thanh toán thất bại. Vui lòng thử lại.",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    });
+
+
+
+
             }
 
     });
