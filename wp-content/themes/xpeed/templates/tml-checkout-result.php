@@ -8,7 +8,7 @@
 use app\Controllers\CheckoutController;
 
 $checkoutController = new CheckoutController();
-
+get_header();
 // Lấy tham số từ URL
 $paymentData = [
     'partnerCode' => isset($_GET['partnerCode']) ? sanitize_text_field($_GET['partnerCode']) : '',
@@ -29,9 +29,13 @@ $paymentData = [
 // Kiểm tra nếu thanh toán thành công
 if ($paymentData['resultCode'] == '0') {
     // Gọi hàm xử lý đơn hàng
-   $checkoutController->handlePaymentSuccess($paymentData);
+    $order = $checkoutController->handlePaymentSuccess($paymentData['orderId']);
+    if ($order == false) {
 
-    if (true) {
+    }
+
+
+    if ( $order !== false) {
         // Hiển thị thông báo thành công
         echo '<h1>Thanh toán thành công!</h1>';
         echo '<p>Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đang được xử lý.</p>';
@@ -52,8 +56,6 @@ if ($paymentData['resultCode'] == '0') {
     echo '<h1>Lỗi thanh toán</h1>';
     echo '<p>' . esc_html($paymentData['message']) . '</p>';
 }
-get_header();
-
 ?>
 
 <?php

@@ -4,12 +4,15 @@
  * Template Name: Payment
  * Author: Phuongdd
  */
-
+session_start();
 use app\Controllers\CheckoutController;
 
+if (!isset($_GET['token']) || empty($_GET['token'])) {
+    header('Location: ' . home_url('cart'));
+}
+$orderId = $_GET['token'];
 $checkoutController = new CheckoutController();
-$checkoutController->moveCartToOrder();
-$orders = $checkoutController->getOrderHandler();
+$orders = $checkoutController->getOrderHandler($orderId);
 $totalCarts = 0;
 get_header();
 
@@ -25,12 +28,12 @@ get_header();
 
                 <div class="payment_breadcrumb"></div>
 
-                <form class="payment_form">
+                <form class="payment_form" data-orderId="<?= $orderId ?>">
 
                     <div class="payment_address">
                         <h3 class="payment_address--title">Địa chỉ giao hàng</h3>
 
-                        <input type="text" class="payment_form--input" name="name" placeholder="Tên" />
+                        <input type="text" class="payment_form--input" name="name" placeholder="Tên"/>
 
                         <input
                                 type="text"

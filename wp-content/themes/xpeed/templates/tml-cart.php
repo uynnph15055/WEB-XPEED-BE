@@ -6,8 +6,9 @@
  */
 
 use app\Controllers\CartController;
-
+session_start();
 $cartController = new CartController();
+
 $carts = $cartController->getCartHandler();
 $totalCarts = 0;
 get_header();
@@ -42,15 +43,19 @@ get_header();
                                 </div>
                                 <div class="cart__item-details">
                                     <span class="cart__item-name"><?= $cart["product_name"] ?? '' ?></span>
+
                                     <span class="cart__item-size"
-                                          data-variation-size="<?= $cart["variation"] ?? '' ?>"
-                                          data-variation-key="<?= $cart["variation_key"] ?? '' ?>"
+                                          data-variation-size="<?= $cart["attribute"] ?? '' ?>"
+                                          data-variation-key="<?= $cart["attribute_key"] ?? '' ?>"
                                     >
                                         <?= $cart["variation_title"] ?? '' ?>
                                     </span>
                                     <span class="cart__item-stock-quantity"
                                           style="display: none"><?= $cart["stock_quantity"] ?? '' ?></span>
                                     <span class="cart__item-details-price"><?= number_format($cart["price"]) ?? '' ?> đ</span>
+                                    <?php if ((int)$cart["stock_quantity"] <  (int)$cart["quantity"]) { ?>
+                                    <h3  style="color: red;"><i>Số lượng sản phẩm không đủ, tối đa <?= $cart["stock_quantity"] ?? '' ?> sản phẩm</i> </h3>
+                                    <?php } ?>
                                 </div>
                             </td>
                             <td class="cart__item-quantity">
@@ -84,7 +89,7 @@ get_header();
                             <button class="button button--primary-cart">
                                 Cập nhật giỏ hàng
                             </button>
-                            <button class="button button--primary" onclick="window.location.href='<?php echo home_url('payment'); ?>'">Thanh toán</button>
+                            <button class="button button--primary" id="paymentBtn" >Thanh toán</button>
                         </div>
                     </div>
                 </div>

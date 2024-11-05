@@ -33,18 +33,18 @@ class CartController extends BaseController
         $cart_cookie = isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : [];
 
         // Lặp qua từng sản phẩm trong request và thêm vào giỏ hàng
+
         foreach ($cart_items as $item) {
             $product_id = $item['productId'];
             $quantity = $item['quantity'];
             $variation = $item['variation'];
-
             // Kiểm tra dữ liệu từng sản phẩm
             if (empty($product_id) || !$quantity) {
                 continue;  // Bỏ qua sản phẩm không hợp lệ
             }
 
             // Tạo chuỗi để kiểm tra kết hợp product_id và attributes
-            $attribute_key = $product_id . '-' . json_encode($variation);
+            $attribute_key = !empty($variation) ? $product_id . '-' . json_encode($variation) : $product_id;
 
             // Tạo mảng sản phẩm để thêm vào giỏ hàng
             $cart_item = [
@@ -52,10 +52,21 @@ class CartController extends BaseController
                 'quantity' => $quantity,
                 'attributes' => $variation
             ];
+            $product = wc_get_product($product_id);
+            if (!$product) {
+                continue;  // Bỏ qua nếu không tìm thấy sản phẩm
+            }
+
+            // Kiểm tra số lượng tồn kho
+            $stock_quantity = $product->get_stock_quantity();
 
             // Thêm hoặc cập nhật sản phẩm trong session và cookie
+
             $this->addOrUpdateCartItem($_SESSION['cart'], $attribute_key, $cart_item);
             $this->addOrUpdateCartItem($cart_cookie, $attribute_key, $cart_item);
+            if ($cart_cookie[$attribute_key]['quantity'] > $stock_quantity) {
+                return $this->fail('Số lượng yêu cầu vượt quá số lượng còn lại trong kho.');
+            }
         }
 
         // Lưu giỏ hàng vào cookie trong 30 ngày
@@ -76,7 +87,9 @@ class CartController extends BaseController
         } else {
             // Nếu chưa có, thêm mới
             $cart[$attribute_key] = $cart_item;
+
         }
+
     }
 
     public function updateCartHandler($request)
@@ -104,6 +117,7 @@ class CartController extends BaseController
 
         // Lặp qua từng sản phẩm trong request và cập nhật số lượng
         foreach ($cart_items as $item) {
+
             $product_id = $item['productId'];
             $quantity = $item['quantity'];
             $variation = $item['variation'];
@@ -122,10 +136,21 @@ class CartController extends BaseController
                 'quantity' => $quantity,
                 'attributes' => $variation
             ];
+            $product = wc_get_product($product_id);
+            if (!$product) {
+                continue;  // Bỏ qua nếu không tìm thấy sản phẩm
+            }
+
+            // Kiểm tra số lượng tồn kho
+            $stock_quantity = $product->get_stock_quantity();
 
             // Cập nhật sản phẩm trong session và cookie
             $this->updateCartItem($_SESSION['cart'], $attribute_key, $cart_item);
             $this->updateCartItem($cart_cookie, $attribute_key, $cart_item);
+
+            if ($cart_cookie[$attribute_key]['quantity'] > $stock_quantity) {
+                return $this->fail('Số lượng yêu cầu vượt quá số lượng còn lại trong kho.');
+            }
         }
 
         // Lưu giỏ hàng vào cookie trong 30 ngày
@@ -149,84 +174,72 @@ class CartController extends BaseController
         }
     }
 
-    public function getCartHandler()
-    {
-        // Lấy thông tin giỏ hàng từ session và cookie
-        $cart_data = array_merge(
-            isset($_SESSION['cart']) ? $_SESSION['cart'] : [],
-            isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []
-        );
+    function getCartHandler() {
+
+        $cart_items = [];
+        $data = (isset($_SESSION['cart']) ? $_SESSION['cart'] : [])
+            + (isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []);
+
 
         // Kiểm tra nếu giỏ hàng trống
-        if (empty($cart_data)) {
+        if (empty($data)) {
             return [];
         }
 
-        $detailed_cart = [];
 
-        // Duyệt qua giỏ hàng
-        foreach ($cart_data as $cart_item) {
-            $product_id = $cart_item['product_id'];
-            $attributes = $cart_item['attributes'];
-            $quantity = $cart_item['quantity'];
+        foreach ($data as $key => $item) {
+            // Lấy product_id và variation_key
+            $product_id = $item['product_id'];
+            $quantity = $item['quantity'];
 
-            // Lấy thông tin sản phẩm chính
-            $product = DB::table('posts')
-                ->where('ID', $product_id)
-                ->where('post_type', 'product')
-                ->where('post_status', 'publish')
-                ->first();
+            // Lấy thông tin sản phẩm
+            $product = wc_get_product($product_id);
+
+            $thumbnail_url = wp_get_attachment_url($product->get_image_id());
 
             if ($product) {
-                // Lấy biến thể phù hợp
-                $matched_variation = DB::table('posts')
-                    ->where('post_parent', $product_id)
-                    ->where('post_type', 'product_variation')
-                    ->where('post_status', 'publish')
-                    ->get()
-                    ->first(function ($variation) use ($attributes) {
-                        foreach ($attributes as $attribute_key => $attribute_value) {
-                            $meta_value = DB::table('postmeta')
-                                ->where('post_id', $variation->ID)
-                                ->where('meta_key', 'attribute_' . $attribute_key)
-                                ->value('meta_value');
-                            if ($meta_value !== $attribute_value) return false;
-                        }
-                        return true;
-                    });
+                // Lấy thông tin biến thể nếu có
+                $variation_key = $key;
+                $attributes = $data[$variation_key]["attributes"] ?? [];
+                $variation_title = '';
+                $attributeKey = $attributeValue = '';
 
-                // Lấy thông tin chi tiết về biến thể hoặc sản phẩm chính
-                $price = $stock_quantity = null;
-                $variation_title = $variation_image = 'Không tìm thấy biến thể phù hợp';
+                // Nếu có thuộc tính biến thể, lấy thông tin từ product
+                if (!empty($attributes)) {
+                    foreach ($attributes as $attr_key => $attr_value) {
+                        $variation_title .= ucfirst($attr_key) . ': ' . $attr_value . ', ';
+                        $attributeValue = $attr_value;
+                        $attributeKey = $attr_key;
 
-                if ($matched_variation) {
-                    $variation_image = get_the_post_thumbnail_url($matched_variation->ID);
-                    $post_meta = DB::table('postmeta')->where('post_id', $matched_variation->ID)->get();
-                    $price = $post_meta->where('meta_key', '_price')->first()->meta_value ?? null;
-                    $stock_quantity = $post_meta->where('meta_key', '_stock')->first()->meta_value ?? null;
-                    $variation_title = $matched_variation->post_excerpt;
-                } else {
-                    $variation_image = get_the_post_thumbnail_url($product_id);
+                    }
+                    $variation_title = rtrim($variation_title, ', '); // Bỏ dấu phẩy cuối
                 }
 
-                // Thêm thông tin vào giỏ hàng
-                $detailed_cart[] = [
+                // Lấy thông tin giá
+                $price = $product->get_price();
+                $stock_quantity = $product->get_stock_quantity();
+                $image = wp_get_attachment_url($product->get_image_id());
+                $total = $price * $quantity;
+
+                // Thêm thông tin sản phẩm vào mảng giỏ hàng
+                $cart_items[] = [
                     'product_id' => $product_id,
-                    'product_name' => $product->post_title,
+                    'product_name' => $product->get_name(),
                     'quantity' => $quantity,
-                    'variation_key' => array_keys($attributes)[0] ?? '',
+                    'attribute_key' => $attributeKey,
                     'variation_title' => $variation_title,
-                    'variation' => strtolower(explode(': ', $variation_title)[1] ?? $variation_title),
-                    'price' => $price ? (float)$price : 0,
-                    'stock_quantity' => $stock_quantity ? (int)$stock_quantity : 0,
-                    'image' => $variation_image,
-                    'total' => ($price ? $price * $quantity : 0),  // Tính tổng tiền cho mỗi sản phẩm
+                    'attribute' => $attributeValue,
+                    'price' => $price,
+                    'stock_quantity' => $stock_quantity,
+                    'image' => $image ?? $thumbnail_url,
+                    'total' => $total,
                 ];
+
             }
         }
 
-        // Trả về thông tin chi tiết của giỏ hàng
-        return $detailed_cart;
+        //return $this->success(data:$cart_items);
+        return $cart_items;
     }
 
     public function removeCartItem($request)
@@ -240,7 +253,7 @@ class CartController extends BaseController
         $product_id = $request->get_param('productId');
         $variation = $request->get_param('variation');
         // Kiểm tra dữ liệu hợp lệ
-        if (empty($product_id) || empty($variation) || !is_array($variation)) {
+        if (empty($product_id)) {
             return $this->fail('Dữ liệu không hợp lệ.');
         }
 
@@ -253,8 +266,7 @@ class CartController extends BaseController
         $cart_cookie = isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : [];
 
         // Tạo chuỗi để kiểm tra kết hợp product_id và attributes
-        $attribute_key = $product_id . '-' . json_encode($variation);
-
+        $attribute_key = !empty($variation) ? $product_id . '-' . json_encode($variation) : $product_id;
         // Xóa sản phẩm trong session
         if (isset($_SESSION['cart'][$attribute_key])) {
             unset($_SESSION['cart'][$attribute_key]);

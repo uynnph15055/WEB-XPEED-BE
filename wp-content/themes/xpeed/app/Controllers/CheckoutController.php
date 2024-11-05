@@ -4,6 +4,7 @@ namespace app\Controllers;
 
 use app\Controllers\Controller as BaseController;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Str;
 
 class CheckoutController extends BaseController
 {
@@ -15,118 +16,124 @@ class CheckoutController extends BaseController
     public function moveCartToOrder()
     {
         // Lấy dữ liệu từ session và cookie giỏ hàng
-        $cart_data = array_merge(
-            isset($_SESSION['cart']) ? $_SESSION['cart'] : [],
-            isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []
-        );
+        $cart_data = (isset($_SESSION['cart']) ? $_SESSION['cart'] : [])
+            + (isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []);
+
 
         // Kiểm tra nếu giỏ hàng trống
         if (empty($cart_data)) {
-            return false; // Trả về false nếu không có dữ liệu
+            return $this->fail('Không có sản phẩm');
         }
 
-        // Sao chép dữ liệu giỏ hàng vào cookie order
-        setcookie('order', json_encode($cart_data), time() + 3600, "/"); // Lưu 1 giờ
-
-        // Xóa dữ liệu giỏ hàng trong session và cookie
-        unset($_SESSION['cart']);
-        setcookie('cart', '', time() - 3600, "/"); // Hết hạn cookie giỏ hàng
-
-        return true; // Trả về true nếu thành công
-    }
-
-    public function getOrderHandler()
-    {
-
-        // Lấy dữ liệu từ cookie 'order'
-        $orderData = isset($_COOKIE['order']) ? json_decode(stripslashes($_COOKIE['order']), true) : [];
-        if (empty($orderData)) {
-            return [];
-        }
-
-        $detailed_order = [];
-
-        foreach ($orderData as $order_item) {
-            $product_id = $order_item['product_id'];
-            $attributes = $order_item['attributes'];
-            $quantity = $order_item['quantity'];
-
-            // Lấy sản phẩm chính và kiểm tra tính hợp lệ
-            $product = DB::table('posts')
-                ->where('ID', $product_id)
-                ->where('post_type', 'product')
-                ->where('post_status', 'publish')
-                ->first();
+        foreach ($cart_data as $item) {
+            $product_id = $item['product_id'];
+            $product = wc_get_product($product_id);
 
             if (!$product) {
-                continue;
+                return $this->fail('Không tìm thấy sản phẩm');
             }
 
-            // Lấy biến thể sản phẩm nếu có
-            $matched_variation = DB::table('posts')
-                ->where('post_parent', $product_id)
-                ->where('post_type', 'product_variation')
-                ->where('post_status', 'publish')
-                ->get()
-                ->first(function ($variation) use ($attributes) {
-                    foreach ($attributes as $key => $value) {
-                        $meta_value = DB::table('postmeta')
-                            ->where('post_id', $variation->ID)
-                            ->where('meta_key', 'attribute_' . $key)
-                            ->value('meta_value');
-                        if ($meta_value !== $value) return false;
-                    }
-                    return true;
-                });
+            // Kiểm tra số lượng tồn kho
+            $stock_quantity = $product->get_stock_quantity();
 
-            // Lấy thông tin giá và số lượng kho của biến thể hoặc sản phẩm chính
-            $variation_image = get_the_post_thumbnail_url($matched_variation->ID ?? $product_id);
-            $price = $stock_quantity = null;
-            $variation_title = $matched_variation->post_excerpt ?? 'Không tìm thấy biến thể phù hợp';
-
-            if ($matched_variation) {
-                $post_meta = DB::table('postmeta')->where('post_id', $matched_variation->ID)->get();
-                $price = $post_meta->where('meta_key', '_price')->first()->meta_value ?? 0;
-                $stock_quantity = $post_meta->where('meta_key', '_stock')->first()->meta_value ?? 0;
+            if ($item['quantity'] > $stock_quantity) {
+                return $this->fail('Số lượng yêu cầu vượt quá số lượng còn lại trong kho.');
             }
-
-            // Thêm thông tin vào mảng chi tiết đơn hàng
-            $detailed_order[] = [
-                'product_id' => $product_id,
-                'product_name' => $product->post_title,
-                'quantity' => $quantity,
-                'variation_key' => array_keys($attributes)[0] ?? '',
-                'variation_title' => $variation_title,
-                'variation' => strtolower(explode(': ', $variation_title)[1] ?? $variation_title),
-                'price' => (float)$price,
-                'stock_quantity' => (int)$stock_quantity,
-                'image' => $variation_image,
-                'total' => $price * $quantity,
-            ];
         }
 
+        // Tạo ID đơn hàng ngẫu nhiên
+        $orderId = bin2hex(random_bytes(32));
+        $orders[$orderId] = $cart_data;
+
+        // Sao chép dữ liệu giỏ hàng vào session
+        $_SESSION['order'] = $orders;
+        // Xóa dữ liệu giỏ hàng trong session và cookie
+        unset($_SESSION['cart']);
+        setcookie('cart', '', time() - 3600, "/"); // Xóa cookie giỏ hàng nếu vẫn còn
+
+        return $this->success(data: ['orderId' => $orderId]);
+    }
+
+    public function getOrderHandler($orderId)
+    {
+        $detailed_order = [];
+        // Lấy dữ liệu từ cookie 'order'
+        $orderData = isset($_SESSION['order']) ? $_SESSION['order'] : [];
+
+        if (empty($orderData) || empty($orderData[$orderId])) {
+            header('Location: ' . home_url('cart'));
+        }
+
+        foreach ($orderData[$orderId] as $key => $item) {
+            // Lấy product_id và variation_key
+            $product_id = $item['product_id'];
+            $quantity = $item['quantity'];
+
+            // Lấy thông tin sản phẩm
+            $product = wc_get_product($product_id);
+
+            if ($product) {
+                // Lấy thông tin biến thể nếu có
+                $variation_key = $key;
+                $attributes = $data[$variation_key]["attributes"] ?? [];
+                $variation_title = '';
+                $attributeKey = $attributeValue = '';
+
+                // Nếu có thuộc tính biến thể, lấy thông tin từ product
+                if (!empty($attributes)) {
+                    foreach ($attributes as $attr_key => $attr_value) {
+                        $variation_title .= ucfirst($attr_key) . ': ' . $attr_value . ', ';
+                        $attributeValue = $attr_value;
+                        $attributeKey = $attr_key;
+
+                    }
+                    $variation_title = rtrim($variation_title, ', '); // Bỏ dấu phẩy cuối
+                }
+
+                // Lấy thông tin giá
+                $price = $product->get_price();
+                $stock_quantity = $product->get_stock_quantity();
+                $image = wp_get_attachment_url($product->get_image_id());
+                $total = $price * $quantity;
+
+                // Thêm thông tin sản phẩm vào mảng giỏ hàng
+                $detailed_order[] = [
+                    'product_id' => $product_id,
+                    'product_name' => $product->get_name(),
+                    'quantity' => $quantity,
+                    'attribute_key' => $attributeKey,
+                    'variation_title' => $variation_title,
+                    'attribute' => $attributeValue,
+                    'price' => $price,
+                    'stock_quantity' => $stock_quantity,
+                    'image' => $image,
+                    'total' => $total,
+                ];
+
+            }
+        }
         return $detailed_order;
     }
 
-    public function handlePaymentSuccess($paymentData)
+    public function handlePaymentSuccess($orderId)
     {
         // Lấy thông tin giao hàng từ session
         $shippingInfo = $_SESSION['shippingInfo'] ?? [];
         if (empty($shippingInfo)) {
-            return []; // Không có thông tin giao hàng
+            return false; // Không có thông tin giao hàng
         }
 
-        // Lấy dữ liệu từ cookie 'order'
-        $orderData = isset($_COOKIE['order']) ? json_decode(stripslashes($_COOKIE['order']), true) : [];
-        if (empty($orderData)) {
-            return []; // Không có đơn hàng
+        // Lấy dữ liệu từ session 'order'
+        $orderData = $_SESSION['order'] ?? [];
+        if (empty($orderData) || !isset($orderData[$orderId])) {
+            return false; // Không có đơn hàng hoặc orderId không tồn tại
         }
 
         // Tạo một đơn hàng mới
         $order = wc_create_order();
 
         // Duyệt qua dữ liệu đơn hàng và thêm sản phẩm vào đơn hàng
-        foreach ($orderData as $item) {
+        foreach ($orderData[$orderId] as $item) {
             $product = wc_get_product($item['product_id']);
             if (!$product) continue; // Bỏ qua nếu sản phẩm không tồn tại
 
@@ -145,15 +152,21 @@ class CheckoutController extends BaseController
         $this->updateOrderAddresses($order, $shippingInfo);
 
         // Lưu orderId vào đơn hàng
-        $order->set_meta_data('orderId', $paymentData['orderId']); // Lưu orderId vào meta data của đơn hàng
+        $order->update_meta_data('orderId', $orderId); // Lưu orderId vào meta data của đơn hàng
 
         // Cập nhật thông tin đơn hàng
         $order->set_payment_method('momo'); // Thay thế bằng phương thức thanh toán thực tế của bạn
         $order->set_payment_method_title('MoMo Payment');
-        $order->update_status('completed'); // Thiết lập trạng thái đơn hàng
 
-        // Xóa cookie 'order' sau khi đã xử lý
-        setcookie('order', '', time() - 3600, "/"); // Hết hạn cookie 'order'
+        // Tính toán lại tổng giá trị cho đơn hàng
+        $order->calculate_totals();
+
+        // Cập nhật trạng thái đơn hàng thành 'completed'
+        $order->update_status('processing');
+
+        // Xóa đơn hàng khỏi session
+        unset($orderData[$orderId]);
+        $_SESSION['order'] = $orderData; // Cập nhật lại session
 
         return $order;
     }
@@ -185,7 +198,7 @@ class CheckoutController extends BaseController
         // Tìm biến thể sản phẩm dựa trên thuộc tính
         $args = [
             'post_parent' => $product_id,
-            'post_type'   => 'product_variation',
+            'post_type' => 'product_variation',
             'post_status' => 'publish',
             'numberposts' => -1,
         ];
@@ -210,4 +223,28 @@ class CheckoutController extends BaseController
         return null; // Trả về null nếu không tìm thấy biến thể
     }
 
+    /**
+     * Xử lý thông báo IPN từ MoMo
+     */
+    public function handleIPN()
+    {
+        $result = $_GET;
+        // Lưu log vào file log trong thư mục wp-content
+        $logFile = WP_CONTENT_DIR . '/momo_ipn_log.txt'; // Đường dẫn đến file log
+
+        // Ghi log với tên hàm và dữ liệu
+//        $logMessage = date('Y-m-d H:i:s') . " - " . __FUNCTION__ . " - " . json_encode($result) . PHP_EOL;
+//        file_put_contents($logFile, $logMessage, FILE_APPEND);
+
+        // Kiểm tra kết quả thanh toán
+
+        if ($result && isset($result['orderId']) && isset($result['resultCode']) && $result['resultCode'] == '0') {
+            $this->handlePaymentSuccess($result['orderId']);
+            // Chuyển hướng tới URL redirectUrl
+            header('Location: ' . home_url('checkout-result'));
+            exit;
+        } else {
+            header('Location: ' . home_url('cart'));
+        }
+    }
 }
