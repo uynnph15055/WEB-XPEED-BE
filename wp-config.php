@@ -85,5 +85,8 @@ if (! defined('ABSPATH')) {
 	define('ABSPATH', __DIR__ . '/');
 }
 
+if (!defined('JETPACK_WAF_WPCONFIG')) {
+    define('JETPACK_WAF_WPCONFIG', __FILE__);
+}
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';

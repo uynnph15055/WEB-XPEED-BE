@@ -4,7 +4,10 @@ if ( defined( 'DISABLE_JETPACK_WAF' ) && DISABLE_JETPACK_WAF ) return;
 define( 'JETPACK_WAF_MODE', 'silent' );
 define( 'JETPACK_WAF_SHARE_DATA', false );
 define( 'JETPACK_WAF_SHARE_DEBUG_DATA', false );
-define( 'JETPACK_WAF_DIR', 'C:\\xampp\\htdocs\\WEB-XPEED-BE/wp-content/jetpack-waf' );
-define( 'JETPACK_WAF_WPCONFIG', 'C:\\xampp\\htdocs\\WEB-XPEED-BE/wp-content/../wp-config.php' );
-require_once 'C:\\xampp\\htdocs\\WEB-XPEED-BE\\wp-content\\plugins\\jetpack/vendor/autoload.php';
+define('JETPACK_WAF_DIR', plugin_dir_path(__FILE__));
+define('JETPACK_WAF_WPCONFIG', ABSPATH . 'wp-config.php');
+
+// Sử dụng plugin_dir_path(__FILE__) cho autoload.php
+require_once plugin_dir_path(__FILE__) . '../plugins/jetpack/vendor/autoload.php';
+
 Automattic\Jetpack\Waf\Waf_Runner::initialize();
