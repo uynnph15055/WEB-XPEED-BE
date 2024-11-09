@@ -5,14 +5,18 @@
  * Author: Uynn
  */
 
-use app\Controllers\HomeController;
-
 get_header();
 
+use app\Controllers\HomeController;
+use app\Controllers\BlogController;
 use app\Controllers\ProductController;
 
+$blog = new BlogController();
 $product = new ProductController();
+
+
 $categories = $product->categories;
+$blogs = $blog->blogs;
 
 // -----------
 $cateLinkFirst = isset($product->categories[0]) ? $product->getCategoryLink($product->categories[0]->term_id) : null;
@@ -309,54 +313,27 @@ $homeController = new HomeController;
                   <!-- blogs -->
                   <div id="blogs" class="blogs-section">
                         <div class="blogs__list">
-                              <div class="blogs__item">
+                              <?php
+                              if (empty($blogs)) {
+                                    echo "Không có bài viết";
+                                    return;
+                              } else {
+                                    foreach ($blogs as $blog) : ?>
+                              <a href="<?= $blog["link"] ?>" class="blogs__item">
                                     <div class="blogs__image-wrapper">
-                                          <img class="blogs__image"
-                                                src="https://rt6moto.co.kr/cdn/shop/articles/1_ec5cf67a-f507-4efe-a898-99e1bbd6b06b.jpg?v=1692755011&width=550"
-                                                alt="" />
+                                          <img class="blogs__image" src="<?= $blog["thumbnail"] ?>" alt="" />
                                     </div>
                                     <div class="blogs__details">
-                                          <h3 class="blogs__title">쇼룸 안내</h3>
+                                          <h3 class="blogs__title"><?= $blog["title"] ?></h3>
                                           <div class="blogs__description">
-                                                <p class="blogs__text">
-                                                      편의를 위해 최선을 다하는 HJC 쇼룸
+                                                <p class="blogs__text"><?= $blog["excerpt"] ?></p>
+                                                <p class="blogs__link"><?= date('d/m/Y', strtotime($blog["date"]))  ?>
                                                 </p>
-                                                <a class="blogs__link" href="#">자세히 보기</a>
                                           </div>
                                     </div>
-                              </div>
-                              <div class="blogs__item">
-                                    <div class="blogs__image-wrapper">
-                                          <img class="blogs__image"
-                                                src="https://rt6moto.co.kr/cdn/shop/articles/1_ec5cf67a-f507-4efe-a898-99e1bbd6b06b.jpg?v=1692755011&width=550"
-                                                alt="" />
-                                    </div>
-                                    <div class="blogs__details">
-                                          <h3 class="blogs__title">쇼룸 안내</h3>
-                                          <div class="blogs__description">
-                                                <p class="blogs__text">
-                                                      편의를 위해 최선을 다하는 HJC 쇼룸
-                                                </p>
-                                                <a class="blogs__link" href="#">자세히 보기</a>
-                                          </div>
-                                    </div>
-                              </div>
-                              <div class="blogs__item">
-                                    <div class="blogs__image-wrapper">
-                                          <img class="blogs__image"
-                                                src="https://rt6moto.co.kr/cdn/shop/articles/1_ec5cf67a-f507-4efe-a898-99e1bbd6b06b.jpg?v=1692755011&width=550"
-                                                alt="" />
-                                    </div>
-                                    <div class="blogs__details">
-                                          <h3 class="blogs__title">쇼룸 안내</h3>
-                                          <div class="blogs__description">
-                                                <p class="blogs__text">
-                                                      편의를 위해 최선을 다하는 HJC 쇼룸
-                                                </p>
-                                                <a class="blogs__link" href="#">자세히 보기</a>
-                                          </div>
-                                    </div>
-                              </div>
+                              </a>
+                              <?php endforeach;
+                              }   ?>
                         </div>
                   </div>
                   <!-- end blogs -->
