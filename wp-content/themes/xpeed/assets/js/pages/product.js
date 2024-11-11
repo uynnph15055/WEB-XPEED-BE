@@ -4,6 +4,25 @@ import {BASE_URL} from "../variable.js";
 import {formatVND} from "../common.js";
 
 $(document).ready(function () {
+//--------------------------------------PRODUCT IMAGE----------------------------------
+    $(".thumbnail-item__img").on("click", function () {
+        const src = $(this).attr("src");
+        changeMainImage(src);
+        $(this).parent().addClass("active-thumbnail");
+    });
+
+    function changeMainImage(src) {
+        const $mainImage = $("#mainImage");
+        // Kiểm tra và thay đổi ảnh chính
+        if ($mainImage.attr("src") !== src) {
+            $mainImage.attr("src", src);
+        }
+
+        // Xóa class 'active-thumbnail' khỏi các thumbnail khác
+        $(".thumbnail-item__wrapper").removeClass("active-thumbnail");
+    }
+
+    //--------------------------------------PRODUCT ADD CART----------------------------------
     var productType = $(".product-detail__title").data("product-type"); //simple || variable
 
     if (productType == 'variable') {
@@ -19,6 +38,8 @@ $(document).ready(function () {
         // Hàm để gọi API và lấy giá sản phẩm
         function loadProductPrice(product) {
             // Lấy giá trị size đã chọn
+            console.log('product', product.image.src)
+            changeMainImage(product.image.src ?? '');
             const attributeKey = $(".product-detail__size-options").data("attribute-key");
             selectedVariation = product;
             // Cập nhật giá sản phẩm lên giao diện
@@ -151,7 +172,6 @@ $(document).ready(function () {
                 });
         });
     } else if (productType == 'simple') {
-
         var dataProductSimple = $(".product-detail__title").data("product");
 
         setupQuantityControls(".product-detail__quantity-controls");
