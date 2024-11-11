@@ -149,34 +149,34 @@ $(document).ready(function () {
     });
 
     $('#paymentBtn').on('click', function () {
+        // Lấy giá trị userId từ thuộc tính data-userID của nút
+        const userId = $(this).data('userid'); // Lấy giá trị từ data-userID của nút
 
-            if (!isPayment) {
-                Swal.fire({
-                    icon: "error",
-                    title:"Cập nhật giỏ hàng trước khi thanh toán.",
-                    showConfirmButton: false,
-                    timer: 3000,
-                });
-            }else{
-                APIHandler.get('/wp-json/custom-api/v1/order/create')
-                    .done(function (response) {
-                           window.location.href= baseUrl+'/payment?token='+response.data.orderId ?? '';
-                    })
-                    .fail(function (error) {
-                        Swal.fire({
-                            icon: "error",
-                            title: error.responseJSON.message ?? "Thanh toán thất bại. Vui lòng thử lại.",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+        if (!isPayment) {
+            Swal.fire({
+                icon: "error",
+                title: "Cập nhật giỏ hàng trước khi thanh toán.",
+                showConfirmButton: false,
+                timer: 3000,
+            });
+        } else {
+            // Gửi request API với tham số userId
+            APIHandler.get('/wp-json/custom-api/v1/order/create?userId='+userId)
+                .done(function (response) {
+                    // Chuyển hướng tới trang thanh toán với orderId trả về
+                    window.location.href = baseUrl + '/payment?token=' + (response.data.orderId ?? '');
+                })
+                .fail(function (error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: error.responseJSON.message ?? "Thanh toán thất bại. Vui lòng thử lại.",
+                        showConfirmButton: false,
+                        timer: 1500
                     });
-
-
-
-
-            }
-
+                });
+        }
     });
+
 
     showAlertFromUrlParam('errorPayment');
     function showAlertFromUrlParam(paramName) {

@@ -6,6 +6,7 @@ use app\Controllers\Controller as BaseController;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Str;
 
+
 class CheckoutController extends BaseController
 {
     public function __construct()
@@ -13,16 +14,22 @@ class CheckoutController extends BaseController
         session_start(); // Bắt đầu session
     }
 
-    public function moveCartToOrder()
+    public function moveCartToOrder($request)
     {
         // Lấy dữ liệu từ session và cookie giỏ hàng
         $cart_data = (isset($_SESSION['cart']) ? $_SESSION['cart'] : [])
             + (isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []);
 
-
         // Kiểm tra nếu giỏ hàng trống
         if (empty($cart_data)) {
             return $this->fail('Không có sản phẩm');
+        }
+
+        // Lấy userId từ tham số trong request, nếu không có thì dùng get_current_user_id()
+        $userId = $request->get_param('userId') ?: get_current_user_id();
+
+        if (!$userId) {
+            return $this->fail('Người dùng chưa đăng nhập');
         }
 
         foreach ($cart_data as $item) {
@@ -42,7 +49,7 @@ class CheckoutController extends BaseController
         }
 
         // Tạo ID đơn hàng ngẫu nhiên
-        $orderId = bin2hex(random_bytes(32));
+        $orderId = $userId.'_'.time();
         $orders[$orderId] = $cart_data;
 
         // Sao chép dữ liệu giỏ hàng vào session
@@ -53,6 +60,7 @@ class CheckoutController extends BaseController
 
         return $this->success(data: ['orderId' => $orderId]);
     }
+
 
     public function getOrderHandler($orderId)
     {
@@ -117,20 +125,26 @@ class CheckoutController extends BaseController
 
     public function handlePaymentSuccess($orderId)
     {
-        // Lấy thông tin giao hàng từ session
+        // Lấy thông tin giao hàng và đơn hàng từ session
         $shippingInfo = $_SESSION['shippingInfo'] ?? [];
-        if (empty($shippingInfo)) {
-            return false; // Không có thông tin giao hàng
-        }
-
-        // Lấy dữ liệu từ session 'order'
         $orderData = $_SESSION['order'] ?? [];
-        if (empty($orderData) || !isset($orderData[$orderId])) {
-            return false; // Không có đơn hàng hoặc orderId không tồn tại
+
+        if (empty($shippingInfo) || empty($orderData)) return false;
+
+        // Kiểm tra định dạng orderId và lấy thông tin đơn hàng
+        $orderIdParts = explode('_', $orderId);
+        if (count($orderIdParts) !== 3 || !isset($orderData[$orderIdParts[0] . '_' . $orderIdParts[1]])) {
+            return false;
         }
 
-        // Tạo một đơn hàng mới
+        // Lấy thông tin người dùng
+        $userId = $orderIdParts[0];
+        $customer = new \WP_User($userId);
+        if (!$customer->ID) return false;
+
+        // Tạo đơn hàng mới và gán thông tin khách hàng
         $order = wc_create_order();
+        $order->set_customer_id($userId);
 
         // Duyệt qua dữ liệu đơn hàng và thêm sản phẩm vào đơn hàng
         foreach ($orderData[$orderId] as $item) {
@@ -232,16 +246,12 @@ class CheckoutController extends BaseController
         // Lưu log vào file log trong thư mục wp-content
         $logFile = WP_CONTENT_DIR . '/momo_ipn_log.txt'; // Đường dẫn đến file log
 
-        // Ghi log với tên hàm và dữ liệu
-//        $logMessage = date('Y-m-d H:i:s') . " - " . __FUNCTION__ . " - " . json_encode($result) . PHP_EOL;
-//        file_put_contents($logFile, $logMessage, FILE_APPEND);
-
         // Kiểm tra kết quả thanh toán
 
         if ($result && isset($result['orderId']) && isset($result['resultCode']) && $result['resultCode'] == '0') {
             $this->handlePaymentSuccess($result['orderId']);
             // Chuyển hướng tới URL redirectUrl
-            header('Location: ' . home_url('checkout-result'));
+            header('Location: ' . home_url('/') . '?paymentsuccess=true');
             exit;
         } else {
             header('Location: ' . home_url('cart'));

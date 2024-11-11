@@ -195,6 +195,7 @@ class ProductController extends BaseController
 
         if ($product) {
             $product_id = $product->ID;
+
             $wc_product = wc_get_product($product_id);
 
             if ($wc_product) {
@@ -260,10 +261,10 @@ class ProductController extends BaseController
                 foreach ($wc_product->get_attributes() as $attribute) {
                     if ($attribute->is_taxonomy()) {
 
-                        $attribute_values = wc_get_product_terms($wc_product->get_id(), $attribute->get_name(), ['fields' => 'names']);
+                        $attribute_values = $wc_product->get_available_variations();
                         $attributes[$attribute["name"]] = [
                             'name' => wc_attribute_label($attribute->get_name()),
-                            'value' => implode(', ', $attribute_values),
+                            'value' => $attribute_values,
                         ];
                     } else {
                         $attributes[$attribute["name"]] = [
@@ -281,8 +282,8 @@ class ProductController extends BaseController
                         'value' => $meta->value,
                     ];
                 }
-
                 // Return product information
+
                 return [
                     'id' => $wc_product->get_id(),
                     'name' => $wc_product->get_name(),
@@ -293,6 +294,7 @@ class ProductController extends BaseController
                     'gallery_images' => $gallery_images,
                     'stock_quantity' => $wc_product->get_stock_quantity(),
                     'attributes' => $attributes,
+                    'productType' => !empty($attributes) ? 'variable' : 'simple',
                     'meta_data' => $meta_data,
                     'categories' => $categories,
                     'upsell_products' => $upsell_products,
@@ -317,6 +319,7 @@ class ProductController extends BaseController
         }
 
         // Lấy các biến thể có sẵn
+        $product = wc_get_product($product_id);
         $variations = $product->get_available_variations();
 
         // Tìm biến thể khớp với các thuộc tính
@@ -331,44 +334,5 @@ class ProductController extends BaseController
             }
         }
         return $this->fail('Không tìm thấy biến thể phù hợp.');
-    }
-
-
-    function getNewProducts($limit = 3)
-    {
-        $args = array(
-            'post_type' => 'product',
-            'posts_per_page' => $limit,
-            'tax_query' => array(
-                array(
-                    'taxonomy' => 'product_tag',
-                    'field'    => 'slug',
-                    'terms'    => 'NEW',
-                ),
-            ),
-        );
-
-        $query = new WP_Query($args);
-        $new_products = array();
-
-        if ($query->have_posts()) {
-            while ($query->have_posts()) {
-                $query->the_post();
-                $terms = get_the_terms(get_the_ID(), 'product_cat');
-                $first_category = !empty($terms) && !is_wp_error($terms) ? reset($terms)->name : '';
-                $new_products[] = array(
-                    'ID' => get_the_ID(),
-                    'title' => get_the_title(),
-                    'url' => get_permalink(),
-                    'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
-                    'price' => get_post_meta(get_the_ID(), '_price', true),
-                    'first_category' => $first_category,
-                );
-            }
-        }
-
-        wp_reset_postdata();
-
-        return $new_products;
     }
 }
