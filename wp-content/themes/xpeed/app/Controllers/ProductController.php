@@ -55,26 +55,26 @@ class ProductController extends BaseController
             $categories = explode(',', $category);
             $args['tax_query'][] = array(
                 'taxonomy' => 'product_cat',
-                'field' => 'slug',
-                'terms' => $categories,
+                'field'    => 'slug',
+                'terms'    => $categories,
             );
         }
 
         if (!empty($size)) {
             $sizes = explode(',', $size);
             $args['meta_query'][] = array(
-                'key' => 'attribute_pa_size',
-                'value' => $sizes,
+                'key'     => 'attribute_pa_size',
+                'value'   => $sizes,
                 'compare' => '='
             );
         }
 
         if ($min_price || $max_price < PHP_INT_MAX) {
             $args['meta_query'][] = array(
-                'key' => '_price',
-                'value' => array($min_price, $max_price),
+                'key'     => '_price',
+                'value'   => array($min_price, $max_price),
                 'compare' => 'BETWEEN',
-                'type' => 'NUMERIC'
+                'type'    => 'NUMERIC'
             );
         }
 
@@ -193,7 +193,7 @@ class ProductController extends BaseController
         // Retrieve product by slug
         $product = get_page_by_path($slug, OBJECT, 'product');
 
-        if (true) {
+        if ($product) {
             $product_id = $product->ID;
 
             $wc_product = wc_get_product($product_id);

@@ -153,12 +153,13 @@ $(document).ready(function () {
             // Gọi API để thêm sản phẩm vào giỏ hàng
             APIHandler.post("/wp-json/custom-api/v1/add-to-cart", data)
                 .done(function (response) {
-
                     Swal.fire({
                         icon: "success",
                         title: "Sản phẩm đã được thêm vào giỏ hàng",
                         showConfirmButton: false,
                         timer: 1500,
+                    }).then(()=>{
+                        $("#product-count").text(Object.keys(response.data.session_cart).length);
                     });
                 })
                 .fail(function (err) {

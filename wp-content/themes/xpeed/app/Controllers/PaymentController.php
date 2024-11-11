@@ -27,7 +27,6 @@ class PaymentController extends BaseController
      */
     public function processPayment($request)
     {
-
         $amount = (float)$request->get_param('amount');
         $orderInfo = $request->get_param('orderInfo') ?? 'MoMo Payment';
         $shippingInfo = $request->get_param('shippingInfo') ?? '';
@@ -59,6 +58,7 @@ class PaymentController extends BaseController
         $extraData = ""; // Dữ liệu bổ sung nếu có
         $requestType = "payWithATM"; // payWithATM /  captureWallet
         // Tạo chữ ký (signature) cho yêu cầu
+        $orderId = $orderId.'_'.time();
         $rawHash = "accessKey=" . $this->accessKey .
             "&amount=" . $amount .
             "&extraData=" . $extraData .
