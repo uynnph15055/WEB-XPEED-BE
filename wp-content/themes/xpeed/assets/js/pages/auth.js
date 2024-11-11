@@ -4,7 +4,14 @@ import Validator from '../validation.js';
 
 // main.js
 $(document).ready(function () {
-    console.log('xin chào');
+    const redirectAfterLogin = getCookie('redirect_after_login');
+    const redirectUrl = (redirectAfterLogin && redirectAfterLogin.trim() !== '') ? redirectAfterLogin : baseUrl;
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
     const clearErrors = () => {
         $('.error-message').html(''); // Xóa hết các phần tử có class "error-message"
     };
@@ -46,7 +53,7 @@ $(document).ready(function () {
             username: 'required',
             password: ''
         },
-        baseUrl);
+        redirectUrl);
 
     submitForm(
         $('#auth-wrapper-register__form'),

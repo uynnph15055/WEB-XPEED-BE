@@ -217,6 +217,7 @@ class ProductController extends BaseController
 
                 // Get gallery and main image
                 $gallery_images = array_map('wp_get_attachment_url', $wc_product->get_gallery_image_ids());
+
                 $main_image = $wc_product->get_image_id() ? wp_get_attachment_url($wc_product->get_image_id()) : ($gallery_images[0] ?? '');
 
                 // Retrieve Upsell Products
