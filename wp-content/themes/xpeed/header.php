@@ -17,7 +17,8 @@ if (!isset($_SESSION['cart'])) {
             rel="stylesheet" />
       <link rel="profile" href="http://gmpg.org/xfn/11">
       <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-      <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
+      <link rel="icon" href="<?= get_template_directory_uri() . '/assets/images/logo/logo-url.svg' ?>" sizes="16x16"
+            type="image/png">
       <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
       <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -26,8 +27,8 @@ if (!isset($_SESSION['cart'])) {
       const baseUrl = "<?php echo home_url(); ?>";
       </script>
       <?php
-    wp_head()
-    ?>
+      wp_head()
+      ?>
 </head>
 
 <body>
@@ -51,7 +52,7 @@ if (!isset($_SESSION['cart'])) {
                                                       <?= $menu_item->title ?>
                                                 </a>
                                                 <?php if ($menu_item->submenu_count > 0) {
-                                    ?>
+                                                      ?>
                                                 <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
                                                 <?php } ?>
 
