@@ -4,7 +4,7 @@ import Validator from '../validation.js';
 
 // main.js
 $(document).ready(function () {
-    const redirectAfterLogin = getCookie('redirect_after_login');
+    const redirectAfterLogin = decodeURIComponent(getCookie('redirect_after_login'));
     const redirectUrl = (redirectAfterLogin && redirectAfterLogin.trim() !== '') ? redirectAfterLogin : baseUrl;
     function getCookie(name) {
         const value = `; ${document.cookie}`;

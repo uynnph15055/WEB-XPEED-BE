@@ -10,13 +10,10 @@ use app\Controllers\BranchStoreController;
 
 $branchStoreController = new BranchStoreController;
 ?>
-    <div class="address__header">
-        <img
-                class="address__header-img"
-                src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg"
-                alt=""
-        />
-        <h1 id="address-title" class="address__heading">Đại lý - địa chỉ</h1>
+    <div class="header-overlay blogs__header">
+        <img class="header-overlay__img blogs__header-img" src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg"
+             alt="" />
+        <h1 id="blogs-title" class="blogs__heading"> Đại lý - địa chỉ</h1>
     </div>
 
     <main class="address-wrapper">

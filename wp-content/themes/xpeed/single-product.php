@@ -101,10 +101,10 @@ $product = $productController->getProductInfo();
                     </div>
 
                     <div class="product-detail__actions">
-                        <button class="button button--primary product-detail__buy-now">
+                        <button class="button button--primary product-detail__buy-now"  data-userID="<?= get_current_user_id() ?? 0 ?>">
                             Mua ngay
                         </button>
-                        <button class="button button--cart product-detail__add-to-cart">
+                        <button class="button button--cart product-detail__add-to-cart"  data-userID="<?= get_current_user_id() ?? 0 ?>">
                             Thêm vào giỏ hàng
                         </button>
                     </div>

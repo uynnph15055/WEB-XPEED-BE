@@ -7,10 +7,11 @@
 
 use app\Controllers\CartController;
 session_start();
+check_user_login_and_redirect();
 $cartController = new CartController();
-
 $carts = $cartController->getCartHandler();
 $totalCarts = 0;
+
 get_header();
 
 ?>

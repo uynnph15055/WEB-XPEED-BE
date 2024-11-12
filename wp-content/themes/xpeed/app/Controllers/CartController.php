@@ -94,13 +94,22 @@ class CartController extends BaseController
 
     public function updateCartHandler($request)
     {
+        // Lấy dữ liệu từ request (danh sách sản phẩm)
+        $cart_items = $request->get_params();
+        $cart_cookie = $this->progressUpdateCartItem($request);
+        // Trả về kết quả thành công với dữ liệu giỏ hàng trong session và cookie
+        return $this->success('Sản phẩm đã được cập nhật giỏ hàng.', [
+            'session_cart' => $_SESSION['cart'],
+            'cookie_cart' => $cart_cookie
+        ]);
+    }
+
+    public function progressUpdateCartItem($cart_items)
+    {
         // Khởi động session nếu chưa
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
-        // Lấy dữ liệu từ request (danh sách sản phẩm)
-        $cart_items = $request->get_params();
 
         // Kiểm tra dữ liệu hợp lệ
         if (empty($cart_items) || !is_array($cart_items)) {
@@ -121,7 +130,6 @@ class CartController extends BaseController
             $product_id = $item['productId'];
             $quantity = $item['quantity'];
             $variation = $item['variation'];
-
             // Kiểm tra dữ liệu từng sản phẩm
             if (empty($product_id) || !is_numeric($quantity) || $quantity < 1) {
                 continue;  // Bỏ qua sản phẩm không hợp lệ
@@ -155,12 +163,7 @@ class CartController extends BaseController
 
         // Lưu giỏ hàng vào cookie trong 30 ngày
         setcookie('cart', json_encode($cart_cookie), time() + (86400 * 30), "/");
-
-        // Trả về kết quả thành công với dữ liệu giỏ hàng trong session và cookie
-        return $this->success('Sản phẩm đã được cập nhật giỏ hàng.', [
-            'session_cart' => $_SESSION['cart'],
-            'cookie_cart' => $cart_cookie
-        ]);
+        return $cart_cookie;
     }
 
     private function updateCartItem(&$cart, $attribute_key, $cart_item)
