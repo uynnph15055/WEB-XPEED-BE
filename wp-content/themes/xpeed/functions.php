@@ -1,5 +1,10 @@
 <?php
 
+// Kiểm tra xem WordPress đã được khởi động chưa
+if (!defined('ABSPATH')) {
+    exit; // Ngăn chặn truy cập trái phép
+}
+
 /**
  * Theme function.
  * Version: 1.0
@@ -9,10 +14,17 @@ define("THEME_VER", $theme['Version']);
 define('THEME_URL', get_stylesheet_directory());
 define('TEMP_DIR', get_template_directory());
 define('DIR_URI', get_stylesheet_directory_uri());
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+// Bao gồm file autoload của Composer
+require_once __DIR__ . '/vendor/autoload.php'; // Đảm bảo đường dẫn chính xác
+require_once get_template_directory() . '/app/Routes/web.php'; // Bao gồm các route
+
+
 const TEXT_DOMAIN = 'xpeed';
 const CORE = THEME_URL . '/core';
 
-load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
 
 $list_files = array(
     "/includes/class_customizes.php",
@@ -29,7 +41,13 @@ foreach ($list_files as $file) {
     require_once(TEMP_DIR . $file);
 }
 
-// var_dump data
+
+load_theme_textdomain(TEXT_DOMAIN, TEMP_DIR . '/languages');
+
+// Các hàm khác trong theme của bạn
+// ...
+
+// Hàm var_dump data
 if (!function_exists('dd')) {
     function dd()
     {
@@ -42,18 +60,41 @@ if (!function_exists('dd')) {
     }
 }
 
-// Set views blogs
+if (!function_exists('check_user_login_and_redirect')) {
+    function check_user_login_and_redirect($urlRedirect = null)
+    {
+        // Nếu người dùng chưa đăng nhập
+        $urlRedirect = $urlRedirect ?? home_url('/login');
+        if (!is_user_logged_in()) {
+            // Lấy URL hiện tại
+            $current_url = getCurrentUrl();
+
+            // Lưu URL hiện tại vào cookie, thời gian sống 1 giờ (3600 giây)
+            setcookie('redirect_after_login', $current_url, time() + 3600, '/');
+
+            // Chuyển hướng đến trang login
+            wp_redirect($urlRedirect);
+            exit;
+        }
+    }
+    function getCurrentUrl() {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'];
+        $requestUri = $_SERVER['REQUEST_URI'];
+
+        return $protocol . '://' . $host . $requestUri;
+    }
+}
+
+// Cài đặt view cho blog
 function set_views($post_ID)
 {
     $key = 'views';
-    $count = get_post_meta($post_ID, $key, true); //retrieves the count
+    $count = get_post_meta($post_ID, $key, true);
 
     if ($count == '') {
-
         $count = 0;
-
         delete_post_meta($post_ID, $key);
-
         add_post_meta($post_ID, $key, '0');
     } else {
         $count++;
@@ -62,6 +103,7 @@ function set_views($post_ID)
 }
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
 
+// Theo dõi blog tùy chỉnh
 function track_custom_blogs($post_ID)
 {
     if (!is_single()) return;
@@ -72,3 +114,55 @@ function track_custom_blogs($post_ID)
     set_views($post_ID);
 }
 add_action('wp_head', 'track_custom_blogs');
+
+// Hàm thiết lập Eloquent ORM
+function setup_eloquent()
+{
+    global $wpdb; // Đảm bảo biến $wpdb được gọi đúng cách
+
+    $capsule = new Capsule;
+
+    // Thiết lập kết nối cơ sở dữ liệu WordPress
+    $capsule->addConnection([
+        'driver'    => 'mysql',
+        'host'      => DB_HOST,
+        'database'  => DB_NAME,
+        'username'  => DB_USER,
+        'password'  => DB_PASSWORD,
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => $wpdb->prefix, // Sử dụng tiền tố đúng cách
+    ]);
+
+    // Thiết lập Eloquent ORM để sử dụng
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+}
+
+// Thêm hàm thiết lập vào hook 'init'
+add_action('init', 'setup_eloquent');
+
+// Function to handle Google login callback
+function google_login_callback()
+{
+    include_once get_template_directory() . '/inc/social-login/google-login.php';
+    exit;
+}
+
+// Function to handle Facebook login callback
+function facebook_login_callback()
+{
+    include_once get_template_directory() . '/inc/social-login/facebook-login.php';
+    exit;
+}
+
+// Hook to process the login callbacks
+add_action('init', function () {
+    if (strpos($_SERVER['REQUEST_URI'], 'google-login-callback') !== false) {
+        google_login_callback();
+    }
+
+    if (strpos($_SERVER['REQUEST_URI'], 'facebook-login-callback') !== false) {
+        facebook_login_callback();
+    }
+});
