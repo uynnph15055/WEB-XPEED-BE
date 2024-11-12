@@ -4,10 +4,8 @@
  * Template Name: Profile
  * Author: Phuongdd
  */
-if (!is_user_logged_in()) {
-    wp_redirect(home_url('/login'));
-    exit;
-}
+
+check_user_login_and_redirect();
 $current_user = wp_get_current_user();
 get_header();
 ?>

@@ -18,8 +18,31 @@ $product = $productController->getProductInfo();
         <div class="product-content">
             <!-- Phần bên trái, để trống -->
             <div class="product-content__left">
-                <img src="<?= $product["main_image"] ?? '' ?>"
-                     alt=""/>
+                <img
+                        id="mainImage"
+                        src="<?= $product["main_image"] ?? '' ?>"
+                        alt="Main Product Image"
+                        class="main-image"
+                />
+                <div class="thumbnail-gallery">
+                    <div class="thumbnail-item__wrapper active-thumbnail ">
+                        <img
+                                src="<?= $product["main_image"] ?? '' ?>"
+                                alt="Thumbnail 1"
+                                class="thumbnail-item__img"
+                        />
+                    </div>
+                    <?php foreach ($product["gallery_images"] as $key => $galleryImage) { ?>
+                    <div class="thumbnail-item__wrapper">
+                        <img
+                                src="<?= $galleryImage ?>"
+                                alt="<?= $galleryImage ?>"
+                                class="thumbnail-item__img"
+                        />
+                    </div>
+                    <?php } ?>
+
+                </div>
             </div>
 
             <!-- Phần bên phải là thông tin chi tiết sản phẩm -->

@@ -89,7 +89,7 @@ get_header();
                             <button class="button button--primary-cart">
                                 Cập nhật giỏ hàng
                             </button>
-                            <button class="button button--primary" id="paymentBtn" >Thanh toán</button>
+                            <button class="button button--primary" id="paymentBtn" data-userID="<?= get_current_user_id() ?? 0 ?>">Thanh toán</button>
                         </div>
                     </div>
                 </div>

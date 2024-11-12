@@ -60,6 +60,32 @@ if (!function_exists('dd')) {
     }
 }
 
+if (!function_exists('check_user_login_and_redirect')) {
+    function check_user_login_and_redirect($urlRedirect = null)
+    {
+        // Nếu người dùng chưa đăng nhập
+        $urlRedirect = $urlRedirect ?? home_url('/login');
+        if (!is_user_logged_in()) {
+            // Lấy URL hiện tại
+            $current_url = getCurrentUrl();
+
+            // Lưu URL hiện tại vào cookie, thời gian sống 1 giờ (3600 giây)
+            setcookie('redirect_after_login', $current_url, time() + 3600, '/');
+
+            // Chuyển hướng đến trang login
+            wp_redirect($urlRedirect);
+            exit;
+        }
+    }
+    function getCurrentUrl() {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'];
+        $requestUri = $_SERVER['REQUEST_URI'];
+
+        return $protocol . '://' . $host . $requestUri;
+    }
+}
+
 // Cài đặt view cho blog
 function set_views($post_ID)
 {

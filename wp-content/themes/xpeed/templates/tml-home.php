@@ -39,6 +39,7 @@ $productThird = isset($product->categories[2]) ? $product->getProductLimitItemPa
 require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
 
 $homeController = new HomeController;
+
 ?>
 <main class="home-wrapper">
       <!-- banner -->
