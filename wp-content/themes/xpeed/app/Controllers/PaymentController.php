@@ -8,6 +8,7 @@ class PaymentController extends BaseController
 {
     public function __construct()
     {
+        check_user_login_and_redirect();
         session_start(); // Bắt đầu session
     }
 
@@ -27,11 +28,10 @@ class PaymentController extends BaseController
      */
     public function processPayment($request)
     {
-        $amount = (float)$request->get_param('amount');
         $orderInfo = $request->get_param('orderInfo') ?? 'MoMo Payment';
         $shippingInfo = $request->get_param('shippingInfo') ?? '';
         $orderId = $request->get_param('orderId') ?? '';
-
+        $amount = $this->getOrderTotal($orderId) ?? (float)$request->get_param('amount');
         if (empty($amount) || empty($shippingInfo) || empty($orderId)) {
             return $this->fail('Thông tin không hợp lệ .');
         }
@@ -58,7 +58,7 @@ class PaymentController extends BaseController
         $extraData = ""; // Dữ liệu bổ sung nếu có
         $requestType = "payWithATM"; // payWithATM /  captureWallet
         // Tạo chữ ký (signature) cho yêu cầu
-        $orderId = $orderId.'_'.time();
+        $orderId = $orderId . '_' . time();
         $rawHash = "accessKey=" . $this->accessKey .
             "&amount=" . $amount .
             "&extraData=" . $extraData .
@@ -171,4 +171,36 @@ class PaymentController extends BaseController
 
         return $order;
     }
+
+    public function getOrderTotal($orderId)
+    {
+        $orderData = isset($_SESSION['order']) ? $_SESSION['order'] : [];
+
+        // Kiểm tra dữ liệu đơn hàng
+        if (empty($orderData) || empty($orderData[$orderId])) {
+            return 0;
+        }
+
+        $totalOrderPrice = 0;
+
+        // Duyệt qua tất cả các sản phẩm trong đơn hàng
+        foreach ($orderData[$orderId] as $key => $item) {
+            // Lấy product_id và số lượng
+            $product_id = $item['product_id'];
+            $quantity = $item['quantity'];
+
+            // Lấy thông tin sản phẩm từ WooCommerce
+            $product = wc_get_product($product_id);
+
+            if ($product) {
+                // Lấy giá của sản phẩm
+                $price = $product->get_price();
+                // Tính tổng tiền của sản phẩm (giá x số lượng)
+                $totalOrderPrice += $price * $quantity;
+            }
+        }
+
+        return $totalOrderPrice + 50000;
+    }
+
 }

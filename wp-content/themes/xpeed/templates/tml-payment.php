@@ -5,6 +5,8 @@
  * Author: Phuongdd
  */
 session_start();
+check_user_login_and_redirect();
+
 use app\Controllers\CheckoutController;
 
 if (!isset($_GET['token']) || empty($_GET['token'])) {
@@ -176,16 +178,17 @@ get_header();
                 </div>
                 <div class="payment_cart--summary-item">
                     <span class="payment_cart--summary-item-label">Vận chuyển</span>
-                    <span class="payment_cart--summary-item-value">Tính toán</span>
+                    <span class="payment_cart--summary-item-value">50,000 đ</span>
                 </div>
                 <div class="payment_cart--summary-item payment_cart--summary-total">
                     <div class="payment_cart--summary-total-details">
                         <span class="payment_cart--summary-total-label">Tổng tiền</span>
-                        <span class="payment_cart--summary-total-tax"
-                        >Đã bao gồm thuế <?= number_format($totalCarts) ?? '' ?> đ</span
-                        >
+                        <!--                        <span class="payment_cart--summary-total-tax"-->
+                        <!--                        >Đã bao gồm thuế -->
+                        <? //= number_format($totalCarts) ?? '' ?><!-- đ</span-->
+                        <!--                        >-->
                     </div>
-                    <span class="payment_cart--summary-total-value"><?= number_format($totalCarts) ?? '' ?> đ</span>
+                    <span class="payment_cart--summary-total-value"><?= number_format((int)$totalCarts + 50000) ?? '' ?> đ</span>
                 </div>
             </div>
         </div>

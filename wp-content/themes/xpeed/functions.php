@@ -69,6 +69,10 @@ if (!function_exists('check_user_login_and_redirect')) {
             // Lấy URL hiện tại
             $current_url = getCurrentUrl();
 
+            if (strpos($current_url, 'wp-json') !== false) {
+                return false;
+            }
+
             // Lưu URL hiện tại vào cookie, thời gian sống 1 giờ (3600 giây)
             setcookie('redirect_after_login', $current_url, time() + 3600, '/');
 
@@ -77,7 +81,9 @@ if (!function_exists('check_user_login_and_redirect')) {
             exit;
         }
     }
-    function getCurrentUrl() {
+
+    function getCurrentUrl()
+    {
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'];
         $requestUri = $_SERVER['REQUEST_URI'];
@@ -101,6 +107,7 @@ function set_views($post_ID)
         update_post_meta($post_ID, $key, $count);
     }
 }
+
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
 
 // Theo dõi blog tùy chỉnh
@@ -113,6 +120,7 @@ function track_custom_blogs($post_ID)
     }
     set_views($post_ID);
 }
+
 add_action('wp_head', 'track_custom_blogs');
 
 // Hàm thiết lập Eloquent ORM
@@ -124,14 +132,14 @@ function setup_eloquent()
 
     // Thiết lập kết nối cơ sở dữ liệu WordPress
     $capsule->addConnection([
-        'driver'    => 'mysql',
-        'host'      => DB_HOST,
-        'database'  => DB_NAME,
-        'username'  => DB_USER,
-        'password'  => DB_PASSWORD,
-        'charset'   => 'utf8',
+        'driver' => 'mysql',
+        'host' => DB_HOST,
+        'database' => DB_NAME,
+        'username' => DB_USER,
+        'password' => DB_PASSWORD,
+        'charset' => 'utf8',
         'collation' => 'utf8_unicode_ci',
-        'prefix'    => $wpdb->prefix, // Sử dụng tiền tố đúng cách
+        'prefix' => $wpdb->prefix, // Sử dụng tiền tố đúng cách
     ]);
 
     // Thiết lập Eloquent ORM để sử dụng

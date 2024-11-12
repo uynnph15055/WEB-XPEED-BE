@@ -4234,7 +4234,7 @@ template {
   font-weight: bold;
 }
 .invoice__items {
-  padding: 2.5rem 3.5rem;
+  padding: 0 0 2.5rem;
   font-size: 0.875rem;
   color: #4a5568;
   overflow-x: scroll;
@@ -4413,6 +4413,66 @@ template {
   .invoice__footer {
     font-size: 0.75rem;
   }
+}
+.invoice__detail-table-wrapper {
+  width: 100%;
+  overflow: auto;
+}
+.invoice__detail-table-wrapper .invoice__detail-table {
+  width: 100%;
+  min-width: max-content;
+  border-collapse: collapse;
+  display: table;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-row {
+  display: table-row;
+  border-bottom: 1px solid #ccc;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-row--header {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-row .invoice__detail-cell {
+  padding: 10px;
+  text-align: left;
+  display: table-cell;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status {
+  padding: 5px 10px;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  color: #333;
+  display: inline-block;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--paid {
+  background-color: #d4edda;
+  color: #155724;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--unpaid {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-button {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 12px;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-button:hover {
+  background-color: #0056b3;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-button .invoice__detail-button-icon {
+  margin-right: 5px;
+  font-size: 16px;
 }
 
 /*# sourceMappingURL=main.css.map */
