@@ -17,8 +17,53 @@ class CheckoutController extends BaseController
     public function addOrder($request)
     {
         $cart_items = $request->get_params();
+        $cart = new CartController();
+        foreach ([$cart_items[0]] as $item) {
 
-         $cart = new CartController();
+            $product_id = $item['productId'];
+            $quantity = $item['quantity'];
+            $variation = $item['variation'];
+            // Kiểm tra dữ liệu từng sản phẩm
+            if (empty($product_id) || !is_numeric($quantity) || $quantity < 1) {
+                continue;  // Bỏ qua sản phẩm không hợp lệ
+            }
+
+            // Tạo chuỗi để kiểm tra kết hợp product_id và attributes
+            $attribute_key = $product_id . '-' . json_encode($variation);
+
+            // Tạo mảng sản phẩm để cập nhật vào giỏ hàng
+            $cart_item = [
+                'product_id' => $product_id,
+                'quantity' => $quantity,
+                'attributes' => $variation
+            ];
+            $product = wc_get_product($product_id);
+            if (!$product) {
+                continue;  // Bỏ qua nếu không tìm thấy sản phẩm
+            }
+
+            // Kiểm tra số lượng tồn kho
+            $stock_quantity = $product->get_stock_quantity();
+            dd($_SESSION['order']);
+            // Cập nhật sản phẩm trong session và cookie
+//            $cart->updateCartItem($_SESSION['order'], $attribute_key, $cart_item);
+            $userId = $request->get_param('userId') ?: get_current_user_id();
+            if (!$userId) {
+                return $this->fail('Người dùng chưa đăng nhập');
+            }
+
+            if ($_SESSION['order'][$attribute_key]['quantity'] > $stock_quantity) {
+                return $this->fail('Số lượng yêu cầu vượt quá số lượng còn lại trong kho.');
+            }
+
+        }
+
+
+
+
+
+
+
         $cart = $cart->progressUpdateCartItem([$cart_items[0]]);
 
         if(!empty($cart)){

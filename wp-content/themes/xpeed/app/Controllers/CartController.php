@@ -96,7 +96,7 @@ class CartController extends BaseController
     {
         // Lấy dữ liệu từ request (danh sách sản phẩm)
         $cart_items = $request->get_params();
-        $cart_cookie = $this->progressUpdateCartItem($request);
+        $cart_cookie = $this->progressUpdateCartItem($cart_items);
         // Trả về kết quả thành công với dữ liệu giỏ hàng trong session và cookie
         return $this->success('Sản phẩm đã được cập nhật giỏ hàng.', [
             'session_cart' => $_SESSION['cart'],
