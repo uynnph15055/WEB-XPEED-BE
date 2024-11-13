@@ -84,9 +84,9 @@ if (!isset($_SESSION['cart'])) {
                                             <ion-icon name="cart-outline"></ion-icon>
                                         </button>
 
-                                        <?php if (count($_SESSION['cart']) >= 1): ?>
-                                            <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']); ?></div>
-                                        <?php endif; ?>
+
+                                            <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']) ?? 0; ?></div>
+
                                           <div class="header__cart-overlay"></div>
 <!--                                          <div class="header__cart">-->
 <!--                                                <div class="header__cart-content">-->

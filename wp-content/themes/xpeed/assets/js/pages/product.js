@@ -300,6 +300,8 @@ $(document).ready(function () {
                         title: "Sản phẩm đã được thêm vào giỏ hàng",
                         showConfirmButton: false,
                         timer: 1500,
+                    }).then(() => {
+                        $("#product-count").text(Object.keys(response.data.session_cart).length);
                     });
                 })
                 .fail(function (err) {
@@ -502,6 +504,8 @@ $(document).ready(function () {
                         title: "Sản phẩm đã được thêm vào giỏ hàng",
                         showConfirmButton: false,
                         timer: 1500,
+                    }).then(() => {
+                        $("#product-count").text(Object.keys(response.data.session_cart).length);
                     });
                 })
                 .fail(function (err) {
