@@ -77,11 +77,12 @@ $product = $productController->getProductInfo();
 
                             <div class="product-detail__size-options" data-attribute-key="<?= $key ?>">
                                 <?php foreach ($attribute["value"] as $item) { ?>
+
                                     <input type="radio" name="<?= $key ?>"
                                            data-attribute='<?= json_encode($item) ?>'
                                            id="<?= $key ?>-<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
                                            value="<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
-                                           class="product-detail__size-option"/>
+                                           class="product-detail__size-option"  <?= $item["is_in_stock"] != true ? "disabled" : "" ?> />
                                     <label for="<?= $key ?>-<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
                                            class="product-detail__size-label-option"><?= strtoupper($item["attributes"]["attribute_" . $key]) ?></label>
                                 <?php } ?>

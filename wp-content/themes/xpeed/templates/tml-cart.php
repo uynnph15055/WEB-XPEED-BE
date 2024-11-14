@@ -54,9 +54,16 @@ get_header();
                                     <span class="cart__item-stock-quantity"
                                           style="display: none"><?= $cart["stock_quantity"] ?? '' ?></span>
                                     <span class="cart__item-details-price"><?= number_format($cart["price"]) ?? '' ?> đ</span>
-                                    <?php if ((int)$cart["stock_quantity"] <  (int)$cart["quantity"]) { ?>
-                                    <h3  style="color: red;"><i>Số lượng sản phẩm không đủ, tối đa <?= $cart["stock_quantity"] ?? '' ?> sản phẩm</i> </h3>
-                                    <?php } ?>
+                                    <?php
+                                    if ((int)$cart["stock_quantity"] < 1) { ?>
+                                        <h3 style="color: red;"><i>Sản phẩm đã hết hàng</i></h3>
+                                        <?php
+                                    } elseif ((int)$cart["stock_quantity"] < (int)$cart["quantity"]) { ?>
+                                        <h3 style="color: red;"><i>Số lượng sản phẩm không đủ, tối đa <?= $cart["stock_quantity"] ?? '' ?> sản phẩm</i></h3>
+                                        <?php
+                                    }
+                                    ?>
+
                                 </div>
                             </td>
                             <td class="cart__item-quantity">

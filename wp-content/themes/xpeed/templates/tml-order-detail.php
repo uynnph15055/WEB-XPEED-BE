@@ -8,8 +8,10 @@
 use app\Controllers\OrderController;
 
 check_user_login_and_redirect();
+$orderId = isset($_GET['orderId']) ? intval($_GET['orderId']) : 0;
+
 $orderController = new OrderController();
-$orders = $orderController->getAllOrdersForCurrentUser();
+$orderDetails  = $orderController->getOrderDetail($orderId);
 
 get_header();
 
@@ -19,247 +21,61 @@ include plugin_dir_path(__FILE__) . 'sideBar.php';
         <div class="content__title">Invoice Detail</div>
         <div class="invoice-wrapper invoice">
             <div class="invoice__container">
-                <div class="invoice__header">
-                    <table class="invoice__table">
-                        <tbody>
-                        <tr>
-                            <!-- <td class="invoice__logo-cell">
-                              <div>
-                                <img
-                                  src="./assets/images/logo/logo.png"
-                                  class="invoice__logo"
-                                />
-                              </div>
-                            </td> -->
-                            <td class="invoice__info-cell">
-                                <div class="invoice__info">
-                                    <table class="invoice__table">
-                                        <tbody>
-                                        <tr>
-                                            <td
-                                                    class="invoice__info-cell invoice__info-cell--border-right"
-                                            >
-                                                <div>
-                                                    <p class="invoice__info-label">Date</p>
-                                                    <p class="invoice__info-value">
-                                                        April 26, 2023
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td
-                                                    class="invoice__info-cell invoice__info-cell--padding-left"
-                                            >
-                                                <div>
-                                                    <p class="invoice__info-label">Invoice #</p>
-                                                    <p class="invoice__info-value">BRA-00335</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <?php
+                if (!empty($orderDetails) && !is_string($orderDetails)) {
+                    echo "<h2>Thông tin đơn hàng: #" . $orderDetails['order_number'] . "</h2>";
+                    echo "<p><strong>Mã đơn hàng:</strong> " . $orderDetails['order_id'] . "</p>";
+                    echo "<p><strong>Ngày đặt hàng:</strong> " . $orderDetails['order_date'] . "</p>";
+                    echo "<p><strong>Trạng thái đơn hàng:</strong> " . $orderDetails['status'] . "</p>";
+                    echo "<p><strong>Tổng tiền:</strong> " . $orderDetails['total'] . "</p>";
+                    echo "<p><strong>Phí vận chuyển:</strong> " . $orderDetails['shipping_total'] . "</p>";
+                    echo "<p><strong>Phương thức thanh toán:</strong> " . $orderDetails['payment_method'] . "</p>";
 
-                <div class="invoice__section">
-                    <table class="invoice__table">
-                        <tbody>
-                        <tr>
-                            <td class="invoice__details-cell">
-                                <div class="invoice__details">
-                                    <p class="invoice__details-item">
-                                        Supplier Company INC
-                                    </p>
-                                    <p class="invoice__details-info">Number: 23456789</p>
-                                    <p class="invoice__details-info">VAT: 23456789</p>
-                                    <p class="invoice__details-info">6622 Abshire Mills</p>
-                                    <p class="invoice__details-info">
-                                        Port Orlofurt, 05820
-                                    </p>
-                                    <p class="invoice__details-info">United States</p>
-                                </div>
-                            </td>
-                            <td
-                                    class="invoice__details-cell invoice__details-cell--right"
-                            >
-                                <div class="invoice__details">
-                                    <p class="invoice__details-item">Customer Company</p>
-                                    <p class="invoice__details-info">Number: 123456789</p>
-                                    <p class="invoice__details-info">VAT: 23456789</p>
-                                    <p class="invoice__details-info">
-                                        9552 Vandervort Spurs
-                                    </p>
-                                    <p class="invoice__details-info">Paradise, 43325</p>
-                                    <p class="invoice__details-info">United States</p>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    echo "<h3>Địa chỉ thanh toán:</h3>";
+                    echo "<p>" . nl2br($orderDetails['billing_address']) . "</p>";
 
-                <div class="invoice__items">
-                    <table class="invoice__items-table">
-                        <thead>
-                        <tr>
-                            <td class="invoice__items-header">#</td>
-                            <td class="invoice__items-header">Product details</td>
-                            <td
-                                    class="invoice__items-header invoice__items-header--right"
-                            >
-                                Price
-                            </td>
-                            <td
-                                    class="invoice__items-header invoice__items-header--center"
-                            >
-                                Qty.
-                            </td>
-                            <td
-                                    class="invoice__items-header invoice__items-header--center"
-                            >
-                                VAT
-                            </td>
-                            <td
-                                    class="invoice__items-header invoice__items-header--right"
-                            >
-                                Subtotal
-                            </td>
-                            <td
-                                    class="invoice__items-header invoice__items-header--right invoice__items-header--padding-right"
-                            >
-                                Subtotal + VAT
-                            </td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="invoice__items-row">1.</td>
-                            <td class="invoice__items-row">
-                                Monthly accounting services
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--right">
-                                $150.00
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--center">
-                                1
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--center">
-                                20%
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--right">
-                                $150.00
-                            </td>
-                            <td
-                                    class="invoice__items-row invoice__items-row--right invoice__items-row--padding-right"
-                            >
-                                $180.00
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="invoice__items-row">2.</td>
-                            <td class="invoice__items-row">
-                                Taxation consulting (hour)
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--right">
-                                $60.00
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--center">
-                                2
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--center">
-                                20%
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--right">
-                                $120.00
-                            </td>
-                            <td
-                                    class="invoice__items-row invoice__items-row--right invoice__items-row--padding-right"
-                            >
-                                $144.00
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="invoice__items-row">3.</td>
-                            <td class="invoice__items-row">Bookkeeping services</td>
-                            <td class="invoice__items-row invoice__items-row--right">
-                                $50.00
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--center">
-                                1
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--center">
-                                20%
-                            </td>
-                            <td class="invoice__items-row invoice__items-row--right">
-                                $50.00
-                            </td>
-                            <td
-                                    class="invoice__items-row invoice__items-row--right invoice__items-row--padding-right"
-                            >
-                                $60.00
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="7">
-                                <table class="invoice__totals">
-                                    <tbody>
-                                    <tr>
-                                        <td class="invoice__totals-cell">
-                                            <div class="invoice__totals-label">
-                                                Net total:
-                                            </div>
-                                        </td>
-                                        <td
-                                                class="invoice__totals-cell invoice__totals-value"
-                                        >
-                                            $320.00
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="invoice__totals-cell">
-                                            <div class="invoice__totals-label">
-                                                VAT total:
-                                            </div>
-                                        </td>
-                                        <td
-                                                class="invoice__totals-cell invoice__totals-value"
-                                        >
-                                            $64.00
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="invoice__totals-total">
-                                            <div class="invoice__totals-label">Total:</div>
-                                        </td>
-                                        <td class="invoice__totals-total">$384.00</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    echo "<h3>Địa chỉ giao hàng:</h3>";
+                    echo "<p>" . nl2br($orderDetails['shipping_address']) . "</p>";
 
-                <div class="invoice__payment">
-                    <p class="invoice__payment-label">PAYMENT DETAILS</p>
-                    <p class="invoice__payment-info">Banks of Banks</p>
-                    <p class="invoice__payment-info">Bank/Sort Code: 1234567</p>
-                    <p class="invoice__payment-info">Account Number: 123456678</p>
-                    <p class="invoice__payment-info">Payment Reference: BRA-00335</p>
-                </div>
+                    echo "<h3>Chi tiết sản phẩm:</h3>";
+                    echo "<ul>";
 
-                <div class="invoice__notes">
-                    <p class="invoice__notes-label">Notes</p>
-                    <p class="invoice__notes-text">
-                        Lorem ipsum is placeholder text commonly used in the graphic,
-                        print, and publishing industries for previewing layouts and
-                        visual mockups.
-                    </p>
-                </div>
+                    // Duyệt qua từng sản phẩm trong đơn hàng
+                    foreach ($orderDetails['items'] as $item) {
+                        echo "<li>";
+                        echo "<p><strong>Tên sản phẩm:</strong> " . $item['product_name'] . "</p>";
+                        echo "<p><strong>Số lượng:</strong> " . $item['quantity'] . "</p>";
+                        echo "<p><strong>Giá mỗi sản phẩm:</strong> " . $item['price'] . "</p>";
+                        echo "<p><strong>Tổng:</strong> " . $item['total'] . "</p>";
+
+                        // Hiển thị ảnh sản phẩm nếu có
+                        if (!empty($item['thumbnail'])) {
+                            echo "<img src='" . $item['thumbnail'] . "' alt='" . $item['product_name'] . "' width='100' height='100'>";
+                        }
+
+                        // Hiển thị link đến trang sản phẩm nếu có
+                        if (!empty($item['link'])) {
+                            echo "<p><a href='" . $item['link'] . "' target='_blank'>Xem sản phẩm</a></p>";
+                        }
+
+                        // Hiển thị thông tin biến thể sản phẩm nếu có
+                        if (!empty($item['variation_data'])) {
+                            echo "<p><strong>Thông tin biến thể:</strong></p>";
+                            echo "<ul>";
+                            foreach ($item['variation_data'] as $variation) {
+                                echo "<li>" . $variation['name'] . ": " . $variation['value'] . "</li>";
+                            }
+                            echo "</ul>";
+                        }
+
+                        echo "</li>";
+                    }
+
+                    echo "</ul>";
+                } else {
+                    echo "<p>Không tìm thấy thông tin đơn hàng.</p>";
+                }
+                ?>
 
                 <footer class="invoice__footer">
                     Supplier Company

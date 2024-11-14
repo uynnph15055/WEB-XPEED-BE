@@ -41,7 +41,8 @@ include plugin_dir_path(__FILE__) . 'sideBar.php';
                       ><?= $order['status'] ?></span
                       >
                                     </div>
-                                    <div class="invoice__detail-cell">
+                                    <div class="invoice__detail-cell"
+                                            onclick="window.location.href='<?= home_url('/chi-tiet-don-hang') . '?orderId=' . $order['order_id'] ?>'">
                                         <button class="invoice__detail-button">
                                             <ion-icon
                                                     name="wallet-outline"
