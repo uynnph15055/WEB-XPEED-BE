@@ -4447,14 +4447,36 @@ template {
   border-radius: 5px;
   color: #333;
   display: inline-block;
+  /* Thành công (hoặc đã thanh toán) */
+  /* Thất bại (hoặc chưa thanh toán) */
+  /* Lỗi */
+  /* Đang xử lý hoặc đang giao */
+  /* Cảnh báo */
+  /* Mặc định */
 }
 .invoice__detail-table-wrapper .invoice__detail-table .invoice__status--paid {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #d4edda; /* Màu xanh lá nhạt */
+  color: #155724; /* Màu xanh lá đậm */
 }
 .invoice__detail-table-wrapper .invoice__detail-table .invoice__status--unpaid {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: #f8d7da; /* Màu đỏ nhạt */
+  color: #721c24; /* Màu đỏ đậm */
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--error {
+  background-color: #dc3545; /* Màu đỏ đậm */
+  color: #fff; /* Màu trắng */
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--processing {
+  background-color: #fff3cd; /* Màu vàng nhạt */
+  color: #856404; /* Màu vàng đậm */
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--warning {
+  background-color: #ffc107; /* Màu vàng */
+  color: #856404; /* Màu vàng đậm */
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--default {
+  background-color: #e2e3e5;
+  color: #383d41;
 }
 .invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-button {
   display: flex;

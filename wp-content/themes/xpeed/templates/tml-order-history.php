@@ -37,12 +37,12 @@ include plugin_dir_path(__FILE__) . 'sideBar.php';
                                     <div class="invoice__detail-cell"><?= number_format($order['total']) ?? '' ?>đ
                                     </div>
                                     <div class="invoice__detail-cell">
-                      <span class="invoice__status invoice__status--paid"
-                      ><?= $order['status'] ?></span
-                      >
+                                    <span class="invoice__status <?= $orderController->getOrderStatusClass($order['status']) ?>">
+                                        <?= $order['status'] ?>
+                                    </span>
                                     </div>
                                     <div class="invoice__detail-cell"
-                                            onclick="window.location.href='<?= home_url('/chi-tiet-don-hang') . '?orderId=' . $order['order_id'] ?>'">
+                                         onclick="window.location.href='<?= home_url('/chi-tiet-don-hang') . '?orderId=' . $order['order_id'] ?>'">
                                         <button class="invoice__detail-button">
                                             <ion-icon
                                                     name="wallet-outline"

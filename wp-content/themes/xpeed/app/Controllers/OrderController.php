@@ -12,6 +12,7 @@ class OrderController extends BaseController
     {
         session_start(); // Bắt đầu session
     }
+
     /**
      * Lấy thông tin tất cả đơn hàng của người dùng đang đăng nhập
      *
@@ -30,7 +31,7 @@ class OrderController extends BaseController
         // Truy vấn các đơn hàng của người dùng dựa trên user_id
         $query_args = [
             'customer_id' => $user_id,
-            'status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending'],
+//            'status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending'],
             'limit' => -1, // Lấy tất cả đơn hàng, có thể giới hạn nếu cần
         ];
 
@@ -63,7 +64,7 @@ class OrderController extends BaseController
         return $order_details;
     }
 
-    function getOrderDetail($orderId)
+    public function getOrderDetail($orderId)
     {
         // Kiểm tra người dùng đã đăng nhập
         if (!is_user_logged_in()) {
@@ -144,4 +145,55 @@ class OrderController extends BaseController
         return $order_data;
     }
 
+    public function cancelOrder($orderId)
+    {
+        // Lấy thông tin đơn hàng từ WooCommerce
+        $order = wc_get_order($orderId);
+
+        if (!$order) {
+            return ['error' => 'Không tìm thấy đơn hàng'];
+        }
+
+        // Kiểm tra quyền sở hữu đơn hàng
+        $current_user_id = get_current_user_id();
+        if ($order->get_customer_id() !== $current_user_id) {
+            return ['error' => 'Bạn không có quyền hủy đơn hàng này'];
+        }
+
+        // Kiểm tra trạng thái đơn hàng trước khi hủy
+        $status = $order->get_status();
+        $cancelable_statuses = ['pending', 'on-hold', 'processing'];
+
+        if (!in_array($status, $cancelable_statuses)) {
+            return ['error' => 'Đơn hàng không thể hủy ở trạng thái hiện tại'];
+        }
+
+        // Thực hiện hủy đơn hàng
+        $order->update_status('cancelled', 'Đơn hàng đã bị hủy bởi người dùng.');
+
+        return ['success' => 'Đơn hàng đã được hủy thành công'];
+    }
+
+    public function getOrderStatusClass($status)
+    {
+        $status = strtolower($status); // Chuyển về chữ thường để tránh lỗi so sánh
+        switch ($status) {
+            case 'completed':
+            case 'paid':
+            case 'thành công':
+                return 'invoice__status--success'; // Màu xanh lá cây
+            case 'cancelled':
+            case 'failed':
+            case 'thất bại':
+                return 'invoice__status--error'; // Màu đỏ
+            case 'pending':
+            case 'processing':
+            case 'on hold':
+            case 'đang xử lý':
+            case 'đang giao':
+                return 'invoice__status--warning'; // Màu vàng
+            default:
+                return 'invoice__status--default'; // Màu mặc định
+        }
+    }
 }
