@@ -88,17 +88,22 @@ class OrderController extends BaseController
 
         // Lấy thông tin chi tiết sản phẩm trong đơn hàng
         $order_items = [];
+        $items_subtotal = 0; // Khởi tạo subtotal cho tất cả sản phẩm
+
         foreach ($order->get_items() as $item_id => $item) {
             $product = $item->get_product();
             $product_id = $item->get_product_id();
             $variation_id = $item->get_variation_id();
             $product_name = $item->get_name();
             $quantity = $item->get_quantity();
-            $subtotal = $item->get_subtotal();
-            $total = $item->get_total();
+            $subtotal = $item->get_subtotal(); // Tổng tiền sản phẩm trước thuế
+            $total = $item->get_total(); // Tổng tiền sản phẩm sau thuế và giảm giá
             $price = $item->get_total() / $quantity;
             $product_thumbnail = get_the_post_thumbnail_url($product_id, 'thumbnail'); // Lấy URL ảnh thumbnail
             $product_link = get_permalink($product_id); // Lấy link sản phẩm
+
+            // Cộng dồn subtotal của từng sản phẩm vào items_subtotal
+            $items_subtotal += $subtotal;
 
             // Lấy thông tin biến thể sản phẩm
             $variation_data = [];
@@ -124,8 +129,20 @@ class OrderController extends BaseController
                 'total' => wc_price($total),
                 'variation_data' => $variation_data,
                 'thumbnail' => $product_thumbnail,
-                'link' => $product_link
+                'link' => $product_link,
             ];
+        }
+
+        // Lấy phí vận chuyển
+        $shipping_total = 0;
+        foreach ($order->get_items('shipping') as $shipping_item) {
+            $shipping_total += $shipping_item->get_total();
+        }
+
+        // Lấy phí bổ sung (nếu có)
+        $fee_total = 0;
+        foreach ($order->get_items('fee') as $fee_item) {
+            $fee_total += $fee_item->get_total();
         }
 
         // Lấy thông tin tổng quan của đơn hàng
@@ -134,8 +151,10 @@ class OrderController extends BaseController
             'order_number' => $order->get_order_number(),
             'order_date' => $order->get_date_created()->date('Y-m-d H:i:s'),
             'status' => wc_get_order_status_name($order->get_status()),
-            'total' => wc_price($order->get_total()),
-            'shipping_total' => wc_price($order->get_shipping_total()),
+            'items_subtotal' => wc_price($items_subtotal), // Tổng phụ sản phẩm
+            'total' => wc_price($order->get_total()), // Tổng tiền đơn hàng
+            'shipping_total' => wc_price($shipping_total), // Phí vận chuyển
+            'fee_total' => wc_price($fee_total), // Phí bổ sung
             'payment_method' => $order->get_payment_method_title(),
             'billing_address' => $order->get_formatted_billing_address(),
             'shipping_address' => $order->get_formatted_shipping_address(),
@@ -144,6 +163,7 @@ class OrderController extends BaseController
 
         return $order_data;
     }
+
 
     public function cancelOrder($orderId)
     {

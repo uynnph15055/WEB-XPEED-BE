@@ -19,16 +19,16 @@
  * @package WordPress
  */
 
-define('DB_NAME', 'educa_crm_staging');
+define('DB_NAME', 'aaaa');
 
 /** Database username */
-define('DB_USER', 'mysql_crm_edu');
+define('DB_USER', 'root');
 
 /** Database password */
-define('DB_PASSWORD', 'BKiS2jiL6H52BABg');
+define('DB_PASSWORD', '');
 
 /** Database hostname */
-define('DB_HOST', '192.168.1.248');
+define('DB_HOST', 'localhost');
 /**#@+
  * Authentication unique keys and salts.
  *

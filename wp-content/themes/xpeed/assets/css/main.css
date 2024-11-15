@@ -2670,22 +2670,30 @@ template {
   }
 }
 
-.account {
+.content__page {
+  background: #f5f5fa;
+  padding: 40px 0px;
+  margin-bottom: 40px;
+}
+.content__page .account {
   max-width: 1366px;
-  margin: 40px auto;
+  margin: 0px auto;
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
   overflow: hidden;
 }
-.account .account__sidebar {
+.content__page .account .account__sidebar {
   width: calc(25% - 30px);
+  border-radius: 5px;
+  background: #fff;
+  padding: 1%;
 }
-.account .account__sidebar .sidebar__menu {
+.content__page .account .account__sidebar .sidebar__menu {
   width: 100%;
   margin-top: 40px;
 }
-.account .account__sidebar .sidebar__menu .menu__item {
+.content__page .account .account__sidebar .sidebar__menu .menu__item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2699,63 +2707,63 @@ template {
   box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.05), -4px -4px 6px 0 rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
 }
-.account .account__sidebar .sidebar__menu .menu__item:last-child {
+.content__page .account .account__sidebar .sidebar__menu .menu__item:last-child {
   margin-bottom: 0;
 }
-.account .account__sidebar .sidebar__menu .menu__item:hover {
+.content__page .account .account__sidebar .sidebar__menu .menu__item:hover {
   opacity: 0.8;
 }
-.account .account__sidebar .sidebar__menu .menu__item:focus,
-.account .account__sidebar .sidebar__menu .menu__item .account.active {
+.content__page .account .account__sidebar .sidebar__menu .menu__item:focus,
+.content__page .account .account__sidebar .sidebar__menu .menu__item .account.active {
   background-color: #000;
   color: #fff;
 }
-.account .account__sidebar .sidebar__menu .menu__item .menu__item-icon {
+.content__page .account .account__sidebar .sidebar__menu .menu__item .menu__item-icon {
   margin-left: 8px;
 }
-.account .account__sidebar .sidebar__profile {
+.content__page .account .account__sidebar .sidebar__profile {
   margin-top: 48px;
 }
-.account .account__sidebar .sidebar__profile .profile__head {
+.content__page .account .account__sidebar .sidebar__profile .profile__head {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 8px;
   cursor: default;
 }
-.account .account__sidebar .profile__body {
+.content__page .account .account__sidebar .profile__body {
   background-color: #fff;
   padding: 20px 15px 20px 10px;
   border: 1px solid #d9d9d9;
   border-radius: 8px;
   box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
 }
-.account .account__sidebar .profile__body .profile__item {
+.content__page .account .account__sidebar .profile__body .profile__item {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
   font-size: 13px;
   font-weight: 500;
 }
-.account .account__sidebar .profile__body .profile__item .profile__item-icon {
+.content__page .account .account__sidebar .profile__body .profile__item .profile__item-icon {
   width: 25px;
   height: 25px;
   margin-right: 8px;
 }
-.account .account__sidebar .profile__body .profile__location {
+.content__page .account .account__sidebar .profile__body .profile__location {
   display: flex;
   font-size: 13px;
   font-weight: 500;
 }
-.account .account__sidebar .profile__body .profile__location .profile__item-icon {
+.content__page .account .account__sidebar .profile__body .profile__location .profile__item-icon {
   width: 25px;
   height: 25px;
   margin-right: 8px;
 }
-.account .account__sidebar .profile__actions {
+.content__page .account .account__sidebar .profile__actions {
   width: 100%;
   margin-top: 10px;
 }
-.account .account__sidebar .profile__actions .profile__action {
+.content__page .account .account__sidebar .profile__actions .profile__action {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2770,28 +2778,31 @@ template {
   padding: 0 10px;
   transition: all 0.3s ease;
 }
-.account .account__sidebar .profile__actions .profile__action:last-child {
+.content__page .account .account__sidebar .profile__actions .profile__action:last-child {
   margin-bottom: 0;
 }
-.account .account__sidebar .profile__actions .profile__action:hover {
+.content__page .account .account__sidebar .profile__actions .profile__action:hover {
   background-color: #000;
   color: #fff;
 }
-.account .account__content {
+.content__page .account .account__content {
   width: 75%;
+  border-radius: 5px;
+  background: #fff;
+  padding: 1%;
 }
-.account .account__content .content__title {
+.content__page .account .account__content .content__title {
   height: 40px;
   text-align: right;
   font-size: 30px;
   font-weight: 600;
 }
-.account .account__content .general__title-wrapper {
+.content__page .account .account__content .general__title-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.account .account__content .general__title {
+.content__page .account .account__content .general__title {
   font-size: 20px;
   font-weight: 600;
   display: flex;
@@ -2799,13 +2810,13 @@ template {
   height: 50px;
   margin-bottom: 10px;
 }
-.account .account__content .general__search {
+.content__page .account .account__content .general__search {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 }
-.account .account__content .general__search .search__form {
+.content__page .account .account__content .general__search .search__form {
   align-items: center;
   background: white;
   border: 2px solid #000;
@@ -2821,7 +2832,7 @@ template {
   position: relative;
   width: 100%;
 }
-.account .account__content .general__search .search__form .search__input {
+.content__page .account .account__content .general__search .search__form .search__input {
   background: var(--ch-colors-foreground);
   border: none !important;
   box-shadow: none !important;
@@ -2832,7 +2843,7 @@ template {
   outline: none !important;
   width: calc(100% - 100px);
 }
-.account .account__content .general__search .search__form .search__button {
+.content__page .account .account__content .general__search .search__form .search__button {
   background: none;
   border: none;
   cursor: pointer;
@@ -2840,12 +2851,12 @@ template {
   display: flex;
   align-items: center;
 }
-.account .account__content .general__search .search__form .search__button .icon-search-box {
+.content__page .account .account__content .general__search .search__form .search__button .icon-search-box {
   width: 24px;
   height: 24px;
   stroke: gray;
 }
-.account .account__content .general__search .search__result {
+.content__page .account .account__content .general__search .search__result {
   margin-top: 10px;
   font-size: 14px;
   font-weight: 500;
@@ -4184,6 +4195,20 @@ template {
   padding-top: 1rem;
   max-width: 1366px;
 }
+.invoice__container .invoice__container-quick-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.invoice__container .invoice__container-quick-info--success {
+  color: #00b609;
+}
+.invoice__container .invoice__container-quick-info--cancel {
+  color: #fa0000;
+}
+.invoice__container .invoice__container-quick-info--canceled {
+  color: #dacb00;
+}
 .invoice__header {
   padding: 1rem 3.5rem;
 }
@@ -4258,6 +4283,7 @@ template {
 }
 .invoice__items-table {
   width: 100%;
+  margin-top: 20px;
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -4273,6 +4299,13 @@ template {
 .invoice__items-header--right {
   text-align: right;
 }
+.invoice__items .invoice__items-row-wrapper {
+  cursor: pointer;
+}
+.invoice__items .invoice__items-row-wrapper:hover {
+  background-color: #f1f1f1;
+  transition: all 0.25s ease;
+}
 .invoice__items-row {
   border-bottom: 1px solid #e2e8f0;
   padding: 0.75rem;
@@ -4286,6 +4319,29 @@ template {
 .invoice__items-row--padding-right {
   padding-right: 0.75rem;
 }
+.invoice__items-row--img {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.invoice__items-row .invoice__item-row-image-wrapper {
+  position: relative;
+  background-color: #eee;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: fit-content;
+  aspect-ratio: 1;
+}
+.invoice__items-row .invoice__item-row-image-wrapper .invoice__item-row-image {
+  display: inline-block;
+  aspect-ratio: 1;
+  object-fit: cover;
+  width: 75%;
+  height: auto;
+}
 .invoice__totals {
   width: 100%;
   border-collapse: collapse;
@@ -4298,15 +4354,20 @@ template {
   white-space: nowrap;
   color: #ffffff;
 }
+.invoice__totals .invoice__totals-cell .invoice__totals-label {
+  white-space: nowrap;
+  color: #000000;
+}
 .invoice__totals-value {
   font-weight: bold;
-  color: #ffffff;
+  color: #000000;
   text-align: right;
 }
 .invoice__totals-total {
   background-color: #bf1e2e;
   font-weight: bold;
   color: #ffffff;
+  text-align: right;
   padding: 0.75rem;
 }
 .invoice__payment {
@@ -4322,7 +4383,7 @@ template {
   margin-top: 4px;
 }
 .invoice__notes {
-  padding: 2.5rem 3.5rem;
+  padding: 16px 3.5rem;
   font-size: 0.875rem;
   color: #4a5568;
 }
@@ -4414,6 +4475,31 @@ template {
     font-size: 0.75rem;
   }
 }
+.invoice__details-cell .invoice__details-title {
+  margin-bottom: 2%;
+}
+
+.invoice__details-cell--right {
+  height: 12em;
+}
+.invoice__details-cell--right .invoice__details-title {
+  margin-bottom: 2%;
+}
+.invoice__details-cell--right .invoice__details-address {
+  height: 12em;
+}
+
+.invoice__details-cell--left {
+  margin-right: 5%;
+}
+.invoice__details-cell--left .invoice__details-title {
+  margin-bottom: 2%;
+}
+.invoice__details-cell--left .invoice__details-paymethod {
+  height: 12em;
+  border-radius: 5px;
+}
+
 .invoice__detail-table-wrapper {
   width: 100%;
   overflow: auto;

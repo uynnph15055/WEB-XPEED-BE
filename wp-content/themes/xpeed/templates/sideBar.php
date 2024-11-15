@@ -8,6 +8,7 @@
 check_user_login_and_redirect();
 $current_user = wp_get_current_user();
 ?>
+<div class="content__page">
     <!-- account -->
     <div class="account">
         <div class="account__sidebar">

@@ -71,7 +71,6 @@ include plugin_dir_path(__FILE__) . 'sideBar.php';
     </div>
     </div>
     </div>
-
 <?php
 get_footer();
 ?>
