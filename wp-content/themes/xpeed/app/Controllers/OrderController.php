@@ -10,7 +10,9 @@ class OrderController extends BaseController
 {
     public function __construct()
     {
-        session_start(); // Bắt đầu session
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start(); // Chỉ khởi động session nếu chưa khởi động
+        }
     }
 
     /**

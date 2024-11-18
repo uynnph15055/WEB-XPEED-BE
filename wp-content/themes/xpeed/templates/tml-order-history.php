@@ -34,7 +34,7 @@ include plugin_dir_path(__FILE__) . 'sideBar.php';
                                 <div class="invoice__detail-row">
                                     <div class="invoice__detail-cell"><?= $order['order_id'] ?></div>
                                     <div class="invoice__detail-cell"><?= $order['date_created'] ?></div>
-                                    <div class="invoice__detail-cell"><?= number_format($order['total']) ?? '' ?>đ
+                                    <div class="invoice__detail-cell"><?= number_format((float)$order['total']) ?? '' ?>đ
                                     </div>
                                     <div class="invoice__detail-cell">
                                     <span class="invoice__status <?= $orderController->getOrderStatusClass($order['status']) ?>">

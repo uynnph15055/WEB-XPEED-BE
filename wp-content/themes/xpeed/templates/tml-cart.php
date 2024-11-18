@@ -53,7 +53,7 @@ get_header();
                                     </span>
                                     <span class="cart__item-stock-quantity"
                                           style="display: none"><?= $cart["stock_quantity"] ?? '' ?></span>
-                                    <span class="cart__item-details-price"><?= number_format($cart["price"]) ?? '' ?> đ</span>
+                                    <span class="cart__item-details-price"><?= number_format((float)$cart["price"]) ?? '' ?> đ</span>
                                     <?php
                                     if ((int)$cart["stock_quantity"] < 1) { ?>
                                         <h3 style="color: red;"><i>Sản phẩm đã hết hàng</i></h3>
@@ -78,7 +78,7 @@ get_header();
                                 </div>
                                 <div class="cart__item-action-delete">Xoá</div>
                             </td>
-                            <td class="cart__item-price"><?= number_format($cart["total"]) ?? '' ?> đ</td>
+                            <td class="cart__item-price"><?= number_format((float)$cart["total"]) ?? '' ?> đ</td>
                         </tr>
                         <?php $totalCarts += $cart["total"] ?>
                     <?php } ?>
@@ -92,7 +92,7 @@ get_header();
                     </div>
 
                     <div class="cart__actions-action">
-                        <span class="cart__actions-total"><?= number_format($totalCarts) ?? '' ?> đ</span>
+                        <span class="cart__actions-total"><?= number_format((float)$totalCarts) ?? '' ?> đ</span>
                         <div class="cart__actions-buttons">
                             <button class="button button--primary-cart">
                                 Cập nhật giỏ hàng

@@ -9,7 +9,9 @@ class PaymentController extends BaseController
     public function __construct()
     {
         check_user_login_and_redirect();
-        session_start(); // Bắt đầu session
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start(); // Chỉ khởi động session nếu chưa khởi động
+        }
     }
 
     // Đường dẫn MoMo API

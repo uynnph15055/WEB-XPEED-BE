@@ -41,7 +41,7 @@ function get_excerpt(int $limit = 130){
 /**
  * short title @thanhvv
  */
-function short_title($after = '', $length): string
+function short_title($length, $after = '' ): string
 {
     $qdztitle = explode(' ', get_the_title(), $length);
     if (count($qdztitle)>=$length) {

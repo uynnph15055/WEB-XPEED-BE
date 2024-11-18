@@ -150,7 +150,7 @@ get_header();
                         </div>
 
                         <div class="payment_products--item-price-group">
-                            <p class="payment_products--item-price"><?= number_format($order["price"]) ?? '' ?> đ</p>
+                            <p class="payment_products--item-price"><?= number_format((float)$order["price"]) ?? '' ?> đ</p>
                         </div>
                     </div>
                     <?php $totalCarts += $order["total"] ?>
@@ -174,7 +174,7 @@ get_header();
             <div class="payment_cart--summary">
                 <div class="payment_cart--summary-item">
                     <span class="payment_cart--summary-item-label">Thành tiền</span>
-                    <span class="payment_cart--summary-item-value"><?= number_format($totalCarts) ?? '' ?> đ</span>
+                    <span class="payment_cart--summary-item-value"><?= number_format((float)$totalCarts) ?? '' ?> đ</span>
                 </div>
                 <div class="payment_cart--summary-item">
                     <span class="payment_cart--summary-item-label">Vận chuyển</span>
@@ -185,10 +185,10 @@ get_header();
                         <span class="payment_cart--summary-total-label">Tổng tiền</span>
                         <!--                        <span class="payment_cart--summary-total-tax"-->
                         <!--                        >Đã bao gồm thuế -->
-                        <? //= number_format($totalCarts) ?? '' ?><!-- đ</span-->
+                        <? //= number_format((float)$totalCarts) ?? '' ?><!-- đ</span-->
                         <!--                        >-->
                     </div>
-                    <span class="payment_cart--summary-total-value"><?= number_format((int)$totalCarts + 50000) ?? '' ?> đ</span>
+                    <span class="payment_cart--summary-total-value"><?= number_format((float)$totalCarts + 50000) ?? '' ?> đ</span>
                 </div>
             </div>
         </div>

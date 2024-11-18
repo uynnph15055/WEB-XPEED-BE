@@ -201,7 +201,7 @@ $homeController = new HomeController;
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                           </p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
+                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ? number_format((float)$product->get_price(), 0, ',', '.') : '' ?>
                                           </span>đ
                                     </div>
                               </a>
@@ -247,7 +247,7 @@ $homeController = new HomeController;
                                                 <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[1]->name) ?></p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
+                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ? number_format((float)$product->get_price(), 0, ',', '.') : '' ?>
                                           </span>đ
                                     </div>
                               </a>
@@ -293,7 +293,7 @@ $homeController = new HomeController;
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                           </p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ?>
+                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ?>
                                           </span>đ
                                     </div>
                               </div>
