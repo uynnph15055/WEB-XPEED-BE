@@ -9,29 +9,35 @@ check_user_login_and_redirect();
 $current_user = wp_get_current_user();
 ?>
     <!-- account -->
-    <div class="account">
         <div class="account__sidebar">
+            <div class="account__sidebar-close">
+                <ion-icon
+                        name="close-outline"
+                        class="sidebar__close-icon"
+                ></ion-icon>
+            </div>
+
             <div class="sidebar__menu">
-                <a href="<?= home_url('/profile') ?>" class="menu__item">
-                    <span class="menu__item-content">Trang của tôi</span>
-                    <ion-icon class="menu__item-icon" name="person-circle-outline"></ion-icon>
-                </a>
                 <a href="<?= home_url('/lich-su-dat-hang') ?>" class="menu__item">
-                    <span class="menu__item-content">Lịch sử đơn hàng</span>
-                    <ion-icon class="menu__item-icon" name="person-circle-outline"></ion-icon>
+                    <span class="menu__item-content">Order History</span>
+                    <ion-icon name="cart"></ion-icon>
                 </a>
-                <a href="<?= home_url('/lich-su-dat-hang') ?>" class="menu__item">
-                    <span class="menu__item-content">Hồ sơ của tôi</span>
-                    <ion-icon class="menu__item-icon" name="person-circle-outline"></ion-icon>
-                </a>
-                <a href="<?= home_url('/lich-su-dat-hang') ?>" class="menu__item">
-                    <span class="menu__item-content">Tìm mã bưu điện</span>
-                    <ion-icon class="menu__item-icon" name="person-circle-outline"></ion-icon>
-                </a>
+<!--                <a href="--><?//= home_url('/profile') ?><!--" class="menu__item">-->
+<!--                    <span class="menu__item-content">My Profile</span>-->
+<!--                    <ion-icon name="settings"></ion-icon>-->
+<!--                </a>-->
+<!--                <a href="--><?//= home_url('/lich-su-dat-hang') ?><!--" class="menu__item">-->
+<!--                    <span class="menu__item-content">Find Zip Code</span>-->
+<!--                    <ion-icon name="search"></ion-icon>-->
+<!--                </a>-->
+<!--                <a href="--><?//= home_url('/lich-su-dat-hang') ?><!--" class="menu__item">-->
+<!--                    <span class="menu__item-content">Logout</span>-->
+<!--                    <ion-icon name="exit"></ion-icon>-->
+<!--                </a>-->
             </div>
 
             <div class="sidebar__profile">
-                <div class="profile__head">Thẻ hồ sơ</div>
+                <div class="profile__head">Profile Card</div>
 
                 <div class="profile__body">
                     <div class="profile__item">
@@ -52,9 +58,9 @@ $current_user = wp_get_current_user();
                 </div>
 
                 <div class="profile__actions">
-                    <a href="#" class="profile__action">Cập nhật</a>
-                    <a href="#" class="profile__action">Đổi mật khẩu</a>
-                    <a class="profile__action" id="profile-logout__action">Đăng xuất</a>
+<!--                    <a href="#" class="profile__action">Update</a>-->
+<!--                    <a href="#" class="profile__action">Change Password</a>-->
+                    <a href="#" class="profile__action" id="profile-logout__action">Logout</a>
                 </div>
             </div>
         </div>
