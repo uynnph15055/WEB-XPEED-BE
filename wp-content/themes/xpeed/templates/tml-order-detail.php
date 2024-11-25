@@ -212,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
                         </div>
                         <div class="invoice__container-quick-info">
                             <span class="invoice__container-quick-info--success"></span>
-                            <button class=" button button--primary">Hủy đơn hàng</button>
+                            <button aria-label="<?= home_url() ?>"class=" button button--primary">Hủy đơn hàng</button>
                         </div>
                         <!--                    <div class="invoice__payment">-->
                         <!--                        <p class="invoice__payment-label">Phương thức thanh toán</p>-->

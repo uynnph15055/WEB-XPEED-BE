@@ -31,7 +31,7 @@ get_header();
                     <div class="search__form">
                         <input type="text" class="search__input"
                                placeholder="Tìm kiếm theo số đơn hàng hoặc tên sản phẩm"/>
-                        <button class="search__button">
+                        <button aria-label="<?= home_url() ?>"class="search__button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" class="icon icon-search-box">

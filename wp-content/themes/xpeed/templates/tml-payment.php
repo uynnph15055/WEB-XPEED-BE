@@ -166,7 +166,7 @@ get_header();
             <!--                    />-->
             <!--                </div>-->
             <!---->
-            <!--                <button class="payment_cart--coupon-submit" type="submit">-->
+            <!--                <button aria-label="<?= home_url() ?>"class="payment_cart--coupon-submit" type="submit">-->
             <!--                    <span>Áp dụng</span>-->
             <!--                </button>-->
             <!--            </form>-->

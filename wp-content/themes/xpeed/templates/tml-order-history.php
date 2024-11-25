@@ -57,7 +57,7 @@ get_header();
                                             </div>
                                             <div class="invoice__detail-cell"
                                                  onclick="window.location.href='<?= home_url('/chi-tiet-don-hang') . '?orderId=' . $order['order_id'] ?>'">
-                                                <button class="invoice__detail-button">
+                                                <button aria-label="<?= home_url() ?>"class="invoice__detail-button">
                                                     <ion-icon
                                                             name="wallet-outline"
                                                             class="invoice__detail-button-icon"

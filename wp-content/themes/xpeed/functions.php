@@ -174,3 +174,16 @@ add_action('init', function () {
         facebook_login_callback();
     }
 });
+function dequeue_woocommerce_assets() {
+    // Loại bỏ tất cả các script và style của WooCommerce
+    if (is_product()) {
+        wp_dequeue_script('wc-single-product');
+        wp_dequeue_script('woocommerce');
+        wp_dequeue_style('woocommerce_frontend_styles');
+    }
+}
+add_action('wp_enqueue_scripts', 'dequeue_woocommerce_assets', 99);
+function custom_theme_setup() {
+    add_theme_support('title-tag');
+}
+add_action('after_setup_theme', 'custom_theme_setup');

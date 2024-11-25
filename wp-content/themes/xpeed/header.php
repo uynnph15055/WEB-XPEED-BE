@@ -10,15 +10,13 @@ if (!isset($_SESSION['cart'])) {
 
 <head>
       <meta charset="<?php bloginfo('charset'); ?>">
-      <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
       <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
             rel="stylesheet" />
       <link rel="profile" href="http://gmpg.org/xfn/11">
       <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-      <link rel="icon" href="<?= get_template_directory_uri() . '/assets/images/logo/logo-url.svg' ?>" sizes="16x16"
-            type="image/png">
+      <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
       <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
       <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -27,8 +25,8 @@ if (!isset($_SESSION['cart'])) {
       const baseUrl = "<?php echo home_url(); ?>";
       </script>
       <?php
-      wp_head()
-      ?>
+    wp_head()
+    ?>
 </head>
 
 <body>
@@ -52,7 +50,7 @@ if (!isset($_SESSION['cart'])) {
                                                       <?= $menu_item->title ?>
                                                 </a>
                                                 <?php if ($menu_item->submenu_count > 0) {
-                                                      ?>
+                                    ?>
                                                 <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
                                                 <?php } ?>
 
@@ -84,9 +82,9 @@ if (!isset($_SESSION['cart'])) {
                                             <ion-icon name="cart-outline"></ion-icon>
                                         </button>
 
-
-                                            <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']) ?? 0; ?></div>
-
+                                        <?php if (count($_SESSION['cart']) >= 1): ?>
+                                            <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']); ?></div>
+                                        <?php endif; ?>
                                           <div class="header__cart-overlay"></div>
 <!--                                          <div class="header__cart">-->
 <!--                                                <div class="header__cart-content">-->

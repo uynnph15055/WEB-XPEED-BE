@@ -68,13 +68,13 @@ get_header();
                             </td>
                             <td class="cart__item-quantity">
                                 <div class="cart__item-quantity-controls">
-                                    <button class="cart__item-quantity-decrease">-</button>
+                                    <button aria-label="<?= home_url() ?>"class="cart__item-quantity-decrease">-</button>
                                     <input
                                             value="<?= $cart["quantity"] ?? '' ?>"
                                             min="1"
                                             class="cart__item-quantity-input"
                                     />
-                                    <button class="cart__item-quantity-increase">+</button>
+                                    <button aria-label="<?= home_url() ?>"class="cart__item-quantity-increase">+</button>
                                 </div>
                                 <div class="cart__item-action-delete">Xoá</div>
                             </td>
@@ -94,10 +94,10 @@ get_header();
                     <div class="cart__actions-action">
                         <span class="cart__actions-total"><?= number_format((float)$totalCarts) ?? '' ?> đ</span>
                         <div class="cart__actions-buttons">
-                            <button class="button button--primary-cart">
+                            <button aria-label="<?= home_url() ?>"class="button button--primary-cart">
                                 Cập nhật giỏ hàng
                             </button>
-                            <button class="button button--primary" id="paymentBtn" data-userID="<?= get_current_user_id() ?? 0 ?>">Thanh toán</button>
+                            <button aria-label="<?= home_url() ?>"class="button button--primary" id="paymentBtn" data-userID="<?= get_current_user_id() ?? 0 ?>">Thanh toán</button>
                         </div>
                     </div>
                 </div>

@@ -13,7 +13,7 @@ $blogs = $blog->getBlogMoreView();
 <div class="blogs__sidebar">
       <form class="blogs__sidebar-form" action="">
             <input class="blogs__sidebar-input" type="text" placeholder="Tìm kiếm..." />
-            <button class="blogs__sidebar-btn">
+            <button aria-label="<?= home_url() ?>"class="blogs__sidebar-btn">
                   <ion-icon name="search-outline"></ion-icon>
             </button>
       </form>
