@@ -16,23 +16,8 @@ if (!isset($_SESSION['cart'])) {
             rel="stylesheet" />
       <link rel="profile" href="http://gmpg.org/xfn/11">
       <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-      <link rel="icon" href="<?= get_template_directory_uri() . '/assets/images/logo/logo-url.svg' ?>" sizes="16x16"
-            type="image/png">
-    <title>
-        <?php
-        if (is_front_page() || is_home()) {
-            echo get_bloginfo('name') . ' - ' . get_bloginfo('description');
-        } elseif (is_single() || is_page()) {
-            echo single_post_title('', false) . ' - ' . get_bloginfo('name');
-        } elseif (is_category()) {
-            echo single_cat_title('Category: ', false) . ' - ' . get_bloginfo('name');
-        } else {
-            echo get_bloginfo('name');
-        }
-        ?>
-    </title>
-
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+      <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
+      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
       <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script src="https://unpkg.com/scrollreveal"></script>
@@ -40,8 +25,8 @@ if (!isset($_SESSION['cart'])) {
       const baseUrl = "<?php echo home_url(); ?>";
       </script>
       <?php
-      wp_head()
-      ?>
+    wp_head()
+    ?>
 </head>
 
 <body>
@@ -52,7 +37,7 @@ if (!isset($_SESSION['cart'])) {
             <header class="header">
                   <div class="header_main">
                         <div class="containerX header_main-in">
-                              <a aria-label="<?= home_url() ?>" href="<?= home_url() ?>" class="header_main-logo">
+                              <a href="<?= home_url() ?>" class="header_main-logo">
                                     <img class="logo"
                                           src="<?= get_template_directory_uri() . '/assets/images/logo/logo.png' ?>"
                                           alt="" />
@@ -61,11 +46,11 @@ if (!isset($_SESSION['cart'])) {
                                     <ul class="header_main-nav-list">
                                           <?php foreach ($parent_menu_items as $menu_item) : ?>
                                           <li class="header_main-nav--item">
-                                                <a aria-label="<?= home_url() ?>" href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
+                                                <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
                                                       <?= $menu_item->title ?>
                                                 </a>
                                                 <?php if ($menu_item->submenu_count > 0) {
-                                                      ?>
+                                    ?>
                                                 <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
                                                 <?php } ?>
 
@@ -76,30 +61,30 @@ if (!isset($_SESSION['cart'])) {
                               </div>
                               <div class="header_main-icon">
                                     <li class="header_main-icon--item">
-                                          <a aria-label="<?= home_url() ?>" href="" class="header_main-icon--item--link">
+                                          <a href="" class="header_main-icon--item--link">
                                                 <ion-icon name="search-outline"></ion-icon>
                                           </a>
                                     </li>
                                     <li class="header_main-icon--item">
                                           <?php if (!is_user_logged_in()): ?>
-                                          <a aria-label="<?= home_url() ?>" href="./login" class="header_main-icon--item--link">
+                                          <a href="./login" class="header_main-icon--item--link">
                                                 <ion-icon name="lock-closed-outline"></ion-icon>
                                           </a>
                                           <?php else: ?>
-                                          <a aria-label="<?= home_url() ?>" href="./profile" class="header_main-icon--item--link">
+                                          <a href="./profile" class="header_main-icon--item--link">
                                                 <ion-icon name="person-circle-outline"></ion-icon>
                                           </a>
                                           <?php endif; ?>
                                     </li>
 
                                     <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
-                                        <button aria-label="<?= home_url() ?>"class="header_main-icon--item--button" onclick="window.location.href='<?php echo home_url('cart'); ?>'">
+                                        <button class="header_main-icon--item--button" onclick="window.location.href='<?php echo home_url('cart'); ?>'">
                                             <ion-icon name="cart-outline"></ion-icon>
                                         </button>
 
-
-                                            <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']) ?? 0; ?></div>
-
+                                        <?php if (count($_SESSION['cart']) >= 1): ?>
+                                            <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']); ?></div>
+                                        <?php endif; ?>
                                           <div class="header__cart-overlay"></div>
 <!--                                          <div class="header__cart">-->
 <!--                                                <div class="header__cart-content">-->
@@ -209,8 +194,8 @@ if (!isset($_SESSION['cart'])) {
 <!--                                                                  </div>-->
 <!--                                                            </div>-->
 <!--                                                            <div class="cart-content__footer">-->
-<!--                                                                  <a aria-label="<?= home_url() ?>" class="cart-content__footer-link"-->
-<!--                                                                        <button aria-label="<?= home_url() ?>"class="button button--primary">-->
+<!--                                                                  <a class="cart-content__footer-link"-->
+<!--                                                                        <button class="button button--primary">-->
 <!--                                                                              Xem tất cả-->
 <!--                                                                        </button>-->
 <!--                                                                  </a>-->
