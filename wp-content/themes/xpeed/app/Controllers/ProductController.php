@@ -8,7 +8,6 @@ use WP_Query;
 use app\Controllers\Controller as BaseController;
 
 class ProductController extends BaseController
-
 {
     public $categories;
     public $attributes;
@@ -363,5 +362,43 @@ class ProductController extends BaseController
             }
         }
         return $this->fail('Không tìm thấy biến thể phù hợp.');
+    }
+
+    function getNewProducts($limit = 3)
+    {
+        $args = array(
+            'post_type' => 'product',
+            'posts_per_page' => $limit,
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'product_tag',
+                    'field'    => 'slug',
+                    'terms'    => 'NEW',
+                ),
+            ),
+        );
+
+        $query = new WP_Query($args);
+        $new_products = array();
+
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
+                $terms = get_the_terms(get_the_ID(), 'product_cat');
+                $first_category = !empty($terms) && !is_wp_error($terms) ? reset($terms)->name : '';
+                $new_products[] = array(
+                    'ID' => get_the_ID(),
+                    'title' => get_the_title(),
+                    'url' => get_permalink(),
+                    'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
+                    'price' => get_post_meta(get_the_ID(), '_price', true),
+                    'first_category' => $first_category,
+                );
+            }
+        }
+
+        wp_reset_postdata();
+
+        return $new_products;
     }
 }

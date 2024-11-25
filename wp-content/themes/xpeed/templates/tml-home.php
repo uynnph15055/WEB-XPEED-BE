@@ -14,6 +14,10 @@ use app\Controllers\ProductController;
 $blog = new BlogController();
 $product = new ProductController();
 
+require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
+
+$homeController = new HomeController;
+
 
 $categories = $product->categories;
 $blogs = $blog->blogs;
@@ -36,98 +40,46 @@ $productSecond = isset($product->categories[1]) ?
       $product->getProductLimitItemPageHome($product->categories[1]->term_id) : null;
 $productThird = isset($product->categories[2]) ? $product->getProductLimitItemPageHome($product->categories[2]->term_id)
       : null;
-require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
 
-$homeController = new HomeController;
-
+// -----------
+$sliders = $homeController->getSlider(8);
 ?>
 <main class="home-wrapper">
       <!-- banner -->
       <main class="home-wrapper">
             <!-- banner -->
             <div class="banner">
-                  <div class="banner_item is-active">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
+                  <?php foreach ($sliders as $index => $slider) :  ?>
+                  <div class="banner_item <?= $index == 0 ? 'is-active' : '' ?> ">
+                        <img src="<?= $slider['image'] ?>" alt="<?= $slider['title'] ?>" class="banner_image" />
                         <div class="over_lay">
                               <div class="banner-content containerX">
                                     <div class="banner-content__inside">
                                           <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO QUARTARARO 2024
+                                                <?= $slider['title'] ?>
                                           </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button aria-label="<?= home_url() ?>"class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
+                                          <p class="banner-content__subheading"><?= $slider['content'] ?></p>
+                                          <a href="<?= $slider['link'] ?>"
+                                                class="button banner-content__button button--secondary">
+                                                <?= pll_current_language() == 'vi' ? 'Mua ngay' : 'Buy now' ?>
+                                          </a>
                                     </div>
                               </div>
                         </div>
                   </div>
-
-                  <div class="banner_item is-active">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO 1234 2024
-                                          </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button aria-label="<?= home_url() ?>"class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-
-                  <div class="banner_item is-active">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/diablo_mask_roll_banner.jpg" alt=""
-                              class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO QUARTARARO 2024
-                                          </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button aria-label="<?= home_url() ?>"class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-
-                  <div class="banner_item is-active">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO QUARTARARO 2024
-                                          </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button aria-label="<?= home_url() ?>"class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-
+                  <?php endforeach; ?>
 
                   <ul class="banner_dots">
-                        <li class="banner_dots-item is-active"></li>
-                        <li class="banner_dots-item"></li>
-                        <li class="banner_dots-item"></li>
-                        <li class="banner_dots-item"></li>
+                        <?php for ($i = 0; $i < count($sliders); $i++) : ?>
+                        <li class="banner_dots-item <?= $i == 0 ? 'is-active' : '' ?>"></li>
+                        <?php endfor; ?>
                   </ul>
             </div>
             <!-- end banner -->
 
             <div class="home-wrapper__content">
                   <!-- mosaic -->
-                  <div id="mosaic" class="mosaic-section">
+                  <!-- <div id="mosaic" class="mosaic-section">
                         <div class="mosaic__grid-container">
                               <div class="mosaic__grid-item mosaic__grid-item--large">
                                     <img src="https://rt6moto.co.kr/cdn/shop/files/main-c10.jpg?v=1677676335&width=1500"
@@ -135,7 +87,7 @@ $homeController = new HomeController;
                                     <div class="mosaic__overlay">
                                           <h4 class="mosaic__title">NEW PRODUCTS</h4>
                                           <p class="mosaic__subtitle">HJC의 최신 제품을 만나보세요.</p>
-                                          <a href="#" class="mosaic__link"><button aria-label="<?= home_url() ?>"class="button button--primary">
+                                          <a href="#" class="mosaic__link"><button class="button button--primary">
                                                       VIEW MORE
                                                 </button></a>
                                     </div>
@@ -149,7 +101,7 @@ $homeController = new HomeController;
                                                 지금이 곧 기회! 그 기회를 잡으세요.
                                           </p>
 
-                                          <a href="#" class="mosaic__link"><button aria-label="<?= home_url() ?>"class="button button--primary">
+                                          <a href="#" class="mosaic__link"><button class="button button--primary">
                                                       VIEW MORE
                                                 </button></a>
                                     </div>
@@ -162,13 +114,13 @@ $homeController = new HomeController;
                                           <p class="mosaic__subtitle">
                                                 2세대 SMART HJC 블루투스 시스템을 소개합니다.
                                           </p>
-                                          <a href="" class="mosaic__link"><button aria-label="<?= home_url() ?>"class="button button--primary">
+                                          <a href="" class="mosaic__link"><button class="button button--primary">
                                                       VIEW MORE
                                                 </button></a>
                                     </div>
                               </div>
                         </div>
-                  </div>
+                  </div> -->
                   <!-- end mosaic -->
 
                   <!-- shopify -->
@@ -178,7 +130,8 @@ $homeController = new HomeController;
                               <img src="<?= wp_get_attachment_url(get_term_meta($categories[0]->term_id, 'thumbnail_id', true)) ?>"
                                     alt="" class="shopify__image" />
                               <div class="shopify__image-overlay">
-                                    <h2 class="shopify__title"><?= isset($cateNameFirst) ? $cateNameFirst : '' ?></h2>
+                                    <h2 class="shopify__title"><?= isset($cateNameFirst) ? $cateNameFirst : '' ?>
+                                    </h2>
                               </div>
                         </div>
                         <div class="shopify__product-list">
@@ -201,7 +154,7 @@ $homeController = new HomeController;
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                           </p>
-                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ? number_format((float)$product->get_price(), 0, ',', '.') : '' ?>
+                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
                                           </span>đ
                                     </div>
                               </a>
@@ -225,7 +178,8 @@ $homeController = new HomeController;
                               <img src=<?= wp_get_attachment_url(get_term_meta($categories[1]->term_id, 'thumbnail_id', true)) ?>
                                     alt="" class="shopify__image" />
                               <div class="shopify__image-overlay">
-                                    <h2 class="shopify__title"><?= isset($cateNameSecond) ? $cateNameSecond : '' ?></h2>
+                                    <h2 class="shopify__title">
+                                          <?= isset($cateNameSecond) ? $cateNameSecond : '' ?></h2>
                               </div>
                         </div>
                         <div class="shopify__product-list">
@@ -246,8 +200,9 @@ $homeController = new HomeController;
                                           <h3 class="shopify__product-title">
                                                 <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
                                           </h3>
-                                          <p class="shopify__product-cate"><?= esc_html($categories[1]->name) ?></p>
-                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ? number_format((float)$product->get_price(), 0, ',', '.') : '' ?>
+                                          <p class="shopify__product-cate"><?= esc_html($categories[1]->name) ?>
+                                          </p>
+                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
                                           </span>đ
                                     </div>
                               </a>
@@ -270,7 +225,8 @@ $homeController = new HomeController;
                               <img src=<?= wp_get_attachment_url(get_term_meta($categories[2]->term_id, 'thumbnail_id', true)) ?>
                                     alt="" class="shopify__image" />
                               <div class="shopify__image-overlay">
-                                    <h2 class="shopify__title"><?= isset($cateNameThird) ? $cateNameThird : '' ?></h2>
+                                    <h2 class="shopify__title"><?= isset($cateNameThird) ? $cateNameThird : '' ?>
+                                    </h2>
                               </div>
                         </div>
                         <div class="shopify__product-list">
@@ -293,7 +249,7 @@ $homeController = new HomeController;
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                           </p>
-                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ?>
+                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ?>
                                           </span>đ
                                     </div>
                               </div>
@@ -316,9 +272,6 @@ $homeController = new HomeController;
                         <div class="blogs__list">
                               <?php
                               if (empty($blogs)) {
-                                    echo "Không có bài viết";
-                                    return;
-                              } else {
                                     foreach ($blogs as $blog) : ?>
                               <a href="<?= $blog["link"] ?>" class="blogs__item">
                                     <div class="blogs__image-wrapper">
@@ -328,7 +281,8 @@ $homeController = new HomeController;
                                           <h3 class="blogs__title"><?= $blog["title"] ?></h3>
                                           <div class="blogs__description">
                                                 <p class="blogs__text"><?= $blog["excerpt"] ?></p>
-                                                <p class="blogs__link"><?= date('d/m/Y', strtotime($blog["date"]))  ?>
+                                                <p class="blogs__link">
+                                                      <?= date('d/m/Y', strtotime($blog["date"]))  ?>
                                                 </p>
                                           </div>
                                     </div>

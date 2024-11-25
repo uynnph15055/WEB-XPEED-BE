@@ -22,7 +22,7 @@ require_once __DIR__ . '/vendor/autoload.php'; // Đảm bảo đường dẫn c
 require_once get_template_directory() . '/app/Routes/web.php'; // Bao gồm các route
 
 
-const TEXT_DOMAIN = 'xpeed';
+const TEXT_DOMAIN = ' xpeed';
 const CORE = THEME_URL . '/core';
 
 
@@ -81,7 +81,6 @@ if (!function_exists('check_user_login_and_redirect')) {
             exit;
         }
     }
-
     function getCurrentUrl()
     {
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
@@ -174,16 +173,9 @@ add_action('init', function () {
         facebook_login_callback();
     }
 });
-function dequeue_woocommerce_assets() {
-    // Loại bỏ tất cả các script và style của WooCommerce
-    if (is_product()) {
-        wp_dequeue_script('wc-single-product');
-        wp_dequeue_script('woocommerce');
-        wp_dequeue_style('woocommerce_frontend_styles');
-    }
+
+function my_theme_setup()
+{
+    load_theme_textdomain('xpeed', get_template_directory() . '/languages');
 }
-add_action('wp_enqueue_scripts', 'dequeue_woocommerce_assets', 99);
-function custom_theme_setup() {
-    add_theme_support('title-tag');
-}
-add_action('after_setup_theme', 'custom_theme_setup');
+add_action('after_setup_theme', 'my_theme_setup');
