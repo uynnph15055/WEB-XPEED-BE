@@ -52,19 +52,19 @@
                   <div class="footer__nav-menu">
                         <ul class="footer__nav-menu-list">
                               <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
+                                    <a class="footer__nav-menu-item__link" href="#">Điều khoản dịch vụ</a>
                               </li>
                               <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
+                                    <a class="footer__nav-menu-item__link" href="#">chính sách bảo mật</a>
                               </li>
                               <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
+                                    <a class="footer__nav-menu-item__link" href="#">Tìm đại lý mũ bảo hiểm HJC chính thức</a>
                               </li>
                               <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
+                                    <a class="footer__nav-menu-item__link" href="#">Thông tin phòng trưng bày</a>
                               </li>
                               <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
+                                    <a class="footer__nav-menu-item__link" href="#">Tiếp nhận A/S</a>
                               </li>
                         </ul>
                   </div>
@@ -72,19 +72,17 @@
             <div class="footer__credits">
                   <p class="footer__credits-text">Copyright © 2024, 루트6.</p>
                   <p class="footer__credits-text">
-                        경기도 성남시 분당구 벌말로40번길 4-1, 201호(야탑동) 대표:임근
-                        주식회사 루트6 사업자등록번호: 782-81-00339 통신판매업신고번호:
-                        2021-성남분당 A-0630호<br />
-                        개인정보관리자: 임태희 대표번호:
+                      #201, 4-1, Beolmal-ro 40beon-gil, Bundang-gu, Seongnam-si, Kyunggi-do (Yatap-dong) Người đại diện: Geun Lim Co., Ltd. Route 6 Số đăng ký kinh doanh: 782-81-00339 Số báo cáo kinh doanh đặt hàng qua thư: 2021-Seongnam Bundang A-0630<br />
+                      Người quản lý thông tin cá nhân: CEO Taehee Lim Số :
                         <a href="tel:1533-4469" target="_blank" rel="noreferrer noopener">1533-4469</a>
                         <a href="mailto:customerservice@rt6.co.kr" target="_blank"
                               rel="noreferrer noopener">customerservice@rt6.co.kr</a>
-                        호스팅제공: Shopify
+                      Hosting cung cấp: Shopify
                   </p>
             </div>
       </div>
 </footer>
-<button id="backToTop" class="back_top">
+<button aria-label="<?= home_url() ?>"id="backToTop" class="back_top">
       <ion-icon name="caret-up-outline"></ion-icon>
 </button>
 

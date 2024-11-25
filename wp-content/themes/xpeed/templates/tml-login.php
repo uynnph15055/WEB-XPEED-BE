@@ -18,7 +18,7 @@ get_header();
                 <div id="auth-wrapper-password__message" class="auth-wrapper__message" style="color: red;"></div>
                 <div id="auth-wrapper-login__message" class="auth-wrapper__message"
                      style="color: red; text-align: center;"></div>
-                <button class="auth-wrapper__button auth-wrapper__button--submit button button--primary"
+                <button aria-label="<?= home_url() ?>"class="auth-wrapper__button auth-wrapper__button--submit button button--primary"
                         type="submit">
                     Gửi
                 </button>

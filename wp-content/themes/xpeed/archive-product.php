@@ -14,7 +14,7 @@ get_header();
       <div class="collection__sidebar">
             <div class="custom-select">
                   <div class="custom-select__button">
-                        <button class="custom-select__title">MODEL</button>
+                        <button aria-label="<?= home_url() ?>"class="custom-select__title">MODEL</button>
                         <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
                   </div>
 
@@ -28,7 +28,7 @@ get_header();
 
             <div class="custom-select">
                   <div class="custom-select__button">
-                        <button class="custom-select__title">SIZE</button>
+                        <button aria-label="<?= home_url() ?>"class="custom-select__title">SIZE</button>
                         <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
                   </div>
 
@@ -62,7 +62,7 @@ get_header();
 
             <div class="custom-select">
                   <div class="custom-select__button">
-                        <button class="custom-select__title">PRICE</button>
+                        <button aria-label="<?= home_url() ?>"class="custom-select__title">PRICE</button>
                         <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
                   </div>
 
@@ -74,12 +74,12 @@ get_header();
 
       <div class="collection__content">
             <div class="collection__tags">
-                  <a href="#" class="collection__tags__item">
+                  <a aria-label="<?= home_url() ?>" href="#" class="collection__tags__item">
                         <span class="collection__tags__item__content">MODEL: F70 CARBON</span>
                         <ion-icon class="collection__tags__item__close" name="close-outline"></ion-icon>
                   </a>
 
-                  <a href="#" class="collection__tags__item">
+                  <a aria-label="<?= home_url() ?>" href="#" class="collection__tags__item">
                         <span class="collection__tags__item__content">MODEL: F70 CARBON</span>
                         <ion-icon class="collection__tags__item__close" name="close-outline"></ion-icon>
                   </a>
@@ -87,12 +87,12 @@ get_header();
 
             <div class="collection__content-empty-product">
                   <div class="empty-product-text">No products</div>
-                  <a href="" class="empty-product-link">필터 초기화</a>
+                  <a aria-label="<?= home_url() ?>" href="" class="empty-product-link">필터 초기화</a>
             </div>
 
             <div class="collection__content-product">
                   <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
+                        <a aria-label="<?= home_url() ?>" href="" class="shopify__product-image-wrapper">
                               <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
                               <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
                                     alt="" class="shopify__product-image" />
@@ -100,7 +100,7 @@ get_header();
 
                         <div class="shopify__product-details">
                               <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
+                                    <a aria-label="<?= home_url() ?>" href="" class="shopify__product-link">i71 CELOS / MC5</a>
                               </h3>
 
                               <p class="shopify__product-cate">FULL FACE</p>
@@ -110,7 +110,7 @@ get_header();
                   </div>
 
                   <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
+                        <a aria-label="<?= home_url() ?>" href="" class="shopify__product-image-wrapper">
                               <span class="shopify__product-badge shopify__product-badge--sale">Sale</span>
                               <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
                                     alt="" class="shopify__product-image" />
@@ -118,7 +118,7 @@ get_header();
 
                         <div class="shopify__product-details">
                               <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
+                                    <a aria-label="<?= home_url() ?>" href="" class="shopify__product-link">i71 CELOS / MC5</a>
                               </h3>
 
                               <p class="shopify__product-cate">FULL FACE</p>
@@ -128,7 +128,7 @@ get_header();
                   </div>
 
                   <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
+                        <a aria-label="<?= home_url() ?>" href="" class="shopify__product-image-wrapper">
                               <span class="shopify__product-badge shopify__product-badge--out">SOLD OUT</span>
                               <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
                                     alt="" class="shopify__product-image" />
@@ -136,7 +136,7 @@ get_header();
 
                         <div class="shopify__product-details">
                               <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
+                                    <a aria-label="<?= home_url() ?>" href="" class="shopify__product-link">i71 CELOS / MC5</a>
                               </h3>
 
                               <p class="shopify__product-cate">FULL FACE</p>
@@ -146,7 +146,7 @@ get_header();
                   </div>
 
                   <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
+                        <a aria-label="<?= home_url() ?>" href="" class="shopify__product-image-wrapper">
                               <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
                               <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
                                     alt="" class="shopify__product-image" />
@@ -154,7 +154,7 @@ get_header();
 
                         <div class="shopify__product-details">
                               <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
+                                    <a aria-label="<?= home_url() ?>" href="" class="shopify__product-link">i71 CELOS / MC5</a>
                               </h3>
 
                               <p class="shopify__product-cate">FULL FACE</p>
@@ -164,7 +164,7 @@ get_header();
                   </div>
 
                   <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
+                        <a aria-label="<?= home_url() ?>" href="" class="shopify__product-image-wrapper">
                               <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
                               <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
                                     alt="" class="shopify__product-image" />
@@ -172,7 +172,7 @@ get_header();
 
                         <div class="shopify__product-details">
                               <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
+                                    <a aria-label="<?= home_url() ?>" href="" class="shopify__product-link">i71 CELOS / MC5</a>
                               </h3>
 
                               <p class="shopify__product-cate">FULL FACE</p>
@@ -182,7 +182,7 @@ get_header();
                   </div>
 
                   <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
+                        <a aria-label="<?= home_url() ?>" href="" class="shopify__product-image-wrapper">
                               <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
                               <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
                                     alt="" class="shopify__product-image" />
@@ -190,7 +190,7 @@ get_header();
 
                         <div class="shopify__product-details">
                               <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
+                                    <a aria-label="<?= home_url() ?>" href="" class="shopify__product-link">i71 CELOS / MC5</a>
                               </h3>
 
                               <p class="shopify__product-cate">FULL FACE</p>
@@ -200,7 +200,7 @@ get_header();
                   </div>
 
                   <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
+                        <a aria-label="<?= home_url() ?>" href="" class="shopify__product-image-wrapper">
                               <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
                               <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
                                     alt="" class="shopify__product-image" />
@@ -208,7 +208,7 @@ get_header();
 
                         <div class="shopify__product-details">
                               <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
+                                    <a aria-label="<?= home_url() ?>" href="" class="shopify__product-link">i71 CELOS / MC5</a>
                               </h3>
 
                               <p class="shopify__product-cate">FULL FACE</p>
@@ -218,7 +218,7 @@ get_header();
                   </div>
 
                   <div class="shopify__product">
-                        <a href="" class="shopify__product-image-wrapper">
+                        <a aria-label="<?= home_url() ?>" href="" class="shopify__product-image-wrapper">
                               <span class="shopify__product-badge shopify__product-badge--new">NEW</span>
                               <img src="https://hjchelmets.eu/cdn/shop/files/black___rpha_12_carbon-solid_1.png?v=1692400941"
                                     alt="" class="shopify__product-image" />
@@ -226,7 +226,7 @@ get_header();
 
                         <div class="shopify__product-details">
                               <h3 class="shopify__product-title">
-                                    <a href="" class="shopify__product-link">i71 CELOS / MC5</a>
+                                    <a aria-label="<?= home_url() ?>" href="" class="shopify__product-link">i71 CELOS / MC5</a>
                               </h3>
 
                               <p class="shopify__product-cate">FULL FACE</p>
@@ -238,13 +238,13 @@ get_header();
 
             <div class="collection__content-pagination">
                   <div class="collection__content-pagination-action">
-                        <a href="" class="collection__content-pagination-action-icon">
+                        <a aria-label="<?= home_url() ?>" href="" class="collection__content-pagination-action-icon">
                               <div class="collection__content-pagination-action-icon-child">
                                     <ion-icon name="arrow-back-outline"></ion-icon>
                               </div>
                         </a>
 
-                        <a href="" class="collection__content-pagination-action-icon">
+                        <a aria-label="<?= home_url() ?>" href="" class="collection__content-pagination-action-icon">
                               <div class="collection__content-pagination-action-icon-child">
                                     <ion-icon name="arrow-forward-outline"></ion-icon>
                               </div>
@@ -252,10 +252,10 @@ get_header();
                   </div>
 
                   <div class="collection__content-pagination-number-list">
-                        <a href=""
+                        <a aria-label="<?= home_url() ?>" href=""
                               class="collection__content-pagination-number collection__content-pagination-number--active">1</a>
-                        <a href="" class="collection__content-pagination-number">2</a>
-                        <a href="" class="collection__content-pagination-number">3</a>
+                        <a aria-label="<?= home_url() ?>" href="" class="collection__content-pagination-number">2</a>
+                        <a aria-label="<?= home_url() ?>" href="" class="collection__content-pagination-number">3</a>
                   </div>
             </div>
       </div>

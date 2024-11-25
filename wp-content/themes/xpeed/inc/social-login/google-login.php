@@ -5,10 +5,11 @@ require_once get_template_directory() . '/vendor/autoload.php';
 function handle_google_login()
 {
     try {
+        $redirectUrl = !empty($_COOKIE['redirect_after_login']) ? $_COOKIE['redirect_after_login'] : home_url();
         // Initialize Google Client
         $client = new Google_Client();
-        $client->setClientId('697902993845-08guf9k8u509h27075c73vcegav0ksmj.apps.googleusercontent.com'); // Get Google Client ID from environment variable
-        $client->setClientSecret('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'); 
+        $client->setClientId('922240587187-o3lj02p7lnaq6id14b4l0kcsnud50eq4.apps.googleusercontent.com'); // Get Google Client ID from environment variable
+        $client->setClientSecret('GOCSPX-s_8fTcBxf857FQmAvJlHOGISZBO');
         $client->setRedirectUri(home_url('/google-login-callback'));
         $client->addScope('email');
         $client->addScope('profile');
@@ -37,7 +38,7 @@ function handle_google_login()
                 // Log the user in if they exist
                 wp_set_current_user($user->ID);
                 wp_set_auth_cookie($user->ID);
-                wp_redirect(home_url()); // Redirect to homepage or dashboard
+                wp_redirect($redirectUrl); // Redirect to homepage or dashboard
                 exit;
             } else {
                 // If user does not exist, register a new user
@@ -54,7 +55,7 @@ function handle_google_login()
                 // Log the new user in
                 wp_set_current_user($user_id);
                 wp_set_auth_cookie($user_id);
-                wp_redirect(home_url()); // Redirect to homepage or dashboard
+                wp_redirect($redirectUrl); // Redirect to homepage or dashboard
                 exit;
             }
         }

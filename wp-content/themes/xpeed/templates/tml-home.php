@@ -55,7 +55,7 @@ $homeController = new HomeController;
                                                 RPHA 1 FABIO QUARTARARO 2024
                                           </h2>
                                           <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
+                                          <button aria-label="<?= home_url() ?>"class="button banner-content__button button--secondary">
                                                 Buy now
                                           </button>
                                     </div>
@@ -72,7 +72,7 @@ $homeController = new HomeController;
                                                 RPHA 1 FABIO 1234 2024
                                           </h2>
                                           <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
+                                          <button aria-label="<?= home_url() ?>"class="button banner-content__button button--secondary">
                                                 Buy now
                                           </button>
                                     </div>
@@ -90,7 +90,7 @@ $homeController = new HomeController;
                                                 RPHA 1 FABIO QUARTARARO 2024
                                           </h2>
                                           <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
+                                          <button aria-label="<?= home_url() ?>"class="button banner-content__button button--secondary">
                                                 Buy now
                                           </button>
                                     </div>
@@ -107,7 +107,7 @@ $homeController = new HomeController;
                                                 RPHA 1 FABIO QUARTARARO 2024
                                           </h2>
                                           <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
+                                          <button aria-label="<?= home_url() ?>"class="button banner-content__button button--secondary">
                                                 Buy now
                                           </button>
                                     </div>
@@ -135,7 +135,7 @@ $homeController = new HomeController;
                                     <div class="mosaic__overlay">
                                           <h4 class="mosaic__title">NEW PRODUCTS</h4>
                                           <p class="mosaic__subtitle">HJC의 최신 제품을 만나보세요.</p>
-                                          <a href="#" class="mosaic__link"><button class="button button--primary">
+                                          <a href="#" class="mosaic__link"><button aria-label="<?= home_url() ?>"class="button button--primary">
                                                       VIEW MORE
                                                 </button></a>
                                     </div>
@@ -149,7 +149,7 @@ $homeController = new HomeController;
                                                 지금이 곧 기회! 그 기회를 잡으세요.
                                           </p>
 
-                                          <a href="#" class="mosaic__link"><button class="button button--primary">
+                                          <a href="#" class="mosaic__link"><button aria-label="<?= home_url() ?>"class="button button--primary">
                                                       VIEW MORE
                                                 </button></a>
                                     </div>
@@ -162,7 +162,7 @@ $homeController = new HomeController;
                                           <p class="mosaic__subtitle">
                                                 2세대 SMART HJC 블루투스 시스템을 소개합니다.
                                           </p>
-                                          <a href="" class="mosaic__link"><button class="button button--primary">
+                                          <a href="" class="mosaic__link"><button aria-label="<?= home_url() ?>"class="button button--primary">
                                                       VIEW MORE
                                                 </button></a>
                                     </div>
@@ -201,7 +201,7 @@ $homeController = new HomeController;
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                           </p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
+                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ? number_format((float)$product->get_price(), 0, ',', '.') : '' ?>
                                           </span>đ
                                     </div>
                               </a>
@@ -247,7 +247,7 @@ $homeController = new HomeController;
                                                 <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[1]->name) ?></p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
+                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ? number_format((float)$product->get_price(), 0, ',', '.') : '' ?>
                                           </span>đ
                                     </div>
                               </a>
@@ -293,7 +293,7 @@ $homeController = new HomeController;
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                           </p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ?>
+                                          <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ?>
                                           </span>đ
                                     </div>
                               </div>

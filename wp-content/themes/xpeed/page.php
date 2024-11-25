@@ -24,7 +24,7 @@ $product = new ProductController();
       <div class="collection__sidebar">
             <div class="custom-select">
                   <div class="custom-select__button">
-                        <button class="custom-select__title">MODEL</button>
+                        <button aria-label="<?= home_url() ?>"class="custom-select__title">MODEL</button>
                         <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
                   </div>
 
@@ -35,7 +35,7 @@ $product = new ProductController();
 
             <div class="custom-select">
                   <div class="custom-select__button">
-                        <button class="custom-select__title">SIZE</button>
+                        <button aria-label="<?= home_url() ?>"class="custom-select__title">SIZE</button>
                         <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
                   </div>
 
@@ -46,7 +46,7 @@ $product = new ProductController();
 
             <div class="custom-select">
                   <div class="custom-select__button">
-                        <button class="custom-select__title">PRICE</button>
+                        <button aria-label="<?= home_url() ?>"class="custom-select__title">PRICE</button>
                         <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
                   </div>
 
