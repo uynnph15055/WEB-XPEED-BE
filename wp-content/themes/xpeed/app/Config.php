@@ -1,25 +1,54 @@
 <?php
-$menu_name =  'header-menu';
+$header_menu = 'header-menu';
+$footer_menu = 'footer-menu';
+$languages = pll_the_languages(array(
+      'raw' => true,
+));
+$current_lang = pll_current_language();
+
+if ($current_lang === 'es') {
+      $header_menu = 'header-menu-es';
+      $footer_menu = 'footer-menu-es';
+}
+
 $locations = get_nav_menu_locations();
-$menu_id = $locations[$menu_name];
-$menu_items = wp_get_nav_menu_items($menu_id);
+$headers = [];
+$footers = [];
 
-$parent_menu_items = array();
-foreach ($menu_items as $menu_item) {
-      if ($menu_item->menu_item_parent == 0) {
-            $submenu_count = 0;
+function renderMenu($menu_name, $locations = null)
+{
+      $menu_id = isset($locations[$menu_name]) ? $locations[$menu_name] : null;
+      if ($menu_id) {
+            $menu_items = wp_get_nav_menu_items($menu_id);
 
-            foreach ($menu_items as $sub_item) {
-                  if ($sub_item->menu_item_parent == $menu_item->ID) {
-                        $submenu_count++;
+            $parent_menu_items = [];
+            foreach ($menu_items as $menu_item) {
+                  if ($menu_item->menu_item_parent == 0) {
+                        $submenu_count = 0;
+
+                        foreach ($menu_items as $sub_item) {
+                              if ($sub_item->menu_item_parent == $menu_item->ID) {
+                                    $submenu_count++;
+                              }
+                        }
+
+                        $menu_item->submenu_count = $submenu_count;
+                        $parent_menu_items[] = $menu_item;
                   }
             }
 
-            $menu_item->submenu_count = $submenu_count;
-            $parent_menu_items[] = $menu_item;
+            return $parent_menu_items;
       }
 }
 
+$headers = renderMenu($header_menu, $locations);
+$footers = renderMenu($footer_menu, $locations);
+set_query_var('headers', $headers);
+set_query_var('footers', $footers);
+set_query_var('current_lang', $current_lang);
+set_query_var('languages', $languages);
+
+// --------------------------
 function containsAtN($string)
 {
       if (strpos($string, '@N') !== false) {
@@ -30,10 +59,10 @@ function containsAtN($string)
       return '';
 }
 
-function render_submenu_by_parent_id($parent_id, $menu_name = 'header-menu', $locations = null)
+function render_submenu_by_parent_id($parent_id, $header_menu = 'header-menu', $locations = null)
 {
-      if (isset($locations[$menu_name])) {
-            $menu_id = $locations[$menu_name];
+      if (isset($locations[$header_menu])) {
+            $menu_id = $locations[$header_menu];
 
             $menu_items = wp_get_nav_menu_items($menu_id);
 
@@ -66,7 +95,7 @@ function render_submenu_by_parent_id($parent_id, $menu_name = 'header-menu', $lo
                                 ></ion-icon>' : '';
                         echo  '</a>';
 
-                        render_submenu_by_parent_id($submenu_item->ID, $menu_name, $locations);
+                        render_submenu_by_parent_id($submenu_item->ID, $header_menu, $locations);
 
                         echo '</li>';
                   }

@@ -51,35 +51,29 @@
                   </div>
                   <div class="footer__nav-menu">
                         <ul class="footer__nav-menu-list">
-                              <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
-                              </li>
-                              <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
-                              </li>
-                              <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
-                              </li>
-                              <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
-                              </li>
-                              <li class="footer__nav-menu-item">
-                                    <a class="footer__nav-menu-item__link" href="#">서비스 약관</a>
-                              </li>
+                              <?php
+                              if (!empty($footers)):
+                                    foreach ($footers as $menu) :   ?>
+                                          <li class="footer__nav-menu-item">
+                                                <a class="footer__nav-menu-item__link" href="<?= $menu->url ?>"
+                                                      title="<?= !empty($menu->title) ? $menu->title : 'Link to ' . $menu->url ?>">
+                                                      <?= !empty($menu->title) ? $menu->title : 'Link' ?>
+                                                </a>
+                                                </a>
+                                          </li>
+                              <?php endforeach;
+                              endif; ?>
                         </ul>
                   </div>
             </div>
             <div class="footer__credits">
-                  <p class="footer__credits-text">Copyright © 2024, 루트6.</p>
+                  <p class="footer__credits-text"><?= _e('Dữ liệu test cần update', 'xpeed'); ?>
+                  </p>
                   <p class="footer__credits-text">
-                        경기도 성남시 분당구 벌말로40번길 4-1, 201호(야탑동) 대표:임근
-                        주식회사 루트6 사업자등록번호: 782-81-00339 통신판매업신고번호:
-                        2021-성남분당 A-0630호<br />
-                        개인정보관리자: 임태희 대표번호:
-                        <a href="tel:1533-4469" target="_blank" rel="noreferrer noopener">1533-4469</a>
+                        <a href="tel:1533-4469" target="_blank" rel="noreferrer noopener">
+                              <?= _e('Dữ liệu test cần update', 'xpeed'); ?></a>
                         <a href="mailto:customerservice@rt6.co.kr" target="_blank"
-                              rel="noreferrer noopener">customerservice@rt6.co.kr</a>
-                        호스팅제공: Shopify
+                              rel="noreferrer noopener"><?= _e('Dữ liệu test cần update', 'xpeed'); ?></a>
                   </p>
             </div>
       </div>
@@ -89,22 +83,24 @@
 </button>
 
 <div class="overlay"></div>
-
 <div class="language">
-      <div class="language-selected ">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/flag_vi.svg" alt="language image"
-                  class="language-selected--img" />
+      <div class="language-selected">
+            <img alt="language"
+                  src="<?= get_template_directory_uri()  ?><?= $current_lang == 'vi' ? '/assets/images/icons/flag_vi.svg' : '/assets/images/icons/flag_us.svg'  ?>"
+                  alt="language image" class="language-selected--img" />
       </div>
 
       <ul class="language-list">
-            <li class="language-item" title="VI">
-                  <img src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/flag_vi.svg"
-                        alt="language image" class="language-selected--img" />
-            </li>
-            <li class="language-item" title="EN">
-                  <img src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/flag_us.svg"
-                        alt="language image" class="language-selected--img" />
-            </li>
+            <?php foreach ($languages as $language) :
+            ?>
+                  <li class="language-item">
+                        <a href=<?= $language['url'] ?>>
+                              <img alt="language"
+                                    src="<?= get_template_directory_uri() ?><?= $language['slug'] == 'vi' ? '/assets/images/icons/flag_vi.svg' : '/assets/images/icons/flag_us.svg'  ?>"
+                                    alt="language image" class="language-selected--img" />
+                        </a>
+                  </li>
+            <?php endforeach; ?>
       </ul>
 </div>
 </div>

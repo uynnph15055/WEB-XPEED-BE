@@ -14,6 +14,10 @@ use app\Controllers\ProductController;
 $blog = new BlogController();
 $product = new ProductController();
 
+require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
+
+$homeController = new HomeController;
+
 
 $categories = $product->categories;
 $blogs = $blog->blogs;
@@ -36,98 +40,46 @@ $productSecond = isset($product->categories[1]) ?
       $product->getProductLimitItemPageHome($product->categories[1]->term_id) : null;
 $productThird = isset($product->categories[2]) ? $product->getProductLimitItemPageHome($product->categories[2]->term_id)
       : null;
-require_once dirname(__DIR__) . '/app/Controllers/ProductController.php';
 
-$homeController = new HomeController;
-
+// -----------
+$sliders = $homeController->getSlider(8);
 ?>
 <main class="home-wrapper">
       <!-- banner -->
       <main class="home-wrapper">
             <!-- banner -->
             <div class="banner">
-                  <div class="banner_item is-active">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO QUARTARARO 2024
-                                          </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
+                  <?php foreach ($sliders as $index => $slider) :  ?>
+                        <div class="banner_item <?= $index == 0 ? 'is-active' : '' ?> ">
+                              <img src="<?= $slider['image'] ?>" alt="<?= $slider['title'] ?>" class="banner_image" />
+                              <div class="over_lay">
+                                    <div class="banner-content containerX">
+                                          <div class="banner-content__inside">
+                                                <h2 class="banner-content__heading">
+                                                      <?= $slider['title'] ?>
+                                                </h2>
+                                                <p class="banner-content__subheading"><?= $slider['content'] ?></p>
+                                                <a href="<?= $slider['link'] ?>"
+                                                      class="button banner-content__button button--secondary">
+                                                      <?= pll_current_language() == 'vi' ? 'Mua ngay' : 'Buy now' ?>
+                                                </a>
+                                          </div>
                                     </div>
                               </div>
                         </div>
-                  </div>
-
-                  <div class="banner_item is-active">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO 1234 2024
-                                          </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-
-                  <div class="banner_item is-active">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/diablo_mask_roll_banner.jpg" alt=""
-                              class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO QUARTARARO 2024
-                                          </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-
-                  <div class="banner_item is-active">
-                        <img src="https://rt6moto.co.kr/cdn/shop/files/fq2024.jpg" alt="" class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                RPHA 1 FABIO QUARTARARO 2024
-                                          </h2>
-                                          <p class="banner-content__subheading">BANDAI NAMCO</p>
-                                          <button class="button banner-content__button button--secondary">
-                                                Buy now
-                                          </button>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
-
+                  <?php endforeach; ?>
 
                   <ul class="banner_dots">
-                        <li class="banner_dots-item is-active"></li>
-                        <li class="banner_dots-item"></li>
-                        <li class="banner_dots-item"></li>
-                        <li class="banner_dots-item"></li>
+                        <?php for ($i = 0; $i < count($sliders); $i++) : ?>
+                              <li class="banner_dots-item <?= $i == 0 ? 'is-active' : '' ?>"></li>
+                        <?php endfor; ?>
                   </ul>
             </div>
             <!-- end banner -->
 
             <div class="home-wrapper__content">
                   <!-- mosaic -->
-                  <div id="mosaic" class="mosaic-section">
+                  <!-- <div id="mosaic" class="mosaic-section">
                         <div class="mosaic__grid-container">
                               <div class="mosaic__grid-item mosaic__grid-item--large">
                                     <img src="https://rt6moto.co.kr/cdn/shop/files/main-c10.jpg?v=1677676335&width=1500"
@@ -168,146 +120,150 @@ $homeController = new HomeController;
                                     </div>
                               </div>
                         </div>
-                  </div>
+                  </div> -->
                   <!-- end mosaic -->
 
                   <!-- shopify -->
                   <?php if (isset($productFirst) && count($productFirst) > 0): ?>
-                  <div id="shopify" class="shopify-section">
-                        <div class="shopify__image-container">
-                              <img src="<?= wp_get_attachment_url(get_term_meta($categories[0]->term_id, 'thumbnail_id', true)) ?>"
-                                    alt="" class="shopify__image" />
-                              <div class="shopify__image-overlay">
-                                    <h2 class="shopify__title"><?= isset($cateNameFirst) ? $cateNameFirst : '' ?></h2>
+                        <div id="shopify" class="shopify-section">
+                              <div class="shopify__image-container">
+                                    <img src="<?= wp_get_attachment_url(get_term_meta($categories[0]->term_id, 'thumbnail_id', true)) ?>"
+                                          alt="" class="shopify__image" />
+                                    <div class="shopify__image-overlay">
+                                          <h2 class="shopify__title"><?= isset($cateNameFirst) ? $cateNameFirst : '' ?>
+                                          </h2>
+                                    </div>
                               </div>
-                        </div>
-                        <div class="shopify__product-list">
-                              <?php
+                              <div class="shopify__product-list">
+                                    <?php
                                     foreach ($productFirst as $product):
                                           $tags = wp_get_post_terms($product->get_id(), 'product_tag'); ?>
-                              <a href="<?= esc_url(get_permalink($product->get_id())) ?>" class="shopify__product-item">
-                                    <div class="shopify__product-image-wrapper">
-                                          <?php if (isset($tags[0]->name)) {  ?>
-                                          <span
-                                                class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?  esc_html($tags[0]->name) : '' ?></span>
-                                          <?php } ?>
-                                          <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ? esc_url(wp_get_attachment_url($product->get_image_id())) : '' ?>"
-                                                alt="<?= esc_attr($product->get_name()) ?  esc_attr($product->get_name()) : '' ?>"
-                                                class="shopify__product-image" />
-                                    </div>
-                                    <div class="shopify__product-details">
-                                          <h3 class="shopify__product-title">
-                                                <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
-                                          </h3>
-                                          <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
-                                          </p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
-                                          </span>đ
-                                    </div>
-                              </a>
-                              <?php
+                                          <a href="<?= esc_url(get_permalink($product->get_id())) ?>" class="shopify__product-item">
+                                                <div class="shopify__product-image-wrapper">
+                                                      <?php if (isset($tags[0]->name)) {  ?>
+                                                            <span
+                                                                  class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?  esc_html($tags[0]->name) : '' ?></span>
+                                                      <?php } ?>
+                                                      <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ? esc_url(wp_get_attachment_url($product->get_image_id())) : '' ?>"
+                                                            alt="<?= esc_attr($product->get_name()) ?  esc_attr($product->get_name()) : '' ?>"
+                                                            class="shopify__product-image" />
+                                                </div>
+                                                <div class="shopify__product-details">
+                                                      <h3 class="shopify__product-title">
+                                                            <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
+                                                      </h3>
+                                                      <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
+                                                      </p>
+                                                      <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
+                                                      </span>đ
+                                                </div>
+                                          </a>
+                                    <?php
                                     endforeach;
                                     ?>
+                              </div>
+                              <div class="shopify__cta">
+                                    <a href="<?= isset($cateLinkFirst) ? $cateLinkFirst : '' ?>"
+                                          class="button button--primary shopify__cta-button">
+                                          VIEW MORE
+                                    </a>
+                              </div>
                         </div>
-                        <div class="shopify__cta">
-                              <a href="<?= isset($cateLinkFirst) ? $cateLinkFirst : '' ?>"
-                                    class="button button--primary shopify__cta-button">
-                                    VIEW MORE
-                              </a>
-                        </div>
-                  </div>
                   <?php endif; ?>
 
                   <?php if (isset($productSecond) && count($productSecond) > 0):
                   ?>
-                  <div id="shopify-2" class="shopify-section">
-                        <div class="shopify__image-container">
-                              <img src=<?= wp_get_attachment_url(get_term_meta($categories[1]->term_id, 'thumbnail_id', true)) ?>
-                                    alt="" class="shopify__image" />
-                              <div class="shopify__image-overlay">
-                                    <h2 class="shopify__title"><?= isset($cateNameSecond) ? $cateNameSecond : '' ?></h2>
+                        <div id="shopify-2" class="shopify-section">
+                              <div class="shopify__image-container">
+                                    <img src=<?= wp_get_attachment_url(get_term_meta($categories[1]->term_id, 'thumbnail_id', true)) ?>
+                                          alt="" class="shopify__image" />
+                                    <div class="shopify__image-overlay">
+                                          <h2 class="shopify__title">
+                                                <?= isset($cateNameSecond) ? $cateNameSecond : '' ?></h2>
+                                    </div>
                               </div>
-                        </div>
-                        <div class="shopify__product-list">
-                              <?php
+                              <div class="shopify__product-list">
+                                    <?php
                                     foreach ($productSecond as $product):
                                           $tags = wp_get_post_terms($product->get_id(), 'product_tag'); ?>
-                              <a href="<?= esc_url(get_permalink($product->get_id())) ?>" class="shopify__product-item">
-                                    <div class="shopify__product-image-wrapper">
-                                          <?php if (isset($tags[0]->name)) {  ?>
-                                          <span
-                                                class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?  esc_html($tags[0]->name) : '' ?></span>
-                                          <?php } ?>
-                                          <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ? esc_url(wp_get_attachment_url($product->get_image_id())) : '' ?>"
-                                                alt="<?= esc_attr($product->get_name()) ?  esc_attr($product->get_name()) : '' ?>"
-                                                class="shopify__product-image" />
-                                    </div>
-                                    <div class="shopify__product-details">
-                                          <h3 class="shopify__product-title">
-                                                <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
-                                          </h3>
-                                          <p class="shopify__product-cate"><?= esc_html($categories[1]->name) ?></p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
-                                          </span>đ
-                                    </div>
-                              </a>
-                              <?php
+                                          <a href="<?= esc_url(get_permalink($product->get_id())) ?>" class="shopify__product-item">
+                                                <div class="shopify__product-image-wrapper">
+                                                      <?php if (isset($tags[0]->name)) {  ?>
+                                                            <span
+                                                                  class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?  esc_html($tags[0]->name) : '' ?></span>
+                                                      <?php } ?>
+                                                      <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ? esc_url(wp_get_attachment_url($product->get_image_id())) : '' ?>"
+                                                            alt="<?= esc_attr($product->get_name()) ?  esc_attr($product->get_name()) : '' ?>"
+                                                            class="shopify__product-image" />
+                                                </div>
+                                                <div class="shopify__product-details">
+                                                      <h3 class="shopify__product-title">
+                                                            <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
+                                                      </h3>
+                                                      <p class="shopify__product-cate"><?= esc_html($categories[1]->name) ?>
+                                                      </p>
+                                                      <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
+                                                      </span>đ
+                                                </div>
+                                          </a>
+                                    <?php
                                     endforeach;
                                     ?>
+                              </div>
+                              <div class="shopify__cta">
+                                    <a href="<?= isset($cateLinkSecond) ? $cateLinkSecond : '' ?>"
+                                          class="button button--primary shopify__cta-button">
+                                          VIEW MORE
+                                    </a>
+                              </div>
                         </div>
-                        <div class="shopify__cta">
-                              <a href="<?= isset($cateLinkSecond) ? $cateLinkSecond : '' ?>"
-                                    class="button button--primary shopify__cta-button">
-                                    VIEW MORE
-                              </a>
-                        </div>
-                  </div>
                   <?php endif; ?>
 
                   <?php if (isset($productThird) && count($productThird) > 0): ?>
-                  <div id="shopify-3" class="shopify-section">
-                        <div class="shopify__image-container">
-                              <img src=<?= wp_get_attachment_url(get_term_meta($categories[2]->term_id, 'thumbnail_id', true)) ?>
-                                    alt="" class="shopify__image" />
-                              <div class="shopify__image-overlay">
-                                    <h2 class="shopify__title"><?= isset($cateNameThird) ? $cateNameThird : '' ?></h2>
+                        <div id="shopify-3" class="shopify-section">
+                              <div class="shopify__image-container">
+                                    <img src=<?= wp_get_attachment_url(get_term_meta($categories[2]->term_id, 'thumbnail_id', true)) ?>
+                                          alt="" class="shopify__image" />
+                                    <div class="shopify__image-overlay">
+                                          <h2 class="shopify__title"><?= isset($cateNameThird) ? $cateNameThird : '' ?>
+                                          </h2>
+                                    </div>
                               </div>
-                        </div>
-                        <div class="shopify__product-list">
-                              <?php foreach ($productThird as $product):
+                              <div class="shopify__product-list">
+                                    <?php foreach ($productThird as $product):
                                           $categories = wp_get_post_terms($product->get_id(), 'product_cat');
                                           $tags = wp_get_post_terms($product->get_id(), 'product_tag'); ?>
-                              <div class="shopify__product-item">
-                                    <div class="shopify__product-image-wrapper">
-                                          <span
-                                                class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?></span>
-                                          <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ?>"
-                                                alt="<?= esc_attr($product->get_name()) ?>"
-                                                class="shopify__product-image" />
-                                    </div>
-                                    <div class="shopify__product-details">
-                                          <h3 class="shopify__product-title">
-                                                <a href="" class="shopify__product-link">
-                                                      <?= $product->get_name() ?>
-                                                </a>
-                                          </h3>
-                                          <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
-                                          </p>
-                                          <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ?>
-                                          </span>đ
-                                    </div>
-                              </div>
-                              <?php
+                                          <div class="shopify__product-item">
+                                                <div class="shopify__product-image-wrapper">
+                                                      <span
+                                                            class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?></span>
+                                                      <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ?>"
+                                                            alt="<?= esc_attr($product->get_name()) ?>"
+                                                            class="shopify__product-image" />
+                                                </div>
+                                                <div class="shopify__product-details">
+                                                      <h3 class="shopify__product-title">
+                                                            <a href="" class="shopify__product-link">
+                                                                  <?= $product->get_name() ?>
+                                                            </a>
+                                                      </h3>
+                                                      <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
+                                                      </p>
+                                                      <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ?>
+                                                      </span>đ
+                                                </div>
+                                          </div>
+                                    <?php
                                     endforeach;
                                     ?>
+                              </div>
+                              <div class="shopify__cta">
+                                    <a href=<?= isset($cateLinkThird) ? $cateLinkThird : '' ?>
+                                          class="button button--primary shopify__cta-button">
+                                          VIEW MORE
+                                    </a>
+                              </div>
                         </div>
-                        <div class="shopify__cta">
-                              <a href=<?= isset($cateLinkThird) ? $cateLinkThird : '' ?>
-                                    class="button button--primary shopify__cta-button">
-                                    VIEW MORE
-                              </a>
-                        </div>
-                  </div>
                   <?php endif; ?>
                   <!-- end shopify -->
 
@@ -316,23 +272,21 @@ $homeController = new HomeController;
                         <div class="blogs__list">
                               <?php
                               if (empty($blogs)) {
-                                    echo "Không có bài viết";
-                                    return;
-                              } else {
                                     foreach ($blogs as $blog) : ?>
-                              <a href="<?= $blog["link"] ?>" class="blogs__item">
-                                    <div class="blogs__image-wrapper">
-                                          <img class="blogs__image" src="<?= $blog["thumbnail"] ?>" alt="" />
-                                    </div>
-                                    <div class="blogs__details">
-                                          <h3 class="blogs__title"><?= $blog["title"] ?></h3>
-                                          <div class="blogs__description">
-                                                <p class="blogs__text"><?= $blog["excerpt"] ?></p>
-                                                <p class="blogs__link"><?= date('d/m/Y', strtotime($blog["date"]))  ?>
-                                                </p>
-                                          </div>
-                                    </div>
-                              </a>
+                                          <a href="<?= $blog["link"] ?>" class="blogs__item">
+                                                <div class="blogs__image-wrapper">
+                                                      <img class="blogs__image" src="<?= $blog["thumbnail"] ?>" alt="" />
+                                                </div>
+                                                <div class="blogs__details">
+                                                      <h3 class="blogs__title"><?= $blog["title"] ?></h3>
+                                                      <div class="blogs__description">
+                                                            <p class="blogs__text"><?= $blog["excerpt"] ?></p>
+                                                            <p class="blogs__link">
+                                                                  <?= date('d/m/Y', strtotime($blog["date"]))  ?>
+                                                            </p>
+                                                      </div>
+                                                </div>
+                                          </a>
                               <?php endforeach;
                               }   ?>
                         </div>
@@ -373,21 +327,21 @@ $homeController = new HomeController;
                         <div class="ig-library__gallery">
                               <?php foreach ($homeController->getSocial(8) as $social) {  ?>
 
-                              <div class="ig-library__photo-item"
-                                    onclick="window.location.href='<?php echo $social['title'] ?? '' ?>'">
-                                    <div class="ig-library__photo">
-                                          <img src="<?php echo $social['image'] ?>" alt="<?php echo $social['title'] ?>"
-                                                class="ig-library__photo-image" />
+                                    <div class="ig-library__photo-item"
+                                          onclick="window.location.href='<?php echo $social['title'] ?? '' ?>'">
+                                          <div class="ig-library__photo">
+                                                <img src="<?php echo $social['image'] ?>" alt="<?php echo $social['title'] ?>"
+                                                      class="ig-library__photo-image" />
+                                          </div>
+                                          <!-- Overlay -->
+                                          <div class="ig-library__overlay">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                      fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+                                                      <path fill-rule="evenodd"
+                                                            d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+                                                </svg>
+                                          </div>
                                     </div>
-                                    <!-- Overlay -->
-                                    <div class="ig-library__overlay">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd"
-                                                      d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
-                                          </svg>
-                                    </div>
-                              </div>
                               <?php } ?>
                         </div>
                   </div>

@@ -1,8 +1,9 @@
 <?php
 session_start();
-require_once 'app/Config.php';
+$current_language = pll_current_language();
+require 'app/Config.php';
 if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
+      $_SESSION['cart'] = [];
 }
 ?>
 <!DOCTYPE html>
@@ -24,7 +25,7 @@ if (!isset($_SESSION['cart'])) {
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script src="https://unpkg.com/scrollreveal"></script>
       <script>
-      const baseUrl = "<?php echo home_url(); ?>";
+            const baseUrl = "<?php echo home_url(); ?>";
       </script>
       <?php
       wp_head()
@@ -46,165 +47,163 @@ if (!isset($_SESSION['cart'])) {
                               </a>
                               <div class="header_main-nav">
                                     <ul class="header_main-nav-list">
-                                          <?php foreach ($parent_menu_items as $menu_item) : ?>
-                                          <li class="header_main-nav--item">
-                                                <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
-                                                      <?= $menu_item->title ?>
-                                                </a>
-                                                <?php if ($menu_item->submenu_count > 0) {
+                                          <?php foreach ($headers as $menu_item) : ?>
+                                                <li class="header_main-nav--item">
+                                                      <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
+                                                            <?= $menu_item->title ?>
+                                                      </a>
+                                                      <?php if ($menu_item->submenu_count > 0) {
                                                       ?>
-                                                <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
-                                                <?php } ?>
+                                                            <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
+                                                      <?php } ?>
 
-                                                <?php echo render_submenu_by_parent_id($menu_item->ID, $menu_name, $locations) ?>
-                                          </li>
+                                                      <?php echo render_submenu_by_parent_id($menu_item->ID, $header_menu, $locations) ?>
+                                                </li>
                                           <?php endforeach; ?>
                                     </ul>
                               </div>
                               <div class="header_main-icon">
-                                    <li class="header_main-icon--item">
-                                          <a href="" class="header_main-icon--item--link">
-                                                <ion-icon name="search-outline"></ion-icon>
-                                          </a>
+                                    <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
+                                          <button class="header_main-icon--item--button"
+                                                onclick="window.location.href='<?php echo home_url('cart'); ?>'">
+                                                <ion-icon name="cart-outline"></ion-icon>
+                                          </button>
+
+                                          <?php if (count($_SESSION['cart']) >= 1): ?>
+                                                <div class="header_main-cart-count" id="product-count">
+                                                      <?= count($_SESSION['cart']); ?></div>
+                                          <?php endif; ?>
+                                          <div class="header__cart-overlay"></div>
+                                          <!--                                          <div class="header__cart">-->
+                                          <!--                                                <div class="header__cart-content">-->
+                                          <!---->
+                                          <!--                                                      <div class="header__cart-content--having">-->
+                                          <!--                                                            <h4 class="cart-content__title">Cart</h4>-->
+                                          <!--                                                            <div class="cart-content__list">-->
+                                          <!--                                                                  <div class="cart-content__item">-->
+                                          <!--                                                                        <div class="cart-content__item-container-img">-->
+                                          <!--                                                                              <div class="cart-content__item-wrap-img">-->
+                                          <!--                                                                                    <img class="cart-content__item-img"-->
+                                          <!--                                                                                          src="https://bikegear.in/image/cache/catalog/products/HJC%20Helmets/hjc-f31-solid-semi-flat-black-helmet/1-hjc-f31-solid-semi-flat-black-helmet-800x800.png"-->
+                                          <!--                                                                                          alt="" />-->
+                                          <!--                                                                              </div>-->
+                                          <!--                                                                              <div class="cart-content__item-quantity">-->
+                                          <!--                                                                                    <div-->
+                                          <!--                                                                                          class="cart-content__item-quantity-controls">-->
+                                          <!--                                                                                          <button-->
+                                          <!--                                                                                                class="cart-content__item-quantity-decrease">-->
+                                          <!--                                                                                                --->
+                                          <!--                                                                                          </button>-->
+                                          <!--                                                                                          <input value="1" min="1"-->
+                                          <!--                                                                                                class="cart-content__item-quantity-input" />-->
+                                          <!--                                                                                          <button-->
+                                          <!--                                                                                                class="cart-content__item-quantity-increase">-->
+                                          <!--                                                                                                +-->
+                                          <!--                                                                                          </button>-->
+                                          <!--                                                                                    </div>-->
+                                          <!--                                                                              </div>-->
+                                          <!--                                                                        </div>-->
+                                          <!--                                                                        <div class="cart-content__item-desc">-->
+                                          <!--                                                                              <div class="cart-content__item-info">-->
+                                          <!--                                                                                    <h3-->
+                                          <!--                                                                                          class="cart-content__item-title">-->
+                                          <!--                                                                                          i91 CARST/MC1SF-->
+                                          <!--                                                                                    </h3>-->
+                                          <!--                                                                                    <div-->
+                                          <!--                                                                                          class="cart-content__item-price">-->
+                                          <!--                                                                                          <span-->
+                                          <!--                                                                                                class="cart-content__item-price-item">319.000</span>-->
+                                          <!--                                                                                          <span-->
+                                          <!--                                                                                                class="cart-content__item-quantity-item">x-->
+                                          <!--                                                                                                2</span>-->
+                                          <!--                                                                                    </div>-->
+                                          <!--                                                                                    <div-->
+                                          <!--                                                                                          class="cart-content__item-property">-->
+                                          <!--                                                                                          <span-->
+                                          <!--                                                                                                class="cart-content__item-property-text">Kích-->
+                                          <!--                                                                                                thước: M</span>-->
+                                          <!--                                                                                    </div>-->
+                                          <!--                                                                              </div>-->
+                                          <!--                                                                              <button-->
+                                          <!--                                                                                    class="cart-content__item-action-delete">-->
+                                          <!--                                                                                    Xoá-->
+                                          <!--                                                                              </button>-->
+                                          <!--                                                                        </div>-->
+                                          <!--                                                                  </div>-->
+                                          <!--                                                                  <div class="cart-content__item">-->
+                                          <!--                                                                        <div class="cart-content__item-container-img">-->
+                                          <!--                                                                              <div class="cart-content__item-wrap-img">-->
+                                          <!--                                                                                    <img class="cart-content__item-img"-->
+                                          <!--                                                                                          src="https://bikegear.in/image/cache/catalog/products/HJC%20Helmets/hjc-f31-solid-semi-flat-black-helmet/1-hjc-f31-solid-semi-flat-black-helmet-800x800.png"-->
+                                          <!--                                                                                          alt="" />-->
+                                          <!--                                                                              </div>-->
+                                          <!--                                                                              <div class="cart-content__item-quantity">-->
+                                          <!--                                                                                    <div-->
+                                          <!--                                                                                          class="cart-content__item-quantity-controls">-->
+                                          <!--                                                                                          <button-->
+                                          <!--                                                                                                class="cart-content__item-quantity-decrease">-->
+                                          <!--                                                                                                --->
+                                          <!--                                                                                          </button>-->
+                                          <!--                                                                                          <input value="1" min="1"-->
+                                          <!--                                                                                                class="cart-content__item-quantity-input" />-->
+                                          <!--                                                                                          <button-->
+                                          <!--                                                                                                class="cart-content__item-quantity-increase">-->
+                                          <!--                                                                                                +-->
+                                          <!--                                                                                          </button>-->
+                                          <!--                                                                                    </div>-->
+                                          <!--                                                                              </div>-->
+                                          <!--                                                                        </div>-->
+                                          <!--                                                                        <div class="cart-content__item-desc">-->
+                                          <!--                                                                              <div class="cart-content__item-info">-->
+                                          <!--                                                                                    <h3-->
+                                          <!--                                                                                          class="cart-content__item-title">-->
+                                          <!--                                                                                          i91 CARST/MC1SF-->
+                                          <!--                                                                                    </h3>-->
+                                          <!--                                                                                    <div-->
+                                          <!--                                                                                          class="cart-content__item-price">-->
+                                          <!--                                                                                          <span-->
+                                          <!--                                                                                                class="cart-content__item-price-item">319.000</span>-->
+                                          <!--                                                                                          <span-->
+                                          <!--                                                                                                class="cart-content__item-quantity-item">x-->
+                                          <!--                                                                                                2</span>-->
+                                          <!--                                                                                    </div>-->
+                                          <!--                                                                                    <div-->
+                                          <!--                                                                                          class="cart-content__item-property">-->
+                                          <!--                                                                                          <span-->
+                                          <!--                                                                                                class="cart-content__item-property-text">Kích-->
+                                          <!--                                                                                                thước: M</span>-->
+                                          <!--                                                                                    </div>-->
+                                          <!--                                                                              </div>-->
+                                          <!--                                                                              <button-->
+                                          <!--                                                                                    class="cart-content__item-action-delete">-->
+                                          <!--                                                                                    Xoá-->
+                                          <!--                                                                              </button>-->
+                                          <!--                                                                        </div>-->
+                                          <!--                                                                  </div>-->
+                                          <!--                                                            </div>-->
+                                          <!--                                                            <div class="cart-content__footer">-->
+                                          <!--                                                                  <a class="cart-content__footer-link"-->
+                                          <!--                                                                        <button class="button button--primary">-->
+                                          <!--                                                                              Xem tất cả-->
+                                          <!--                                                                        </button>-->
+                                          <!--                                                                  </a>-->
+                                          <!--                                                            </div>-->
+                                          <!--                                                      </div>-->
+                                          <!--                                                </div>-->
+                                          <!--                                          </div>-->
                                     </li>
+
                                     <li class="header_main-icon--item">
                                           <?php if (!is_user_logged_in()): ?>
-                                          <a href="./login" class="header_main-icon--item--link">
-                                                <ion-icon name="lock-closed-outline"></ion-icon>
-                                          </a>
+                                                <a href="<?= $current_lang == 'vi' ? './dang-nhap' : './en/login' ?>"
+                                                      class="header_main-btn-login"><?= $current_lang == 'vi' ? 'Đăng nhập' : 'Login' ?>
+                                                </a>
                                           <?php else: ?>
-                                          <a href="./profile" class="header_main-icon--item--link">
-                                                <ion-icon name="person-circle-outline"></ion-icon>
-                                          </a>
+                                                <a href="<?= $current_lang == 'vi' ? './en/profile' : './tai-khoan' ?>"
+                                                      class="header_main-icon--item--link">
+                                                      <ion-icon name="person-circle-outline"></ion-icon>
+                                                </a>
                                           <?php endif; ?>
-                                    </li>
-
-                                    <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
-                                        <button class="header_main-icon--item--button" onclick="window.location.href='<?php echo home_url('cart'); ?>'">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
-
-                                        <?php if (count($_SESSION['cart']) >= 1): ?>
-                                            <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']); ?></div>
-                                        <?php endif; ?>
-                                          <div class="header__cart-overlay"></div>
-<!--                                          <div class="header__cart">-->
-<!--                                                <div class="header__cart-content">-->
-<!---->
-<!--                                                      <div class="header__cart-content--having">-->
-<!--                                                            <h4 class="cart-content__title">Cart</h4>-->
-<!--                                                            <div class="cart-content__list">-->
-<!--                                                                  <div class="cart-content__item">-->
-<!--                                                                        <div class="cart-content__item-container-img">-->
-<!--                                                                              <div class="cart-content__item-wrap-img">-->
-<!--                                                                                    <img class="cart-content__item-img"-->
-<!--                                                                                          src="https://bikegear.in/image/cache/catalog/products/HJC%20Helmets/hjc-f31-solid-semi-flat-black-helmet/1-hjc-f31-solid-semi-flat-black-helmet-800x800.png"-->
-<!--                                                                                          alt="" />-->
-<!--                                                                              </div>-->
-<!--                                                                              <div class="cart-content__item-quantity">-->
-<!--                                                                                    <div-->
-<!--                                                                                          class="cart-content__item-quantity-controls">-->
-<!--                                                                                          <button-->
-<!--                                                                                                class="cart-content__item-quantity-decrease">-->
-<!--                                                                                                --->
-<!--                                                                                          </button>-->
-<!--                                                                                          <input value="1" min="1"-->
-<!--                                                                                                class="cart-content__item-quantity-input" />-->
-<!--                                                                                          <button-->
-<!--                                                                                                class="cart-content__item-quantity-increase">-->
-<!--                                                                                                +-->
-<!--                                                                                          </button>-->
-<!--                                                                                    </div>-->
-<!--                                                                              </div>-->
-<!--                                                                        </div>-->
-<!--                                                                        <div class="cart-content__item-desc">-->
-<!--                                                                              <div class="cart-content__item-info">-->
-<!--                                                                                    <h3-->
-<!--                                                                                          class="cart-content__item-title">-->
-<!--                                                                                          i91 CARST/MC1SF-->
-<!--                                                                                    </h3>-->
-<!--                                                                                    <div-->
-<!--                                                                                          class="cart-content__item-price">-->
-<!--                                                                                          <span-->
-<!--                                                                                                class="cart-content__item-price-item">319.000</span>-->
-<!--                                                                                          <span-->
-<!--                                                                                                class="cart-content__item-quantity-item">x-->
-<!--                                                                                                2</span>-->
-<!--                                                                                    </div>-->
-<!--                                                                                    <div-->
-<!--                                                                                          class="cart-content__item-property">-->
-<!--                                                                                          <span-->
-<!--                                                                                                class="cart-content__item-property-text">Kích-->
-<!--                                                                                                thước: M</span>-->
-<!--                                                                                    </div>-->
-<!--                                                                              </div>-->
-<!--                                                                              <button-->
-<!--                                                                                    class="cart-content__item-action-delete">-->
-<!--                                                                                    Xoá-->
-<!--                                                                              </button>-->
-<!--                                                                        </div>-->
-<!--                                                                  </div>-->
-<!--                                                                  <div class="cart-content__item">-->
-<!--                                                                        <div class="cart-content__item-container-img">-->
-<!--                                                                              <div class="cart-content__item-wrap-img">-->
-<!--                                                                                    <img class="cart-content__item-img"-->
-<!--                                                                                          src="https://bikegear.in/image/cache/catalog/products/HJC%20Helmets/hjc-f31-solid-semi-flat-black-helmet/1-hjc-f31-solid-semi-flat-black-helmet-800x800.png"-->
-<!--                                                                                          alt="" />-->
-<!--                                                                              </div>-->
-<!--                                                                              <div class="cart-content__item-quantity">-->
-<!--                                                                                    <div-->
-<!--                                                                                          class="cart-content__item-quantity-controls">-->
-<!--                                                                                          <button-->
-<!--                                                                                                class="cart-content__item-quantity-decrease">-->
-<!--                                                                                                --->
-<!--                                                                                          </button>-->
-<!--                                                                                          <input value="1" min="1"-->
-<!--                                                                                                class="cart-content__item-quantity-input" />-->
-<!--                                                                                          <button-->
-<!--                                                                                                class="cart-content__item-quantity-increase">-->
-<!--                                                                                                +-->
-<!--                                                                                          </button>-->
-<!--                                                                                    </div>-->
-<!--                                                                              </div>-->
-<!--                                                                        </div>-->
-<!--                                                                        <div class="cart-content__item-desc">-->
-<!--                                                                              <div class="cart-content__item-info">-->
-<!--                                                                                    <h3-->
-<!--                                                                                          class="cart-content__item-title">-->
-<!--                                                                                          i91 CARST/MC1SF-->
-<!--                                                                                    </h3>-->
-<!--                                                                                    <div-->
-<!--                                                                                          class="cart-content__item-price">-->
-<!--                                                                                          <span-->
-<!--                                                                                                class="cart-content__item-price-item">319.000</span>-->
-<!--                                                                                          <span-->
-<!--                                                                                                class="cart-content__item-quantity-item">x-->
-<!--                                                                                                2</span>-->
-<!--                                                                                    </div>-->
-<!--                                                                                    <div-->
-<!--                                                                                          class="cart-content__item-property">-->
-<!--                                                                                          <span-->
-<!--                                                                                                class="cart-content__item-property-text">Kích-->
-<!--                                                                                                thước: M</span>-->
-<!--                                                                                    </div>-->
-<!--                                                                              </div>-->
-<!--                                                                              <button-->
-<!--                                                                                    class="cart-content__item-action-delete">-->
-<!--                                                                                    Xoá-->
-<!--                                                                              </button>-->
-<!--                                                                        </div>-->
-<!--                                                                  </div>-->
-<!--                                                            </div>-->
-<!--                                                            <div class="cart-content__footer">-->
-<!--                                                                  <a class="cart-content__footer-link"-->
-<!--                                                                        <button class="button button--primary">-->
-<!--                                                                              Xem tất cả-->
-<!--                                                                        </button>-->
-<!--                                                                  </a>-->
-<!--                                                            </div>-->
-<!--                                                      </div>-->
-<!--                                                </div>-->
-<!--                                          </div>-->
                                     </li>
                               </div>
                         </div>

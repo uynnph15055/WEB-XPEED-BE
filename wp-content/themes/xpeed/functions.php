@@ -22,7 +22,7 @@ require_once __DIR__ . '/vendor/autoload.php'; // Đảm bảo đường dẫn c
 require_once get_template_directory() . '/app/Routes/web.php'; // Bao gồm các route
 
 
-const TEXT_DOMAIN = 'xpeed';
+const TEXT_DOMAIN = ' xpeed';
 const CORE = THEME_URL . '/core';
 
 
@@ -77,7 +77,8 @@ if (!function_exists('check_user_login_and_redirect')) {
             exit;
         }
     }
-    function getCurrentUrl() {
+    function getCurrentUrl()
+    {
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'];
         $requestUri = $_SERVER['REQUEST_URI'];
@@ -166,3 +167,9 @@ add_action('init', function () {
         facebook_login_callback();
     }
 });
+
+function my_theme_setup()
+{
+    load_theme_textdomain('xpeed', get_template_directory() . '/languages');
+}
+add_action('after_setup_theme', 'my_theme_setup');

@@ -42,8 +42,6 @@ class BlogController
                               'thumbnail' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
                         );
                   }
-            } else {
-                  echo '<p>No posts found.</p>';
             }
             wp_reset_postdata();
 
