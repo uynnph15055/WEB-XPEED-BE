@@ -197,6 +197,17 @@ class ProductController extends BaseController
 
             $wc_product = wc_get_product($product_id);
 
+            if (!$wc_product) {
+                return 'Sản phẩm không hợp lệ !';
+            }
+            $product_type = $wc_product->get_type();
+
+            // Debug product type and product data
+            if (!in_array($product_type, ['variable'])) {
+                return 'Sản phẩm không phải loại variable! ';
+            }
+
+
             if ($wc_product) {
                 // Retrieve product categories
                 $category_ids = $wc_product->get_category_ids();
@@ -218,6 +229,20 @@ class ProductController extends BaseController
                 $gallery_images = array_map('wp_get_attachment_url', $wc_product->get_gallery_image_ids());
 
                 $main_image = $wc_product->get_image_id() ? wp_get_attachment_url($wc_product->get_image_id()) : ($gallery_images[0] ?? '');
+
+                // Retrieve images from attributes (variations)
+                if ($wc_product->is_type('variable')) {
+                    $variations = $wc_product->get_children();
+                    foreach ($variations as $variation_id) {
+                        $variation_product = wc_get_product($variation_id);
+                        if ($variation_product && $variation_product->get_image_id()) {
+                            $variation_image = wp_get_attachment_url($variation_product->get_image_id());
+                            if ($variation_image && !in_array($variation_image, $gallery_images)) {
+                                $gallery_images[] = $variation_image;
+                            }
+                        }
+                    }
+                }
 
                 // Retrieve Upsell Products
                 $upsell_ids = $wc_product->get_upsell_ids();
@@ -273,7 +298,9 @@ class ProductController extends BaseController
                         ];
                     }
                 }
-
+                if (empty($attributes)) {
+                    return 'Sản phẩm không có biến thể!';
+                }
                 // Retrieve product meta data
                 $meta_data = [];
                 foreach ($wc_product->get_meta_data() as $meta) {
@@ -302,8 +329,9 @@ class ProductController extends BaseController
             }
         }
 
-        return [];
+        return 'Sản phẩm không hợp lệ!3';
     }
+
 
     public function getProductByAttributes($request)
     {

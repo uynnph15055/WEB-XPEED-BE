@@ -3382,7 +3382,11 @@ template {
 }
 
 .content__page {
+<<<<<<< HEAD
   background: #f5f5fa;
+=======
+  background: #e4e4e9;
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   padding: 40px 0px;
   margin-bottom: 40px;
   position: relative;
@@ -3432,11 +3436,15 @@ template {
     border-bottom: 2px solid transparent;
     cursor: pointer;
   }
+<<<<<<< HEAD
   .content__page
     .menu__tablet
     .menu__tablet-tab
     .menu__tab-item
     .menu__tab-iitem--icon {
+=======
+  .content__page .menu__tablet .menu__tablet-tab .menu__tab-item .menu__tab-iitem--icon {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
     font-size: 22px;
   }
   .content__page .menu__tablet .menu__tablet-tab .menu__tab-item.active {
@@ -3490,11 +3498,15 @@ template {
     height: 50px;
   }
 }
+<<<<<<< HEAD
 .content__page
   .account
   .account__sidebar
   .account__sidebar-close
   .sidebar__close-icon {
+=======
+.content__page .account .account__sidebar .account__sidebar-close .sidebar__close-icon {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   display: inline-block;
   font-size: 33px;
   cursor: pointer;
@@ -3523,23 +3535,31 @@ template {
     -4px -4px 6px 0 rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
 }
+<<<<<<< HEAD
 .content__page
   .account
   .account__sidebar
   .sidebar__menu
   .menu__item:last-child {
+=======
+.content__page .account .account__sidebar .sidebar__menu .menu__item:last-child {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   margin-bottom: 0;
 }
 .content__page .account .account__sidebar .sidebar__menu .menu__item:hover {
   opacity: 0.8;
 }
 .content__page .account .account__sidebar .sidebar__menu .menu__item:focus,
+<<<<<<< HEAD
 .content__page
   .account
   .account__sidebar
   .sidebar__menu
   .menu__item
   .account.active {
+=======
+.content__page .account .account__sidebar .sidebar__menu .menu__item .account.active {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   background-color: #000;
   color: #fff;
 }
@@ -3547,6 +3567,7 @@ template {
   .content__page .account .account__sidebar .sidebar__menu .menu__item {
     height: 35px;
   }
+<<<<<<< HEAD
   .content__page
     .account
     .account__sidebar
@@ -3562,6 +3583,13 @@ template {
   .sidebar__menu
   .menu__item
   .menu__item-icon {
+=======
+  .content__page .account .account__sidebar .sidebar__menu .menu__item .menu__item-content {
+    font-size: 12px;
+  }
+}
+.content__page .account .account__sidebar .sidebar__menu .menu__item .menu__item-icon {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   margin-left: 8px;
 }
 .content__page .account .account__sidebar .sidebar__profile {
@@ -3592,12 +3620,16 @@ template {
   font-size: 13px;
   font-weight: 500;
 }
+<<<<<<< HEAD
 .content__page
   .account
   .account__sidebar
   .profile__body
   .profile__item
   .profile__item-icon {
+=======
+.content__page .account .account__sidebar .profile__body .profile__item .profile__item-icon {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   width: 25px;
   height: 25px;
   margin-right: 8px;
@@ -3607,12 +3639,16 @@ template {
   font-size: 13px;
   font-weight: 500;
 }
+<<<<<<< HEAD
 .content__page
   .account
   .account__sidebar
   .profile__body
   .profile__location
   .profile__item-icon {
+=======
+.content__page .account .account__sidebar .profile__body .profile__location .profile__item-icon {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   width: 25px;
   height: 25px;
   margin-right: 8px;
@@ -3637,6 +3673,7 @@ template {
   padding: 0 10px;
   transition: all 0.3s ease;
 }
+<<<<<<< HEAD
 .content__page
   .account
   .account__sidebar
@@ -3649,6 +3686,12 @@ template {
   .account__sidebar
   .profile__actions
   .profile__action:hover {
+=======
+.content__page .account .account__sidebar .profile__actions .profile__action:last-child {
+  margin-bottom: 0;
+}
+.content__page .account .account__sidebar .profile__actions .profile__action:hover {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   background-color: #000;
   color: #fff;
 }
@@ -3725,12 +3768,16 @@ template {
     height: 60px;
   }
 }
+<<<<<<< HEAD
 .content__page
   .account
   .account__content
   .general__search
   .search__form
   .search__input {
+=======
+.content__page .account .account__content .general__search .search__form .search__input {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   background: var(--ch-colors-foreground);
   border: none !important;
   box-shadow: none !important;
@@ -3741,12 +3788,16 @@ template {
   outline: none !important;
   width: calc(100% - 100px);
 }
+<<<<<<< HEAD
 .content__page
   .account
   .account__content
   .general__search
   .search__form
   .search__button {
+=======
+.content__page .account .account__content .general__search .search__form .search__button {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   background: none;
   border: none;
   cursor: pointer;
@@ -3754,6 +3805,7 @@ template {
   display: flex;
   align-items: center;
 }
+<<<<<<< HEAD
 .content__page
   .account
   .account__content
@@ -3761,6 +3813,9 @@ template {
   .search__form
   .search__button
   .icon-search-box {
+=======
+.content__page .account .account__content .general__search .search__form .search__button .icon-search-box {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   width: 24px;
   height: 24px;
   stroke: gray;
@@ -5825,11 +5880,15 @@ template {
   height: fit-content;
   aspect-ratio: 1;
 }
+<<<<<<< HEAD
 .invoice
   .invoice__items
   .invoice-row
   .invoice__item-row-image-wrapper
   .invoice__item-row-image {
+=======
+.invoice .invoice__items .invoice-row .invoice__item-row-image-wrapper .invoice__item-row-image {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   display: inline-block;
   aspect-ratio: 1;
   object-fit: cover;
@@ -5941,17 +6000,12 @@ template {
   display: table-row;
   border-bottom: 1px solid #ccc;
 }
-.invoice__detail-table-wrapper
-  .invoice__detail-table
-  .invoice__detail-row--header {
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-row--header {
   background-color: #f5f5f5;
   font-weight: bold;
   text-transform: capitalize;
 }
-.invoice__detail-table-wrapper
-  .invoice__detail-table
-  .invoice__detail-row
-  .invoice__detail-cell {
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-row .invoice__detail-cell {
   padding: 10px;
   text-align: left;
   display: table-cell;
@@ -5984,6 +6038,7 @@ template {
   background-color: #dc3545; /* Màu đỏ đậm */
   color: #fff; /* Màu trắng */
 }
+<<<<<<< HEAD
 .invoice__detail-table-wrapper
   .invoice__detail-table
   .invoice__status--processing {
@@ -5999,6 +6054,17 @@ template {
 .invoice__detail-table-wrapper
   .invoice__detail-table
   .invoice__status--default {
+=======
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--processing {
+  background-color: #fff3cd; /* Màu vàng nhạt */
+  color: #856404; /* Màu vàng đậm */
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--warning {
+  background-color: #ffc107; /* Màu vàng */
+  color: #856404; /* Màu vàng đậm */
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--default {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   background-color: #e2e3e5;
   color: #383d41;
 }
@@ -6013,6 +6079,7 @@ template {
   border-radius: 5px;
   font-size: 12px;
 }
+<<<<<<< HEAD
 .invoice__detail-table-wrapper
   .invoice__detail-table
   .invoice__detail-button:hover {
@@ -6022,6 +6089,12 @@ template {
   .invoice__detail-table
   .invoice__detail-button
   .invoice__detail-button-icon {
+=======
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-button:hover {
+  background-color: #0056b3;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-button .invoice__detail-button-icon {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   margin-right: 5px;
   font-size: 16px;
 }
@@ -6171,10 +6244,7 @@ template {
   height: fit-content;
   aspect-ratio: 1;
 }
-.invoice-single
-  .invoice__items-row
-  .invoice__item-row-image-wrapper
-  .invoice__item-row-image {
+.invoice-single .invoice__items-row .invoice__item-row-image-wrapper .invoice__item-row-image {
   display: inline-block;
   aspect-ratio: 1;
   object-fit: cover;
@@ -6269,10 +6339,14 @@ template {
     display: none;
   }
 }
+<<<<<<< HEAD
 .invoice-wrapper
   .invoice__container
   .tablet__invoice-items
   .invoice__items-item {
+=======
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   padding: 16px;
   border-radius: 6px;
   background-color: #fff;
@@ -6283,16 +6357,21 @@ template {
   grid-template-columns: 1fr;
   gap: 10px;
 }
+<<<<<<< HEAD
 .invoice-wrapper
   .invoice__container
   .tablet__invoice-items
   .invoice__items-item
   .invoice__items-item--row {
+=======
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
+<<<<<<< HEAD
 .invoice-wrapper
   .invoice__container
   .tablet__invoice-items
@@ -6322,6 +6401,15 @@ template {
   .invoice__items-item--row
   .items__item-row--value
   .invoice__status {
+=======
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key,
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value {
+  font-size: 14px;
+  color: #4a5568;
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key .invoice__status,
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value .invoice__status {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   padding: 5px 10px;
   font-size: 10px;
   font-weight: bold;
@@ -6335,6 +6423,7 @@ template {
   /* Cảnh báo */
   /* Mặc định */
 }
+<<<<<<< HEAD
 .invoice-wrapper
   .invoice__container
   .tablet__invoice-items
@@ -6458,6 +6547,45 @@ template {
   .tablet__invoice-items
   .invoice__items-item
   .invoice__detail-button {
+=======
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key .invoice__status--paid,
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value .invoice__status--paid {
+  background-color: #d4edda; /* Màu xanh lá nhạt */
+  color: #155724; /* Màu xanh lá đậm */
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key .invoice__status--unpaid,
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value .invoice__status--unpaid {
+  background-color: #f8d7da; /* Màu đỏ nhạt */
+  color: #721c24; /* Màu đỏ đậm */
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key .invoice__status--error,
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value .invoice__status--error {
+  background-color: #dc3545; /* Màu đỏ đậm */
+  color: #fff; /* Màu trắng */
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key .invoice__status--processing,
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value .invoice__status--processing {
+  background-color: #fff3cd; /* Màu vàng nhạt */
+  color: #856404; /* Màu vàng đậm */
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key .invoice__status--warning,
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value .invoice__status--warning {
+  background-color: #ffc107; /* Màu vàng */
+  color: #856404; /* Màu vàng đậm */
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key .invoice__status--default,
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value .invoice__status--default {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--key {
+  font-weight: 600;
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__items-item--row .items__item-row--value {
+  font-weight: 500;
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__detail-button {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6469,6 +6597,7 @@ template {
   border-radius: 5px;
   font-size: 12px;
 }
+<<<<<<< HEAD
 .invoice-wrapper
   .invoice__container
   .tablet__invoice-items
@@ -6482,6 +6611,12 @@ template {
   .invoice__items-item
   .invoice__detail-button
   .invoice__detail-button-icon {
+=======
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__detail-button:hover {
+  background-color: #0056b3;
+}
+.invoice-wrapper .invoice__container .tablet__invoice-items .invoice__items-item .invoice__detail-button .invoice__detail-button-icon {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   margin-right: 5px;
   font-size: 16px;
 }
@@ -6575,17 +6710,25 @@ template {
   display: table-row;
   border-bottom: 1px solid #ccc;
 }
+<<<<<<< HEAD
 .invoice__detail-table-wrapper
   .invoice__detail-table
   .invoice__detail-row--header {
+=======
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-row--header {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   background-color: #f5f5f5;
   font-weight: bold;
   text-transform: capitalize;
 }
+<<<<<<< HEAD
 .invoice__detail-table-wrapper
   .invoice__detail-table
   .invoice__detail-row
   .invoice__detail-cell {
+=======
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-row .invoice__detail-cell {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   padding: 10px;
   text-align: left;
   display: table-cell;
@@ -6618,6 +6761,7 @@ template {
   background-color: #dc3545; /* Màu đỏ đậm */
   color: #fff; /* Màu trắng */
 }
+<<<<<<< HEAD
 .invoice__detail-table-wrapper
   .invoice__detail-table
   .invoice__status--processing {
@@ -6633,6 +6777,17 @@ template {
 .invoice__detail-table-wrapper
   .invoice__detail-table
   .invoice__status--default {
+=======
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--processing {
+  background-color: #fff3cd; /* Màu vàng nhạt */
+  color: #856404; /* Màu vàng đậm */
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--warning {
+  background-color: #ffc107; /* Màu vàng */
+  color: #856404; /* Màu vàng đậm */
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__status--default {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   background-color: #e2e3e5;
   color: #383d41;
 }
@@ -6647,6 +6802,7 @@ template {
   border-radius: 5px;
   font-size: 12px;
 }
+<<<<<<< HEAD
 .invoice__detail-table-wrapper
   .invoice__detail-table
   .invoice__detail-button:hover {
@@ -6656,6 +6812,12 @@ template {
   .invoice__detail-table
   .invoice__detail-button
   .invoice__detail-button-icon {
+=======
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-button:hover {
+  background-color: #0056b3;
+}
+.invoice__detail-table-wrapper .invoice__detail-table .invoice__detail-button .invoice__detail-button-icon {
+>>>>>>> 3bf0798d208c1647fb55b46619aa1d0830565582
   margin-right: 5px;
   font-size: 16px;
 }

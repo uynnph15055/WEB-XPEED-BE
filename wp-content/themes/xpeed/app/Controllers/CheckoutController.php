@@ -5,21 +5,37 @@ namespace app\Controllers;
 use app\Controllers\Controller as BaseController;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Support\Str;
-
+use app\Controllers\CartController;
 
 class CheckoutController extends BaseController
 {
     public function __construct()
     {
-        session_start(); // Bắt đầu session
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start(); // Chỉ khởi động session nếu chưa khởi động
+        }
     }
 
-    public function moveCartToOrder($request)
+    public function addOrder($request)
+    {
+        $cart_items = $request->get_params();
+
+         $cart = new CartController();
+        $cart = $cart->progressUpdateCartItem([$cart_items[0]]);
+
+        if(!empty($cart)){
+           $orderId = $this->moveCartToOrder($request, 'id');
+            return $this->success(data: ['paymentUrl' =>  home_url('/payment') . '?token='.$orderId]);
+        }
+
+        return null; // Trả về null nếu không tìm thấy biến thể
+    }
+
+    public function moveCartToOrder($request, $type = 'json')
     {
         // Lấy dữ liệu từ session và cookie giỏ hàng
         $cart_data = (isset($_SESSION['cart']) ? $_SESSION['cart'] : [])
             + (isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []);
-
         // Kiểm tra nếu giỏ hàng trống
         if (empty($cart_data)) {
             return $this->fail('Không có sản phẩm');
@@ -27,7 +43,6 @@ class CheckoutController extends BaseController
 
         // Lấy userId từ tham số trong request, nếu không có thì dùng get_current_user_id()
         $userId = $request->get_param('userId') ?: get_current_user_id();
-
         if (!$userId) {
             return $this->fail('Người dùng chưa đăng nhập');
         }
@@ -57,10 +72,42 @@ class CheckoutController extends BaseController
         // Xóa dữ liệu giỏ hàng trong session và cookie
         unset($_SESSION['cart']);
         setcookie('cart', '', time() - 3600, "/"); // Xóa cookie giỏ hàng nếu vẫn còn
-
-        return $this->success(data: ['orderId' => $orderId]);
+        if($type == 'json'){
+            return $this->success(data: ['orderId' => $orderId]);
+        }
+        return $orderId;
     }
 
+    public function getOrderTotal($orderId)
+    {
+        $orderData = isset($_SESSION['order']) ? $_SESSION['order'] : [];
+
+        // Kiểm tra dữ liệu đơn hàng
+        if (empty($orderData) || empty($orderData[$orderId])) {
+            return 0;
+        }
+
+        $totalOrderPrice = 0;
+
+        // Duyệt qua tất cả các sản phẩm trong đơn hàng
+        foreach ($orderData[$orderId] as $key => $item) {
+            // Lấy product_id và số lượng
+            $product_id = $item['product_id'];
+            $quantity = $item['quantity'];
+
+            // Lấy thông tin sản phẩm từ WooCommerce
+            $product = wc_get_product($product_id);
+
+            if ($product) {
+                // Lấy giá của sản phẩm
+                $price = $product->get_price();
+                // Tính tổng tiền của sản phẩm (giá x số lượng)
+                $totalOrderPrice += $price * $quantity;
+            }
+        }
+
+        return $totalOrderPrice;
+    }
 
     public function getOrderHandler($orderId)
     {
@@ -147,7 +194,7 @@ class CheckoutController extends BaseController
         $order->set_customer_id($userId);
 
         // Duyệt qua dữ liệu đơn hàng và thêm sản phẩm vào đơn hàng
-        foreach ($orderData[$orderId] as $item) {
+        foreach ($orderData[$orderIdParts[0] . '_' . $orderIdParts[1]] as $item) {
             $product = wc_get_product($item['product_id']);
             if (!$product) continue; // Bỏ qua nếu sản phẩm không tồn tại
 
@@ -166,24 +213,32 @@ class CheckoutController extends BaseController
         $this->updateOrderAddresses($order, $shippingInfo);
 
         // Lưu orderId vào đơn hàng
-        $order->update_meta_data('orderId', $orderId); // Lưu orderId vào meta data của đơn hàng
+        $order->update_meta_data('orderId', $orderId);
+
+        // Thêm phí vận chuyển vào đơn hàng (phí cố định 50,000 VND)
+        $shipping_fee = 50000; // Phí vận chuyển
+        $item = new \WC_Order_Item_Fee();
+        $item->set_name('Phí vận chuyển');
+        $item->set_amount($shipping_fee);
+        $item->set_total($shipping_fee);
+        $order->add_item($item);
+
+        // Tính toán tổng tiền của đơn hàng
+        $order->calculate_totals();
 
         // Cập nhật thông tin đơn hàng
         $order->set_payment_method('momo'); // Thay thế bằng phương thức thanh toán thực tế của bạn
         $order->set_payment_method_title('MoMo Payment');
-
-        // Tính toán lại tổng giá trị cho đơn hàng
-        $order->calculate_totals();
-
-        // Cập nhật trạng thái đơn hàng thành 'completed'
         $order->update_status('processing');
 
         // Xóa đơn hàng khỏi session
-        unset($orderData[$orderId]);
-        $_SESSION['order'] = $orderData; // Cập nhật lại session
+         unset($orderData[$orderId]);
+         $_SESSION['order'] = $orderData; // Cập nhật lại session
 
         return $order;
     }
+
+
 
     private function updateOrderAddresses($order, $shippingInfo)
     {
@@ -237,6 +292,7 @@ class CheckoutController extends BaseController
         return null; // Trả về null nếu không tìm thấy biến thể
     }
 
+
     /**
      * Xử lý thông báo IPN từ MoMo
      */
@@ -249,9 +305,11 @@ class CheckoutController extends BaseController
         // Kiểm tra kết quả thanh toán
 
         if ($result && isset($result['orderId']) && isset($result['resultCode']) && $result['resultCode'] == '0') {
-            $this->handlePaymentSuccess($result['orderId']);
+
+            $result = $this->handlePaymentSuccess($result['orderId']);
             // Chuyển hướng tới URL redirectUrl
-            header('Location: ' . home_url('/') . '?paymentsuccess=true');
+            $paymentsuccess =  $result != false ? "true" : "false";
+            header('Location: ' . home_url('/') . '?paymentsuccess='.$paymentsuccess);
             exit;
         } else {
             header('Location: ' . home_url('cart'));

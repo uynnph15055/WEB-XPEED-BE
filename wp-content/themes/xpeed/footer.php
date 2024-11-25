@@ -54,13 +54,13 @@
                               <?php
                               if (!empty($footers)):
                                     foreach ($footers as $menu) :   ?>
-                                          <li class="footer__nav-menu-item">
-                                                <a class="footer__nav-menu-item__link" href="<?= $menu->url ?>"
-                                                      title="<?= !empty($menu->title) ? $menu->title : 'Link to ' . $menu->url ?>">
-                                                      <?= !empty($menu->title) ? $menu->title : 'Link' ?>
-                                                </a>
-                                                </a>
-                                          </li>
+                              <li class="footer__nav-menu-item">
+                                    <a class="footer__nav-menu-item__link" href="<?= $menu->url ?>"
+                                          title="<?= !empty($menu->title) ? $menu->title : 'Link to ' . $menu->url ?>">
+                                          <?= !empty($menu->title) ? $menu->title : 'Link' ?>
+                                    </a>
+                                    </a>
+                              </li>
                               <?php endforeach;
                               endif; ?>
                         </ul>
@@ -78,7 +78,7 @@
             </div>
       </div>
 </footer>
-<button id="backToTop" class="back_top">
+<button aria-label="<?= home_url() ?>" id="backToTop" class="back_top">
       <ion-icon name="caret-up-outline"></ion-icon>
 </button>
 
@@ -93,13 +93,13 @@
       <ul class="language-list">
             <?php foreach ($languages as $language) :
             ?>
-                  <li class="language-item">
-                        <a href=<?= $language['url'] ?>>
-                              <img alt="language"
-                                    src="<?= get_template_directory_uri() ?><?= $language['slug'] == 'vi' ? '/assets/images/icons/flag_vi.svg' : '/assets/images/icons/flag_us.svg'  ?>"
-                                    alt="language image" class="language-selected--img" />
-                        </a>
-                  </li>
+            <li class="language-item">
+                  <a href=<?= $language['url'] ?>>
+                        <img alt="language"
+                              src="<?= get_template_directory_uri() ?><?= $language['slug'] == 'vi' ? '/assets/images/icons/flag_vi.svg' : '/assets/images/icons/flag_us.svg'  ?>"
+                              alt="language image" class="language-selected--img" />
+                  </a>
+            </li>
             <?php endforeach; ?>
       </ul>
 </div>

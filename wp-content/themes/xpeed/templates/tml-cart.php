@@ -7,10 +7,11 @@
 
 use app\Controllers\CartController;
 session_start();
+check_user_login_and_redirect();
 $cartController = new CartController();
-
 $carts = $cartController->getCartHandler();
 $totalCarts = 0;
+
 get_header();
 
 ?>
@@ -52,25 +53,32 @@ get_header();
                                     </span>
                                     <span class="cart__item-stock-quantity"
                                           style="display: none"><?= $cart["stock_quantity"] ?? '' ?></span>
-                                    <span class="cart__item-details-price"><?= number_format($cart["price"]) ?? '' ?> đ</span>
-                                    <?php if ((int)$cart["stock_quantity"] <  (int)$cart["quantity"]) { ?>
-                                    <h3  style="color: red;"><i>Số lượng sản phẩm không đủ, tối đa <?= $cart["stock_quantity"] ?? '' ?> sản phẩm</i> </h3>
-                                    <?php } ?>
+                                    <span class="cart__item-details-price"><?= number_format((float)$cart["price"]) ?? '' ?> đ</span>
+                                    <?php
+                                    if ((int)$cart["stock_quantity"] < 1) { ?>
+                                        <h3 style="color: red;"><i>Sản phẩm đã hết hàng</i></h3>
+                                        <?php
+                                    } elseif ((int)$cart["stock_quantity"] < (int)$cart["quantity"]) { ?>
+                                        <h3 style="color: red;"><i>Số lượng sản phẩm không đủ, tối đa <?= $cart["stock_quantity"] ?? '' ?> sản phẩm</i></h3>
+                                        <?php
+                                    }
+                                    ?>
+
                                 </div>
                             </td>
                             <td class="cart__item-quantity">
                                 <div class="cart__item-quantity-controls">
-                                    <button class="cart__item-quantity-decrease">-</button>
+                                    <button aria-label="<?= home_url() ?>"class="cart__item-quantity-decrease">-</button>
                                     <input
                                             value="<?= $cart["quantity"] ?? '' ?>"
                                             min="1"
                                             class="cart__item-quantity-input"
                                     />
-                                    <button class="cart__item-quantity-increase">+</button>
+                                    <button aria-label="<?= home_url() ?>"class="cart__item-quantity-increase">+</button>
                                 </div>
                                 <div class="cart__item-action-delete">Xoá</div>
                             </td>
-                            <td class="cart__item-price"><?= number_format($cart["total"]) ?? '' ?> đ</td>
+                            <td class="cart__item-price"><?= number_format((float)$cart["total"]) ?? '' ?> đ</td>
                         </tr>
                         <?php $totalCarts += $cart["total"] ?>
                     <?php } ?>
@@ -84,12 +92,12 @@ get_header();
                     </div>
 
                     <div class="cart__actions-action">
-                        <span class="cart__actions-total"><?= number_format($totalCarts) ?? '' ?> đ</span>
+                        <span class="cart__actions-total"><?= number_format((float)$totalCarts) ?? '' ?> đ</span>
                         <div class="cart__actions-buttons">
-                            <button class="button button--primary-cart">
+                            <button aria-label="<?= home_url() ?>"class="button button--primary-cart">
                                 Cập nhật giỏ hàng
                             </button>
-                            <button class="button button--primary" id="paymentBtn" data-userID="<?= get_current_user_id() ?? 0 ?>">Thanh toán</button>
+                            <button aria-label="<?= home_url() ?>"class="button button--primary" id="paymentBtn" data-userID="<?= get_current_user_id() ?? 0 ?>">Thanh toán</button>
                         </div>
                     </div>
                 </div>
