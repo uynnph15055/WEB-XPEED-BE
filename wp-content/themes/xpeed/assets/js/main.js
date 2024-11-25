@@ -4,6 +4,7 @@ import "./pages/auth.js";
 import "./pages/cart.js";
 import "./pages/payment.js";
 import "./pages/profile.js";
+
 import("./pages/product.js");
 //
 // function isProductPage(path) {
