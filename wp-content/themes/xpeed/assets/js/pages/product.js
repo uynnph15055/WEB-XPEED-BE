@@ -583,7 +583,6 @@ $(document).ready(function () {
     }
 
     //--------------------------------------PRODUCT LIST----------------------------------
-    let currentUrl = window.location.href;
 
     $("#card__product-loading-wapper").removeClass("under-active");
 

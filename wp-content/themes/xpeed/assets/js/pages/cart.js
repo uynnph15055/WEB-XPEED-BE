@@ -44,6 +44,7 @@ $(document).ready(function () {
 
         // Kiểm tra số lượng hiện tại với số lượng tồn kho
         if (quantity < stockQuantity) {
+            console.log('quantity',quantity)
             quantity++;
             $quantityInput.val(quantity);
             isPayment = false;
