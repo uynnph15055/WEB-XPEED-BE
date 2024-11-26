@@ -10,7 +10,7 @@
     </div>
 
     <ion-icon
-        name="ellipsis-horizontal-circle-outline"
-        class="menu__tablet-more"
+            name="ellipsis-horizontal-circle-outline"
+            class="menu__tablet-more"
     ></ion-icon>
 </div>
