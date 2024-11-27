@@ -13,9 +13,13 @@ async function loadPageModule() {
         console.log("Đã tải module: auth.js");
     }
     else if (currentUrl.includes(baseUrl + "/product/")) {
-        // await import("./pages/product.js");
+         await import("./pages/product.js");
         console.log("Đã tải module: product.js");
     }
+    else if (currentUrl.includes(baseUrl + "/product-category")) {
+        await import("./pages/product.js");
+       console.log("Đã tải module: product.js");
+   }
     else if (currentUrl.includes("/cart")) {
         await import("./pages/cart.js");
         console.log("Đã tải module: cart.js");

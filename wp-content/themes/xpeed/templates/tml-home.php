@@ -77,7 +77,7 @@ $sliders = $homeController->getSlider(8);
             </div>
             <!-- end banner -->
 
-            <div class="home-wrapper__content">
+            <div class="home-wrapper__content" style="padding: 0px 40px;">
                   <!-- mosaic -->
                   <!-- <div id="mosaic" class="mosaic-section">
                         <div class="mosaic__grid-container">
