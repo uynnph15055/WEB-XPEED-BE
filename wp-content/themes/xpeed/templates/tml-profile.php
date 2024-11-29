@@ -10,7 +10,7 @@ $current_user = wp_get_current_user();
 get_header();
 
 ?>
-    <div class="content__page">
+    <div class="content__page" style="min-height: 90vh;margin-bottom:0">
 
         <?php include plugin_dir_path(__FILE__) . 'menuTab.php'; ?>
         <div class="account">

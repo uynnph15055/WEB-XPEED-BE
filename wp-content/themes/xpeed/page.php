@@ -12,11 +12,11 @@ use app\Controllers\ProductController;
 $product = new ProductController();
 ?>
 
-<div class="header-overlay header-overlay--height-more collection__header">
+<div class="header-overlay collection__header" style="max-height: 200px">
       <img class="header-overlay__img collection__header-img"
             src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg" alt="" />
       <h1 id="collection-title" class="header-overlay__heading collection__heading">
-            FULL FACE
+            <?= _e('Sản phẩm','xpeed') ?>
       </h1>
 </div>
 
@@ -76,18 +76,6 @@ $product = new ProductController();
       </div>
 
       <div class="collection__content">
-            <div class="collection__tags">
-                  <a href="#" class="collection__tags__item">
-                        <span class="collection__tags__item__content">MODEL: F70 CARBON</span>
-                        <ion-icon class="collection__tags__item__close" name="close-outline"></ion-icon>
-                  </a>
-
-                  <a href="#" class="collection__tags__item">
-                        <span class="collection__tags__item__content">MODEL: F70 CARBON</span>
-                        <ion-icon class="collection__tags__item__close" name="close-outline"></ion-icon>
-                  </a>
-            </div>
-
             <!-- <div class="collection__content-empty-product">
                   <div class="empty-product-text">No products</div>
                   <a href="" class="empty-product-link">필터 초기화</a>
@@ -108,28 +96,28 @@ $product = new ProductController();
                   </div>
             </div>
 
-            <div class="collection__content-pagination">
-                  <div class="collection__content-pagination-action">
-                        <a href="" class="collection__content-pagination-action-icon">
-                              <div class="collection__content-pagination-action-icon-child">
-                                    <ion-icon name="arrow-back-outline"></ion-icon>
-                              </div>
-                        </a>
+            <!--<div class="collection__content-pagination">-->
+            <!--      <div class="collection__content-pagination-action">-->
+            <!--            <a href="" class="collection__content-pagination-action-icon">-->
+            <!--                  <div class="collection__content-pagination-action-icon-child">-->
+            <!--                        <ion-icon name="arrow-back-outline"></ion-icon>-->
+            <!--                  </div>-->
+            <!--            </a>-->
 
-                        <a href="" class="collection__content-pagination-action-icon">
-                              <div class="collection__content-pagination-action-icon-child">
-                                    <ion-icon name="arrow-forward-outline"></ion-icon>
-                              </div>
-                        </a>
-                  </div>
+            <!--            <a href="" class="collection__content-pagination-action-icon">-->
+            <!--                  <div class="collection__content-pagination-action-icon-child">-->
+            <!--                        <ion-icon name="arrow-forward-outline"></ion-icon>-->
+            <!--                  </div>-->
+            <!--            </a>-->
+            <!--      </div>-->
 
-                  <div class="collection__content-pagination-number-list">
-                        <a href=""
-                              class="collection__content-pagination-number collection__content-pagination-number--active">1</a>
-                        <a href="" class="collection__content-pagination-number">2</a>
-                        <a href="" class="collection__content-pagination-number">3</a>
-                  </div>
-            </div>
+            <!--      <div class="collection__content-pagination-number-list">-->
+            <!--            <a href=""-->
+            <!--                  class="collection__content-pagination-number collection__content-pagination-number--active">1</a>-->
+            <!--            <a href="" class="collection__content-pagination-number">2</a>-->
+            <!--            <a href="" class="collection__content-pagination-number">3</a>-->
+            <!--      </div>-->
+            <!--</div>-->
       </div>
 </div>
 

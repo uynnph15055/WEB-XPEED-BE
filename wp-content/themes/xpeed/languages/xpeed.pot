@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xpeed\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-24 13:49+0000\n"
+"POT-Creation-Date: 2024-11-28 18:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -41,13 +41,25 @@ msgstr ""
 msgid "Checkout-result"
 msgstr ""
 
-#: footer.php:76
-msgid "Footer menu"
+#: templates/tml-cart.php:98
+msgid "Cập nhật giỏ hàng"
+msgstr ""
+
+#: footer.php:54
+msgid "Email: hjcvietnam.marketing@gmail.com"
+msgstr ""
+
+#: templates/tml-cart.php:20
+msgid "Giỏ hàng"
 msgstr ""
 
 #. Name of the template
 #: single-product.php:3 templates/tml-home.php:3
 msgid "Home"
+msgstr ""
+
+#: footer.php:51
+msgid "Hotline: 0987254899"
 msgstr ""
 
 #. Author URI of the theme
@@ -63,8 +75,18 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: footer.php:72
-msgid "Nguyễn Ngọc Uy"
+#: templates/menuTab.php:7 templates/sideBar.php:22
+msgid "Lịch sử mua hàng"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-order-detail.php:3
+msgid "Order_detail"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-order-history.php:3
+msgid "Order_history"
 msgstr ""
 
 #. Name of the template
@@ -78,7 +100,7 @@ msgid "Product List"
 msgstr ""
 
 #. Name of the template
-#: templates/tml-profile.php:3
+#: templates/sideBar.php:3 templates/tml-profile.php:3 templates/sidebar.php:3
 msgid "Profile"
 msgstr ""
 
@@ -87,14 +109,60 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
+#: page.php:19 templates/tml-cart.php:26
+msgid "Sản phẩm"
+msgstr ""
+
+#: templates/tml-cart.php:62
+msgid "sản phẩm"
+msgstr ""
+
+#: templates/tml-cart.php:59
+msgid "Sản phẩm đã hết hàng"
+msgstr ""
+
+#: templates/tml-cart.php:29
+msgid "Số lượng"
+msgstr ""
+
+#: templates/tml-cart.php:62
+msgid "Số lượng sản phẩm không đủ, tối đa"
+msgstr ""
+
+#: templates/tml-cart.php:100
+msgid "Thanh toán"
+msgstr ""
+
 #. Description of the theme
 msgid "Theme website bán mũ bảo hiểm xpeed"
+msgstr ""
+
+#: templates/menuTab.php:9
+msgid "Tài khoản của tôi"
+msgstr ""
+
+#: templates/tml-cart.php:31
+msgid "Tổng cộng"
 msgstr ""
 
 #. Author of the theme
 msgid "Uynn"
 msgstr ""
 
+#: footer.php:48
+msgid ""
+"Văn Phòng/Showroom: Mộc Lan 6-06, KDT Vinhomes Green Bay, Mễ Trì, Nam Từ "
+"Liêm, Hà Nội."
+msgstr ""
+
+#: templates/tml-cart.php:79
+msgid "Xoá"
+msgstr ""
+
 #. Name of the theme
 msgid "Xpeed"
+msgstr ""
+
+#: footer.php:45
+msgid "Địa chỉ: Lô 6 - KCN Khai Quang - Vĩnh Yên - Vĩnh Phúc."
 msgstr ""

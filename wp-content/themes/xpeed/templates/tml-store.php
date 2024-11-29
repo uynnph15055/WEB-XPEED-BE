@@ -43,7 +43,6 @@ $branchStoreController = new BranchStoreController;
                                 </a>
                             </h3>
                             <p class="address-item__description-subtitle">
-                                <?php echo $branchStore['content'] ?>
                             </p>
                         </div>
                     </div>

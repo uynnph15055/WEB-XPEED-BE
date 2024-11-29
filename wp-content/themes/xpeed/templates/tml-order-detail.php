@@ -14,6 +14,7 @@ $orderId = isset($_GET['orderId']) ? intval($_GET['orderId']) : 0;
 $orderController = new OrderController();
 $orderDetails = $orderController->getOrderDetail($orderId);
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
     $result = $orderController->cancelOrder($orderId);
 
@@ -210,25 +211,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
                                 </tbody>
                             </table>
                         </div>
+
                         <div class="invoice__container-quick-info">
                             <span class="invoice__container-quick-info--success"></span>
                             <button aria-label="<?= home_url() ?>"class=" button button--primary">Hủy đơn hàng</button>
                         </div>
-                        <!--                    <div class="invoice__payment">-->
-                        <!--                        <p class="invoice__payment-label">Phương thức thanh toán</p>-->
-                        <!--                        <p class="invoice__payment-info">Momo</p>-->
-                        <!--                        <p class="invoice__payment-info">Bank/Sort Code: 1234567</p>-->
-                        <!--                        <p class="invoice__payment-info">Account Number: 123456678</p>-->
-                        <!--                    </div>-->
 
-                        <!--                    <div class="invoice__notes">-->
-                        <!--                        <p class="invoice__notes-label">Ghi chú</p>-->
-                        <!--                        <p class="invoice__notes-text">-->
-                        <!--                            Lorem ipsum is placeholder text commonly used in the graphic,-->
-                        <!--                            print, and publishing industries for previewing layouts and-->
-                        <!--                            visual mockups.-->
-                        <!--                        </p>-->
-                        <!--                    </div>-->
 
                         <footer class="invoice__footer">
                             Supplier Company

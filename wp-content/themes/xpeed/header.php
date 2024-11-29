@@ -58,29 +58,29 @@ if (!isset($_SESSION['cart'])) {
                                     </ul>
                               </div>
                               <div class="header_main-icon">
-                                  <li class="header_main-icon--item">
-                                      <?php if (!is_user_logged_in()): ?>
-                                          <a href="<?= $current_lang == 'vi' ? './dang-nhap' : './en/login' ?>"
-                                             class="header_main-btn-login"><?= $current_lang == 'vi' ? 'Đăng nhập' : 'Login' ?>
-                                          </a>
-                                      <?php else: ?>
-                                          <a href="<?= $current_lang == 'vi' ? './en/profile' : './tai-khoan' ?>"
-                                             class="header_main-icon--item--link">
-                                              <ion-icon name="person-circle-outline"></ion-icon>
-                                          </a>
-                                      <?php endif; ?>
-                                  </li>
-                                    <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
-                                          <button class="header_main-icon--item--button"
-                                                onclick="window.location.href='<?php echo home_url('cart'); ?>'">
+                                   <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
+                                          <a class="header_main-icon--item--button"
+                                                href="<?= $current_lang == 'vi' ?'/gio-hang/' : '/en/cart' ?>">
                                                 <ion-icon name="cart-outline"></ion-icon>
-                                          </button>
+                                          </a>
 
                                         <?php if (count($_SESSION['cart']) >= 1): ?>
                                             <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']); ?></div>
                                         <?php endif; ?>
                                           <div class="header__cart-overlay"></div>
                                     </li>
+                                  <li class="header_main-icon--item">
+                                      <?php if (!is_user_logged_in()): ?>
+                                          <a href="<?= $current_lang == 'vi' ? '/dang-nhap' : '/en/login' ?>"
+                                             class="header_main-btn-login"><?= $current_lang == 'vi' ? 'Đăng nhập' : 'Login' ?>
+                                          </a>
+                                      <?php else: ?>
+                                          <a href="<?= $current_lang == 'vi' ?'/tai-khoan' : '/en/profile' ?>"
+                                             class="header_main-icon--item--link">
+                                              <ion-icon name="person-circle-outline"></ion-icon>
+                                          </a>
+                                      <?php endif; ?>
+                                  </li>
                               </div>
                         </div>
                   </div>

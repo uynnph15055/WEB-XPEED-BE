@@ -59,6 +59,27 @@ if (!function_exists('dd')) {
         die;
     }
 }
+if (!function_exists('isValidColor')) {
+    function isValidColor($color) {
+        // Kiểm tra màu Hex (#FF0003)
+        if (preg_match('/^#([A-Fa-f0-9]{6})$/', $color)) {
+            return true; // Là màu hex hợp lệ
+        }
+
+        // Kiểm tra màu RGB (rgb(255, 0, 3))
+        if (preg_match('/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $color, $matches)) {
+            // Kiểm tra các giá trị r, g, b có nằm trong khoảng 0-255 hay không
+            if ($matches[1] >= 0 && $matches[1] <= 255 &&
+                $matches[2] >= 0 && $matches[2] <= 255 &&
+                $matches[3] >= 0 && $matches[3] <= 255) {
+                return true; // Là màu RGB hợp lệ
+            }
+        }
+
+        // Trả về false nếu không phải màu hợp lệ
+        return false;
+    }
+}
 
 if (!function_exists('check_user_login_and_redirect')) {
     function check_user_login_and_redirect($urlRedirect = null)
