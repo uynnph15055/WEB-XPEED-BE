@@ -283,19 +283,37 @@ class ProductController extends BaseController
 
                 // Retrieve product attributes
                 $attributes = [];
+                $variations = [];
+
                 foreach ($wc_product->get_attributes() as $attribute) {
+                    // Lấy tên thuộc tính
+                    $name = wc_attribute_label($attribute->get_name());
+                    // Lấy các term IDs của thuộc tính
+                    $term_ids = $attribute->get_options();
+
+                    // Mảng chứa tên của các term
+                    $term_names = [];
+
+                    // Lặp qua các term IDs để lấy tên của các term
+                    foreach ($term_ids as $term_id) {
+                        // Lấy đối tượng term từ ID
+                        $term = get_term($term_id);
+
+                        // Nếu term tồn tại và không bị lỗi, thêm tên term vào mảng
+                        if ($term && !is_wp_error($term)) {
+                            $term_names[] = $term->name;
+                        }
+                    }
+
+                    $attributes[$name] = ['value'=> $term_names];
+
+
                     if ($attribute->is_taxonomy()) {
 
                         $attribute_values = $wc_product->get_available_variations();
-                        $attributes[$attribute["name"]] = [
-                            'name' => wc_attribute_label($attribute->get_name()),
-                            'value' => $attribute_values,
-                        ];
+                        $variations= $attribute_values;
                     } else {
-                        $attributes[$attribute["name"]] = [
-                            'name' => wc_attribute_label($attribute->get_name()),
-                            'value' => implode(', ', $attribute->get_options()),
-                        ];
+                        $variations= $attribute->get_options();
                     }
                 }
                 if (empty($attributes)) {
@@ -309,18 +327,40 @@ class ProductController extends BaseController
                         'value' => $meta->value,
                     ];
                 }
-                // Return product information
 
+
+
+//                return $this->success(data:[
+//                    'id' => $wc_product->get_id(),
+//                    'name' => $wc_product->get_name(),
+//                    'price' => $wc_product->get_price(),
+////                    'short_description' => $wc_product->get_short_description(),
+////                    'full_description' => $wc_product->get_description(),
+//                    'short_description' => '',
+//                    'full_description' => '',
+//                    'main_image' => $main_image,
+//                    'gallery_images' => $gallery_images,
+//                    'stock_quantity' => $wc_product->get_stock_quantity(),
+//                    'attributes' => $attributes,
+//                    'variations' => $variations,
+//                    'productType' => !empty($attributes) ? 'variable' : 'simple',
+//                    'meta_data' => $meta_data,
+//                    'categories' => $categories,
+//                    'upsell_products' => $upsell_products,
+//                ]);
                 return [
                     'id' => $wc_product->get_id(),
                     'name' => $wc_product->get_name(),
                     'price' => $wc_product->get_price(),
-                    'short_description' => $wc_product->get_short_description(),
-                    'full_description' => $wc_product->get_description(),
+//                    'short_description' => $wc_product->get_short_description(),
+//                    'full_description' => $wc_product->get_description(),
+                    'short_description' => '',
+                    'full_description' => '',
                     'main_image' => $main_image,
                     'gallery_images' => $gallery_images,
                     'stock_quantity' => $wc_product->get_stock_quantity(),
                     'attributes' => $attributes,
+                    'variations' => $variations,
                     'productType' => !empty($attributes) ? 'variable' : 'simple',
                     'meta_data' => $meta_data,
                     'categories' => $categories,
