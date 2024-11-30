@@ -20,7 +20,7 @@ $next_page_link = $pagination['next_page_link'];
 <div class="header-overlay blogs__header">
       <img class="header-overlay__img blogs__header-img" src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg"
             alt="" />
-      <h1 id="blogs-title" class="blogs__heading">Bài viết</h1>
+      <h1 id="blogs-title" class="blogs__heading"><?= _e('Bài viết','xpeed') ?></h1>
 </div>
 
 <div class="blogs__container">
