@@ -60,8 +60,6 @@ $current_user = wp_get_current_user();
                 </div>
 
                 <div class="profile__actions">
-<!--                    <a href="#" class="profile__action">Update</a>-->
-<!--                    <a href="#" class="profile__action">Change Password</a>-->
                     <a href="#" class="profile__action" id="profile-logout__action"><?= _e('Đăng xuất' , 'xpeed') ?></a>
                 </div>
             </div>
