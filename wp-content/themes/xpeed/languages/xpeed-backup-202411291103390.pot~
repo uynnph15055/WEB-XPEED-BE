@@ -1,0 +1,168 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Xpeed\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-28 18:24+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.14; wp-6.6.1\n"
+"X-Domain: xpeed"
+
+#. Name of the template
+#: templates/tml-about.php:3
+msgid "About Us"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-blog.php:3
+msgid "Blog"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-store.php:3
+msgid "Branch store"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-cart.php:3
+msgid "Cart"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-checkout-result.php:3
+msgid "Checkout-result"
+msgstr ""
+
+#: templates/tml-cart.php:98
+msgid "Cập nhật giỏ hàng"
+msgstr ""
+
+#: footer.php:54
+msgid "Email: hjcvietnam.marketing@gmail.com"
+msgstr ""
+
+#: templates/tml-cart.php:20
+msgid "Giỏ hàng"
+msgstr ""
+
+#. Name of the template
+#: single-product.php:3 templates/tml-home.php:3
+msgid "Home"
+msgstr ""
+
+#: footer.php:51
+msgid "Hotline: 0987254899"
+msgstr ""
+
+#. Author URI of the theme
+msgid "https://wordpress.org/"
+msgstr ""
+
+#. URI of the theme
+msgid "https://wordpress.org/themes/"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-login.php:3
+msgid "Login"
+msgstr ""
+
+#: templates/menuTab.php:7 templates/sideBar.php:22
+msgid "Lịch sử mua hàng"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-order-detail.php:3
+msgid "Order_detail"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-order-history.php:3
+msgid "Order_history"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-payment.php:3
+msgid "Payment"
+msgstr ""
+
+#. Name of the template
+#: archive-product.php:3 page.php:3
+msgid "Product List"
+msgstr ""
+
+#. Name of the template
+#: templates/sideBar.php:3 templates/tml-profile.php:3 templates/sidebar.php:3
+msgid "Profile"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-register.php:3
+msgid "Register"
+msgstr ""
+
+#: page.php:19 templates/tml-cart.php:26
+msgid "Sản phẩm"
+msgstr ""
+
+#: templates/tml-cart.php:62
+msgid "sản phẩm"
+msgstr ""
+
+#: templates/tml-cart.php:59
+msgid "Sản phẩm đã hết hàng"
+msgstr ""
+
+#: templates/tml-cart.php:29
+msgid "Số lượng"
+msgstr ""
+
+#: templates/tml-cart.php:62
+msgid "Số lượng sản phẩm không đủ, tối đa"
+msgstr ""
+
+#: templates/tml-cart.php:100
+msgid "Thanh toán"
+msgstr ""
+
+#. Description of the theme
+msgid "Theme website bán mũ bảo hiểm xpeed"
+msgstr ""
+
+#: templates/menuTab.php:9
+msgid "Tài khoản của tôi"
+msgstr ""
+
+#: templates/tml-cart.php:31
+msgid "Tổng cộng"
+msgstr ""
+
+#. Author of the theme
+msgid "Uynn"
+msgstr ""
+
+#: footer.php:48
+msgid ""
+"Văn Phòng/Showroom: Mộc Lan 6-06, KDT Vinhomes Green Bay, Mễ Trì, Nam Từ "
+"Liêm, Hà Nội."
+msgstr ""
+
+#: templates/tml-cart.php:79
+msgid "Xoá"
+msgstr ""
+
+#. Name of the theme
+msgid "Xpeed"
+msgstr ""
+
+#: footer.php:45
+msgid "Địa chỉ: Lô 6 - KCN Khai Quang - Vĩnh Yên - Vĩnh Phúc."
+msgstr ""
