@@ -19,7 +19,7 @@ $current_user = wp_get_current_user();
 
             <div class="sidebar__menu">
                 <a href="<?= home_url('/lich-su-dat-hang') ?>" class="menu__item">
-                    <span class="menu__item-content"><?= _e('Lịch sử mua hàng' , 'xpeed') ?></span>
+                    <span class="menu__item-content">Order History</span>
                     <ion-icon name="cart"></ion-icon>
                 </a>
 <!--                <a href="--><?//= home_url('/profile') ?><!--" class="menu__item">-->
@@ -48,15 +48,13 @@ $current_user = wp_get_current_user();
                         <ion-icon class="profile__item-icon" name="mail"></ion-icon>
                         <span><?php echo $current_user->user_email ?? ''  ?></span>
                     </div>
-                    <?php if(!empty($current_user->user_address)){ ?>
-                    <div class="profile__location"> 
+                    <div class="profile__location">
                         <ion-icon class="profile__item-icon" name="location"></ion-icon>
                         <div class="location__content">
                             <div class="location__username"></div>
                             <div class="location__address"><?php echo $current_user->user_address ?? ''  ?></div>
                         </div>
                     </div>
-                    <?php } ?>
                 </div>
 
                 <div class="profile__actions">
