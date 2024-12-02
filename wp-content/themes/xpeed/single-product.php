@@ -107,7 +107,7 @@ $product = $productController->getProductInfo();
                         </div>
 
                         <div class="product-detail__actions">
-                            <button aria-label="<?= home_url() ?>"
+                            <button aria-label="<?= home_url() ?>" style="display: none;"
                                     class="button button--primary product-detail__buy-now"
                                     data-userID="<?= get_current_user_id() ?? 0 ?>">
                                 Mua ngay

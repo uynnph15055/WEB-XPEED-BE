@@ -19,7 +19,7 @@ $current_user = wp_get_current_user();
 
             <div class="sidebar__menu">
                 <a href="<?= home_url('/lich-su-dat-hang') ?>" class="menu__item">
-                      <span class="menu__item-content"><?= _e('Lịch sử mua hàng' , 'xpeed') ?></span>
+                    <span class="menu__item-content"><?= _e('Lịch sử mua hàng' , 'xpeed') ?></span>
                     <ion-icon name="cart"></ion-icon>
                 </a>
 <!--                <a href="--><?//= home_url('/profile') ?><!--" class="menu__item">-->
@@ -60,6 +60,8 @@ $current_user = wp_get_current_user();
                 </div>
 
                 <div class="profile__actions">
+<!--                    <a href="#" class="profile__action">Update</a>-->
+<!--                    <a href="#" class="profile__action">Change Password</a>-->
                     <a href="#" class="profile__action" id="profile-logout__action"><?= _e('Đăng xuất' , 'xpeed') ?></a>
                 </div>
             </div>

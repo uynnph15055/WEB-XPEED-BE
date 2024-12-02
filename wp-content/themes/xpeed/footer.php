@@ -4,19 +4,19 @@
                   <div class="footer__nav-social">
                         <ul class="footer__nav-social-list">
                               <li class="footer__nav-social-item">
-                                    <span class="footer__nav-social-item__text">TIK TOK</span>
                                     <span class="footer__nav-social-item__icon">
                                           <a class="footer__nav-social-item__icon-link"
                                                 href="https://www.tiktok.com/@hjchelmetsvietnam?_t=8rkKgRcPeuV&_r=1">
+                                                <span class="footer__nav-social-item__text">TIK TOK</span>
                                                 <ion-icon name="logo-tiktok"></ion-icon>
                                           </a>
                                     </span>
                               </li>
                               <li class="footer__nav-social-item">
-                                    <span class="footer__nav-social-item__text">&nbsp FACEBOOK</span>
                                     <span class="footer__nav-social-item__icon">
                                           <a class="footer__nav-social-item__icon-link"
                                                 href="https://www.facebook.com/hjchelmetsvn?mibextid=ZbWKwL">
+                                                <span class="footer__nav-social-item__text">&nbsp FACEBOOK</span>
                                                 <ion-icon name="logo-facebook"></ion-icon>
                                           </a>
                                     </span>
@@ -42,16 +42,13 @@
             </div>
             <div class="footer__credits">
                   <p class="footer__credits-text">
-                        <?= _e('Địa chỉ: Lô 6 - KCN Khai Quang - Vĩnh Yên - Vĩnh Phúc.', 'xpeed'); ?>
-                  </p>
-                  <p class="footer__credits-text">
                         <?= _e('Văn Phòng/Showroom: Mộc Lan 6-06, KDT Vinhomes Green Bay, Mễ Trì, Nam Từ Liêm, Hà Nội.', 'xpeed'); ?>
                   </p>
                   <p class="footer__credits-text">
                         <?= _e('Hotline: 0987254899', 'xpeed'); ?>
                   </p>
                   <p class="footer__credits-text">
-                        <?= _e('Email: hjcvietnam.marketing@gmail.com', 'xpeed'); ?>
+                        <?= _e('Email: vuong.quyen@gmail.com', 'xpeed'); ?>
                   </p>
             </div>
       </div>

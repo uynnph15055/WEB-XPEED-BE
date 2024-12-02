@@ -71,23 +71,9 @@ function convertToProductUrl($link, $name) {
             <!-- banner -->
             <div class="banner">
                   <?php foreach ($sliders as $index => $slider) :  ?>
-                  <div class="banner_item <?= $index == 0 ? 'is-active' : '' ?> ">
+                  <a href="<?= $slider['link'] ?>" class="banner_item <?= $index == 0 ? 'is-active' : '' ?> ">
                         <img src="<?= $slider['image'] ?>" alt="<?= $slider['title'] ?>" class="banner_image" />
-                        <div class="over_lay">
-                              <div class="banner-content containerX">
-                                    <div class="banner-content__inside">
-                                          <h2 class="banner-content__heading">
-                                                <?= $slider['title'] ?>
-                                          </h2>
-                                          <p class="banner-content__subheading"><?= $slider['content'] ?></p>
-                                          <a href="<?= $slider['link'] ?>"
-                                                class="button banner-content__button button--secondary">
-                                                <?= pll_current_language() == 'vi' ? 'Mua ngay' : 'Buy now' ?>
-                                          </a>
-                                    </div>
-                              </div>
-                        </div>
-                  </div>
+                  </a>
                   <?php endforeach; ?>
 
                   <ul class="banner_dots">
