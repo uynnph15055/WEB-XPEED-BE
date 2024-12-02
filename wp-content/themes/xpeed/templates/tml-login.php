@@ -8,7 +8,7 @@ get_header();
 ?>
     <main class="auth-wrapper">
         <div class="auth-wrapper__container">
-            <h2 class="auth-wrapper__title">Đăng nhập</h2>
+            <h2 class="auth-wrapper__title"><?= _e('Đăng nhập', 'xpeed') ?></h2>
             <form class="auth-wrapper__form" id="auth-wrapper-login__form">
                 <input class="auth-wrapper__input auth-wrapper__input--email" type="text" name="username"
                        placeholder="Nhập tên người dùng hoặc email" />
@@ -20,20 +20,20 @@ get_header();
                      style="color: red; text-align: center;"></div>
                 <button aria-label="<?= home_url() ?>"class="auth-wrapper__button auth-wrapper__button--submit button button--primary"
                         type="submit">
-                    Gửi
+                   <?= _e('Gửi', 'xpeed') ?>
                 </button>
             </form>
             <div class="auth-wrapper__links">
                 <div class="auth-wrapper__links-group">
                     <div class="auth-wrapper__link-item">
-                        <a class="auth-wrapper__link" href="">Quên mật khẩu?</a>
+                        <a class="auth-wrapper__link" href=""><?= _e('Quên mật khẩu', 'xpeed') ?></a>
                     </div>
                     <div class="auth-wrapper__link-item">
-                        <a class="auth-wrapper__link" href="">Đăng ký</a>
+                        <a class="auth-wrapper__link" href=""><?= _e('Đăng ký', 'xpeed') ?></a>
                     </div>
                 </div>
                 <div class="auth-wrapper__divider">
-                    <div class="auth-wrapper__divider-text">HOẶC</div>
+                    <div class="auth-wrapper__divider-text"><?= _e('HOẶC', 'xpeed') ?></div>
                     <div class="auth-wrapper__social-buttons">
                         <button
                                 class="auth-wrapper__social-button auth-wrapper__social-button--google"

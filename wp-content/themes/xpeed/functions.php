@@ -174,6 +174,10 @@ add_action('init', function () {
     }
 });
 
+add_action('init', function() {
+    load_textdomain('woocommerce', '/path/to/woocommerce/languages/woocommerce.mo');
+});
+
 function my_theme_setup()
 {
     load_theme_textdomain('xpeed', get_template_directory() . '/languages');
