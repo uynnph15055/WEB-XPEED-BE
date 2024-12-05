@@ -37,7 +37,7 @@ if (!isset($_SESSION['cart'])) {
                         <div class="containerX header_main-in">
                               <a href="<?= home_url() ?>" class="header_main-logo">
                                     <img class="logo"
-                                          src="<?= get_template_directory_uri() . '/assets/images/logo/logo.png' ?>"
+                                          src="<?= get_template_directory_uri() . '/assets/images/logo/logo-xpeed.png' ?>"
                                           alt="" />
                               </a>
                               <div class="header_main-nav">

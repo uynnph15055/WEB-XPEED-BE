@@ -56,7 +56,10 @@ function register_routes()
         'methods' => 'GET',
         'callback' => [$productController, 'getProductCategoriesApi'],
     ));
-
+    register_rest_route('custom-api/v1', '/list-products-by-cate', array(
+        'methods' => 'GET',
+        'callback' => [$productController, 'getListProductsApi'],
+    ));
     register_rest_route('custom-api/v1', '/attributes', array(
         'methods' => 'GET',
         'callback' => [$productController, 'getAttributesApi'],

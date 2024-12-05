@@ -8,17 +8,17 @@ async function loadPageModule() {
         await import("./pages/home.js");
         console.log("Đã tải module: home.js");
     }
-    else if (currentUrl.includes(baseUrl + "/login") || currentUrl.includes(baseUrl + "/register")) {
+    else if (currentUrl.includes("/login") || currentUrl.includes("/register")) {
         await import("./pages/auth.js");
         console.log("Đã tải module: auth.js");
     }
-    else if (currentUrl.includes(baseUrl + "/product/")) {
+    else if (currentUrl.includes("/product/")) {
          await import("./pages/product.js");
         console.log("Đã tải module: product.js");
     }
-    else if (currentUrl.includes(baseUrl + "/product-category")) {
-        await import("./pages/product.js");
-       console.log("Đã tải module: product.js");
+    else if (currentUrl.includes("/product-category")) {
+        await import("./pages/products.js");
+       console.log("Đã tải module: products.js");
    }
     else if (currentUrl.includes("/cart")) {
         await import("./pages/cart.js");

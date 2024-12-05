@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xpeed\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-29 11:03+0000\n"
+"POT-Creation-Date: 2024-12-02 17:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -21,7 +21,7 @@ msgid " Địa chỉ thanh toán"
 msgstr ""
 
 #. Name of the template
-#: templates/tml-about.php:3
+#: page-aboutus.php:3 templates/tml-about.php:2
 msgid "About Us"
 msgstr ""
 
@@ -77,8 +77,8 @@ msgstr ""
 msgid "Cập nhật giỏ hàng"
 msgstr ""
 
-#: footer.php:54
-msgid "Email: hjcvietnam.marketing@gmail.com"
+#: footer.php:51
+msgid "Email: vuong.quyen@gmail.com"
 msgstr ""
 
 #: templates/tml-order-detail.php:124
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: footer.php:51
+#: footer.php:48
 msgid "Hotline: 0987254899"
 msgstr ""
 
@@ -163,6 +163,14 @@ msgstr ""
 
 #: templates/tml-order-detail.php:52
 msgid "Ngày đặt hàng:"
+msgstr ""
+
+#: templates/tml-login.php:17
+msgid "Nhập mật khẩu"
+msgstr ""
+
+#: templates/tml-login.php:14
+msgid "Nhập tên người dùng hoặc email"
 msgstr ""
 
 #. Name of the template
@@ -279,7 +287,7 @@ msgstr ""
 msgid "Uynn"
 msgstr ""
 
-#: footer.php:48
+#: footer.php:45
 msgid ""
 "Văn Phòng/Showroom: Mộc Lan 6-06, KDT Vinhomes Green Bay, Mễ Trì, Nam Từ "
 "Liêm, Hà Nội."
@@ -335,8 +343,4 @@ msgstr ""
 
 #: templates/tml-payment.php:36
 msgid "Địa chỉ giao hàng"
-msgstr ""
-
-#: footer.php:45
-msgid "Địa chỉ: Lô 6 - KCN Khai Quang - Vĩnh Yên - Vĩnh Phúc."
 msgstr ""

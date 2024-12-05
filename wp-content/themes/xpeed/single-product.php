@@ -7,10 +7,14 @@
 
 use app\Controllers\ProductController;
 use app\Controllers\CartController;
+
 get_header();
 $productController = new ProductController();
 $product = $productController->getProductInfo();
 ?>
+    <script>
+        var productData = <?= json_encode($product, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+    </script>
 <?php if (!empty($product) && is_array($product)) { ?>
 
 
@@ -33,9 +37,9 @@ $product = $productController->getProductInfo();
                                     class="thumbnail-item__img"
                             />
                         </div>
-                        <?php 
+                        <?php
                         // dd($product["gallery_images"]);
-                        foreach (array_slice($product["gallery_images"] , 0 ,-2) as $key => $galleryImage) { ?>
+                        foreach (array_slice($product["gallery_images"], 0, -2) as $key => $galleryImage) { ?>
                             <div class="thumbnail-item__wrapper">
                                 <img
                                         src="<?= $galleryImage ?>"
@@ -75,22 +79,18 @@ $product = $productController->getProductInfo();
                         <?php if (!empty($product["attributes"])) { ?>
                             <div class="product-detail__size" data-product-id="<?= $product["id"] ?? 0 ?>">
                                 <?php foreach ($product["attributes"] as $key => $attribute) { ?>
-
-                                    <label class="product-detail__size-label"> <?= $attribute['name'] ?? '' ?></label>
-
+                                    <label class="product-detail__size-label"> <?= $key ?? '' ?></label>
                                     <div class="product-detail__size-options" data-attribute-key="<?= $key ?>">
                                         <?php foreach ($attribute["value"] as $item) { ?>
-
                                             <input type="radio" name="<?= $key ?>"
-                                                   data-attribute='<?= json_encode($item) ?>'
-                                                   id="<?= $key ?>-<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
-                                                   value="<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
-                                                   class="product-detail__size-option" <?= $item["is_in_stock"] != true ? "disabled" : "" ?> />
-                                            <label for="<?= $key ?>-<?= strtolower($item["attributes"]["attribute_" . $key]) ?>"
-                                                   class="product-detail__size-label-option"><?= strtoupper($item["attributes"]["attribute_" . $key]) ?></label>
+                                                   id="<?= $key ?>-<?= strtolower($item) ?>"
+                                                   value="<?= strtolower($item) ?>"
+                                                   class="product-detail__size-option"/>
+                                            <label for="<?= $key ?>-<?= strtolower($item) ?>" class="product-detail__size-label-option" >
+                                                <?= strtoupper($item) ?>
+                                            </label>
                                         <?php } ?>
                                     </div>
-
                                 <?php } ?>
                             </div>
                         <?php } ?>
@@ -107,7 +107,7 @@ $product = $productController->getProductInfo();
                         </div>
 
                         <div class="product-detail__actions">
-                            <button aria-label="<?= home_url() ?>"
+                            <button aria-label="<?= home_url() ?>" style="display: none;"
                                     class="button button--primary product-detail__buy-now"
                                     data-userID="<?= get_current_user_id() ?? 0 ?>">
                                 Mua ngay
@@ -162,7 +162,6 @@ $product = $productController->getProductInfo();
     <script>
         const product = <?= json_encode($product["attributes"], JSON_HEX_TAG) ?>;
     </script>
-
     <?php get_footer(); ?>
 
 <?php } else {

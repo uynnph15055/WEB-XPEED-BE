@@ -11,10 +11,10 @@ get_header();
             <h2 class="auth-wrapper__title"><?= _e('Đăng nhập', 'xpeed') ?></h2>
             <form class="auth-wrapper__form" id="auth-wrapper-login__form">
                 <input class="auth-wrapper__input auth-wrapper__input--email" type="text" name="username"
-                       placeholder="Nhập tên người dùng hoặc email" />
+                       placeholder="<?= _e('Nhập tên người dùng hoặc email', 'xpeed') ?>" />
                 <div id="auth-wrapper-username__message" class="auth-wrapper__message" style="color: red;"></div>
                 <input class="auth-wrapper__input auth-wrapper__input--password" type="password" name="password"
-                       placeholder="Nhập mật khẩu" />
+                       placeholder="<?= _e('Nhập mật khẩu', 'xpeed') ?>" />
                 <div id="auth-wrapper-password__message" class="auth-wrapper__message" style="color: red;"></div>
                 <div id="auth-wrapper-login__message" class="auth-wrapper__message"
                      style="color: red; text-align: center;"></div>
