@@ -183,3 +183,42 @@ function my_theme_setup()
     load_theme_textdomain('xpeed', get_template_directory() . '/languages');
 }
 add_action('after_setup_theme', 'my_theme_setup');
+
+add_action('woocommerce_product_options_general_product_data', 'add_home_display_checkbox');
+function add_home_display_checkbox() {
+    woocommerce_wp_checkbox(
+        array(
+            'id' => '_show_on_homepage',
+            'label' => __('Hiển thị trên Trang chủ', 'woocommerce'),
+            'description' => __('Chọn để hiển thị sản phẩm này trên trang chủ.', 'woocommerce'),
+        )
+    );
+}
+
+add_action('woocommerce_process_product_meta', 'save_home_display_checkbox');
+function save_home_display_checkbox($post_id) {
+    $is_checked = isset($_POST['_show_on_homepage']) ? 'yes' : 'no';
+    update_post_meta($post_id, '_show_on_homepage', $is_checked);
+}
+add_action('cancel_pending_order', 'handle_cancel_pending_order');
+function handle_cancel_pending_order($order_id) {
+    $order = wc_get_order($order_id);
+
+    if ($order && $order->get_status() === 'pending') {
+        $order->update_status('cancelled', 'Order was cancelled due to non-payment.');
+
+        // Ghi log trước khi hoàn lại kho
+        error_log('Restocking items for order ID: ' . $order_id);
+
+        wc_increase_stock_levels($order_id);
+
+        // Kiểm tra sau khi gọi hàm hoàn lại kho
+        foreach ($order->get_items() as $item) {
+            $product = $item->get_product();
+            if ($product) {
+                $stock_quantity = $product->get_stock_quantity();
+                error_log('Stock for product ID ' . $product->get_id() . ' is now: ' . $stock_quantity);
+            }
+        }
+    }
+}

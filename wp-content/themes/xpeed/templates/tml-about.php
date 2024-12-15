@@ -11,7 +11,7 @@ get_header();
         src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg"
         alt=""
       />
-    <h1 id="about-title" class="about__heading">Giới thiệu</h1>
+    <h1 id="about-title" class="about__heading"><?= _e('Giới thiệu' ,'xpeed') ?></h1>
 </div>
 <main id="main-content">
     <div class="containerX">

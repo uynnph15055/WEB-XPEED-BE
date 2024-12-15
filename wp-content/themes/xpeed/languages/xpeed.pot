@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xpeed\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-02 17:16+0000\n"
+"POT-Creation-Date: 2024-12-12 01:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -77,8 +77,12 @@ msgstr ""
 msgid "Cập nhật giỏ hàng"
 msgstr ""
 
+#: page.php:49
+msgid "Danh mục"
+msgstr ""
+
 #: footer.php:51
-msgid "Email: vuong.quyen@gmail.com"
+msgid "Email: Xpeedhelmets.marketing@gmail.com"
 msgstr ""
 
 #: templates/tml-order-detail.php:124
@@ -87,6 +91,10 @@ msgstr ""
 
 #: templates/tml-cart.php:20
 msgid "Giỏ hàng"
+msgstr ""
+
+#: templates/tml-about.php:14
+msgid "Giới thiệu"
 msgstr ""
 
 #: templates/tml-login.php:23
@@ -215,7 +223,7 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: page.php:19 templates/tml-cart.php:26 templates/tml-order-detail.php:119
+#: page.php:41 templates/tml-cart.php:26 templates/tml-order-detail.php:119
 msgid "Sản phẩm"
 msgstr ""
 

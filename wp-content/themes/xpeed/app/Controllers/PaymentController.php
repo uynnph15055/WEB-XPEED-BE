@@ -174,6 +174,7 @@ class PaymentController extends BaseController
         return $order;
     }
 
+
     public function getOrderTotal($orderId)
     {
         $orderData = isset($_SESSION['order']) ? $_SESSION['order'] : [];

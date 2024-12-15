@@ -1,4 +1,5 @@
 import userLoading from './loading.js';
+import { BASE_URL } from './variable.js';
 
 class APIHandler {
     static post(url, data, isLoading = true) {
@@ -27,8 +28,8 @@ class APIHandler {
     }
 
     static buildUrl(url) {
-        url = baseUrl + url; // Thay thế baseUrl bằng URL cơ bản của bạn
-        console.log('url', url);
+        url = BASE_URL + url; // Thay thế baseUrl bằng URL cơ bản của bạn
+
         return url;
     }
 }

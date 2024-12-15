@@ -51,15 +51,16 @@ function register_routes()
             ),
         ),
     ));
+    register_rest_route('custom-api/v1', '/products-filter', array(
+        'methods' => 'GET',
+        'callback' => [$productController, 'getProductByCategoryApi']
+    ));
 
     register_rest_route('custom-api/v1', '/categories', array(
         'methods' => 'GET',
         'callback' => [$productController, 'getProductCategoriesApi'],
     ));
-    register_rest_route('custom-api/v1', '/list-products-by-cate', array(
-        'methods' => 'GET',
-        'callback' => [$productController, 'getListProductsApi'],
-    ));
+
     register_rest_route('custom-api/v1', '/attributes', array(
         'methods' => 'GET',
         'callback' => [$productController, 'getAttributesApi'],
@@ -96,7 +97,7 @@ function register_routes()
 
     register_rest_route('custom-api/v1', '/order/create', [
         'methods' => 'GET',
-        'callback' => [new \app\Controllers\CheckoutController(), 'moveCartToOrder'],
+        'callback' => [new \app\Controllers\CheckoutController(), 'createOrder'],
         'permission_callback' => '__return_true',
     ]);
 

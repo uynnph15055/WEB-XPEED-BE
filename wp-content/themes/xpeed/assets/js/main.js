@@ -1,6 +1,7 @@
 import "./common.js";
 // Hàm kiểm tra URL hiện tại và import module tương ứng
 //
+
 async function loadPageModule() {
     const currentUrl = window.location.href; // Lấy đường dẫn hiện tại (không bao gồm domain)
 

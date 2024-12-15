@@ -52,37 +52,34 @@ if (!empty($_GET)) {
 
 
                 <div id="filter-category" class="custom-select__options custom-select__options--visible">
-                    <?php foreach ($options['categories'] as $category) { ?>
-                        <?php if ($mainCategorySlug !=  $category->slug) { ?>
-                            <label for='<?php echo $category->slug; ?>' class="custom-select__option">
-                                <input type="checkbox" name="category"
-                                    <?php echo (!empty($params["categories"]) && in_array($category->slug, $params["categories"])) ? 'checked' : ''; ?>
-                                       id="<?php echo $category->slug; ?>"
-                                       value="<?php echo $category->slug; ?>"/>
-
-                                <span class="custom-select__option-label"> <?php echo $category->name; ?></span>
-                            </label>
+                    <select id="categories-select" name="categories"  >
+                        <?php foreach ($options['categories'] as $category) { ?>
+                                <option value="<?php echo $category->link; ?>"
+                                    <?php echo (!empty($mainCategorySlug) && $mainCategorySlug == $category->slug) ? 'selected' : ''; ?>>
+                                    <?php echo $category->name; ?>
+                                </option>
                         <?php } ?>
-                    <?php } ?>
+                    </select>
                 </div>
             </div>
 
             <div class="custom-select attributes">
                 <?php foreach ($options['attributes'] as $attributes) { ?>
-
+                    <!-- Button để hiển thị nhóm -->
                     <div class="custom-select__button">
-                        <button aria-label="<?= home_url() ?>"
-                                class="custom-select__title"> <?php echo $attributes['name']; ?></button>
+                        <button aria-label="<?= home_url() ?>" class="custom-select__title">
+                            <?php echo $attributes['name']; ?>
+                        </button>
                         <ion-icon class="custom-select__icon" name="caret-down-outline"></ion-icon>
                     </div>
 
-
-                    <div id="filter-attribute" class="custom-select__options custom-select__options--visible">
+                    <!-- Danh sách các lựa chọn -->
+                    <div class="custom-select__options custom-select__options--visible">
                         <?php foreach ($attributes['terms'] as $attribute) { ?>
-
-                            <label for="<?php echo $attribute['name']; ?>" class="custom-select__option">
+                            <label for="<?php echo $attribute['slug']; ?>" class="custom-select__option">
                                 <input type="checkbox"
                                     <?php echo (!empty($params[$attributes['slug']]) && in_array($attribute['slug'], $params[$attributes['slug']])) ? 'checked' : ''; ?>
+                                       class="attribute-checkbox"
                                        name="<?php echo $attributes['slug']; ?>"
                                        id="<?php echo $attribute['slug']; ?>"
                                        value="<?php echo $attribute['slug']; ?>"/>
@@ -92,6 +89,7 @@ if (!empty($_GET)) {
                     </div>
                 <?php } ?>
             </div>
+
 
             <div class="custom-select">
                 <div class="custom-select__button">
@@ -128,10 +126,10 @@ if (!empty($_GET)) {
         <div class="collection__content">
 
             <div class="collection__content-product" id="collection__content-product-wapper">
-                <?php if (count($productLists) > 0) { ?>
-                    <?php foreach ($productLists as $product) { ?>
+                <?php if (count($productLists["products"]) > 0) { ?>
+                    <?php foreach ($productLists["products"] as $product) { ?>
                         <div class="shopify__product">
-                            <a href="https://xpeed-helmets.com/product/mu-bao-hiem-xpeed-vo-20-vang/"
+                            <a href="<?= $product['url'] ?? '' ?>"
                                class="shopify__product-image-wrapper">
                                 <span class="shopify__product-badge shopify__product-badge--new"><?= $product['first_tag'] ?? '' ?></span>
                                 <img src="<?= $product['image'] ?? '' ?>"

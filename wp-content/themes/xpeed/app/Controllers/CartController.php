@@ -198,7 +198,13 @@ class CartController extends BaseController
             // Lấy thông tin sản phẩm
             $product = wc_get_product($product_id);
 
-            $thumbnail_url = wp_get_attachment_url($product->get_image_id());
+            if ($product) {
+                $thumbnail_url = wp_get_attachment_url($product->get_image_id());
+            } else {
+                $thumbnail_url = 'path/to/default/image.jpg'; // URL ảnh mặc định
+                unset($data[$key]);
+                setcookie('cart', json_encode($data), time() + (86400 * 30), "/");
+            }
 
             if ($product) {
                 // Lấy thông tin biến thể nếu có

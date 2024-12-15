@@ -6,7 +6,9 @@
  */
 
 use app\Controllers\CartController;
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 check_user_login_and_redirect();
 $cartController = new CartController();
 $carts = $cartController->getCartHandler();

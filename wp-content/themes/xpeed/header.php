@@ -1,88 +1,1 @@
-<?php
-session_start();
-require_once 'app/Config.php';
-if (!isset($_SESSION['cart'])) {
-      $_SESSION['cart'] = [];
-}
-?>
-<!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-
-<head>
-      <meta charset="<?php bloginfo('charset'); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-            rel="stylesheet" />
-      <link rel="profile" href="http://gmpg.org/xfn/11">
-      <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-      <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
-      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-      <script src="https://unpkg.com/scrollreveal"></script>
-      <script>
-            const baseUrl = "<?php echo home_url(); ?>";
-      </script>
-      <?php wp_head() ?>
-</head>
-
-<body>
-      <div class="wp-loading-overlay" style="display: none">
-            <div class="wp-loading"></div>
-      </div>
-      <div class="container home">
-            <header class="header">
-                  <div class="header_main">
-                        <div class="containerX header_main-in">
-                              <a href="<?= home_url() ?>" class="header_main-logo">
-                                    <img class="logo"
-                                          src="<?= get_template_directory_uri() . '/assets/images/logo/logo-xpeed.png' ?>"
-                                          alt="" />
-                              </a>
-                              <div class="header_main-nav">
-                                    <ul class="header_main-nav-list">
-                                          <?php foreach ($headers as $menu_item) : ?>
-                                                <li class="header_main-nav--item">
-                                                      <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">
-                                                            <?= $menu_item->title ?>
-                                                      </a>
-                                                      <?php if ($menu_item->submenu_count > 0) {
-                                                      ?>
-                                                            <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>
-                                                      <?php } ?>
-
-                                                      <?php echo render_submenu_by_parent_id($menu_item->ID, $header_menu, $locations) ?>
-                                                </li>
-                                          <?php endforeach; ?>
-                                    </ul>
-                              </div>
-                              <div class="header_main-icon">
-                                   <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">
-                                          <a class="header_main-icon--item--button"
-                                                href="<?= $current_lang == 'vi' ?'/gio-hang/' : '/en/cart' ?>">
-                                                <ion-icon name="cart-outline"></ion-icon>
-                                          </a>
-
-                                        <?php if (count($_SESSION['cart']) >= 1): ?>
-                                            <div class="header_main-cart-count" id="product-count"><?= count($_SESSION['cart']); ?></div>
-                                        <?php endif; ?>
-                                          <div class="header__cart-overlay"></div>
-                                    </li>
-                                  <li class="header_main-icon--item">
-                                      <?php if (!is_user_logged_in()): ?>
-                                          <a href="<?= $current_lang == 'vi' ? '/dang-nhap' : '/en/login' ?>"
-                                             class="header_main-btn-login"><?= $current_lang == 'vi' ? 'Đăng nhập' : 'Login' ?>
-                                          </a>
-                                      <?php else: ?>
-                                          <a href="<?= $current_lang == 'vi' ?'/tai-khoan' : '/en/profile' ?>"
-                                             class="header_main-icon--item--link">
-                                              <ion-icon name="person-circle-outline"></ion-icon>
-                                          </a>
-                                      <?php endif; ?>
-                                  </li>
-                              </div>
-                        </div>
-                  </div>
-            </header>
-      </div>
+<?phpif (session_status() === PHP_SESSION_NONE) {    session_start();}require_once 'app/Config.php';if (!isset($_SESSION['cart'])) {    $_SESSION['cart'] = [];}?><!DOCTYPE html><html <?php language_attributes(); ?>><head>    <meta charset="<?php bloginfo('charset'); ?>">    <meta name="viewport" content="width=device-width, initial-scale=1">    <meta http-equiv="X-UA-Compatible" content="ie=edge">    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"          rel="stylesheet"/>    <link rel="profile" href="http://gmpg.org/xfn/11">    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>    <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    <script src="https://unpkg.com/scrollreveal"></script>    <script>        const baseUrl = "<?php echo home_url(); ?>";        const current_locale = "<?php echo get_locale(); ?>";    </script>    <?php wp_head() ?></head><body><div class="wp-loading-overlay" style="display: none">    <div class="wp-loading"></div></div><div class="container home">    <header class="header">        <div class="header_main">            <div class="containerX header_main-in">                <a href="<?= home_url() ?>" class="header_main-logo">                    <img class="logo"                         src="<?= get_template_directory_uri() . '/assets/images/logo/logo-xpeed.png' ?>"                         alt=""/>                </a>                <div class="header_main-nav">                    <ul class="header_main-nav-list">                        <?php foreach ($headers as $menu_item) : ?>                            <li class="header_main-nav--item">                                <a href="<?= $menu_item->url ?>" class="header_main-nav--item--link">                                    <?= $menu_item->title ?>                                </a>                                <?php if ($menu_item->submenu_count > 0) {                                    ?>                                    <ion-icon class="icon-down" name="caret-down-outline"></ion-icon>                                <?php } ?>                                <?php echo render_submenu_by_parent_id($menu_item->ID, $header_menu, $locations) ?>                            </li>                        <?php endforeach; ?>                    </ul>                </div>                <div class="header_main-icon">                    <li class="header_main-icon--item">                        <div class="language">                            <div class="language-selected">                                <img                                        src="<?= get_template_directory_uri() ?><?= $current_lang == 'vi' ? '/assets/images/icons/flag_vi.svg' : '/assets/images/icons/flag_us.svg' ?>"                                        alt="language image"                                        class="language-selected--img"                                />                            </div>                            <ul class="language-list">                                <?php foreach ($languages as $language) : ?>                                    <li class="language-item">                                        <a href=<?= $language['url'] ?>>                                            <img alt="language"                                                 src="<?= get_template_directory_uri() ?><?= $language['slug'] == 'vi' ? '/assets/images/icons/flag_vi.svg' : '/assets/images/icons/flag_us.svg' ?>"                                                 alt="language image" class="language-selected--img"/>                                        </a>                                    </li>                                <?php endforeach; ?>                            </ul>                        </div>                    </li>                    <li class="header_main-icon--item header_main-icon--item--cart" id="show-cart">                        <a class="header_main-icon--item--button"                           href="<?= home_url($current_lang == 'vi' ? '/gio-hang/' : '/en/cart') ?>">                            <ion-icon name="cart-outline"></ion-icon>                        </a>                        <div id="icon-cart">                            <?php if (count($_SESSION['cart']) >= 1): ?>                                <div class="header_main-cart-count"                                     id="product-count"><?= count($_SESSION['cart']); ?></div>                            <?php endif; ?>                        </div>                        <div class="header__cart-overlay"></div>                    </li>                    <li class="header_main-icon--item">                        <?php if (!is_user_logged_in()): ?>                            <a href="<?= home_url($current_lang == 'vi' ? '/dang-nhap' : '/en/login') ?>"                               class="header_main-btn-login"><?= $current_lang == 'vi' ? 'Đăng nhập' : 'Login' ?>                            </a>                        <?php else: ?>                            <a href="<?= home_url($current_lang == 'vi' ? '/tai-khoan' : '/en/profile') ?>"                               class="header_main-icon--item--link">                                <ion-icon name="person-circle-outline"></ion-icon>                            </a>                        <?php endif; ?>                    </li>                </div>            </div>        </div>    </header></div>

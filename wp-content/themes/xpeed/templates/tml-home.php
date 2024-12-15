@@ -20,6 +20,7 @@ $homeController = new HomeController;
 
 
 $categories = $product->categories;
+// dd($categories);
 $blogs = $blog->blogs;
 
 // -----------
@@ -36,6 +37,7 @@ $cateNameThird = isset($product->categories[2]) ? $product->categories[2]->name 
 // ----------
 $productFirst = isset($product->categories[0]) ? $product->getProductLimitItemPageHome($product->categories[0]->term_id)
       : null;
+    //   dd($productFirst);
 $productSecond = isset($product->categories[1]) ?
       $product->getProductLimitItemPageHome($product->categories[1]->term_id) : null;
 $productThird = isset($product->categories[2]) ? $product->getProductLimitItemPageHome($product->categories[2]->term_id)
@@ -240,7 +242,7 @@ function convertToProductUrl($link, $name) {
                               <?php foreach ($productThird as $product):
                                           $categories = wp_get_post_terms($product->get_id(), 'product_cat');
                                           $tags = wp_get_post_terms($product->get_id(), 'product_tag'); ?>
-                              <div class="shopify__product-item">
+                               <a href="<?=  convertToProductUrl(esc_url(get_permalink($product->get_id())), $product->get_name() ?  esc_html($product->get_name()) : '')?>" class="shopify__product-item">
                                     <div class="shopify__product-image-wrapper">
                                           <span
                                                 class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?></span>
@@ -249,17 +251,15 @@ function convertToProductUrl($link, $name) {
                                                 class="shopify__product-image" />
                                     </div>
                                     <div class="shopify__product-details">
-                                          <h3 class="shopify__product-title">
-                                                <a href="<?= convertToProductUrl(esc_url(get_permalink($product->get_id())), $product->get_name() ?  esc_html($product->get_name()) : '') ?>" class="shopify__product-link">
-                                                      <?= $product->get_name() ?>
-                                                </a>
+                                           <h3 class="shopify__product-title">
+                                                <?= $product->get_name() ?  esc_html($product->get_name()) : ''  ?>
                                           </h3>
                                           <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                           </p>
                                           <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ?>
                                           </span>đ
                                     </div>
-                              </div>
+                              </a>
                               <?php
                                     endforeach;
                                     ?>

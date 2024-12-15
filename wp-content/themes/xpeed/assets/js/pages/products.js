@@ -5,28 +5,22 @@ import {formatVND} from "../common.js";
 
 $(document).ready(function () {
     //--------------------------------------PRODUCT LIST----------------------------------
-
-    $("#card__product-loading-wapper").removeClass("under-active");
-
-
-    console.log('attributes', attributes)
     // các dữ liệu param
     var categories = '';
     var minPrice = 0;
     var maxPrice = 0;
     var selectedAttributes = {};
     var page = 1
+    var currentUrl = window.location.origin + window.location.pathname;
+    var currentParams = new URLSearchParams(window.location.search); // Phân tích query string hiện tại
+    $("#card__product-loading-wapper").removeClass("under-active");
 
+    $('#categories-select').on('change', function () {
+        var category = $(this).val() ?? '';
 
-    $('input[name="category"]').change(function () {
-        // Lấy tất cả giá trị của các checkbox được chọn
-        var selectedCategories = $('input[name="category"]:checked').map(function () {
-            return this.value;
-        }).get();
-
-        categories = selectedCategories.join(',');
-        console.log('Selected categories:', categories);
-        createUrl();
+        if (category && category != '') {
+            window.location.href = category;
+        }
     });
 
     $('input[name="filter.v.price.gte"], input[name="filter.v.price.lte"]').on('change', function () {
@@ -43,58 +37,44 @@ $(document).ready(function () {
             $('input[name="filter.v.price.gte"]').val(0);
             $('input[name="filter.v.price.lte"]').val(0);
             minPrice = maxPrice = 0;
-        }else{
+        } else {
+            minPrice = minPrice <= 0 ? 1 : minPrice;
             createUrl();
         }
     });
 
-    $('.attributes input[type="checkbox"]').on('change', function () {
-        // Duyệt qua tất cả các checkbox đã chọn trong phần tử có class attributes
-        $('.attributes input[type="checkbox"]:checked').each(function () {
-            var groupName = $(this).attr('name'); // Lấy tên nhóm (mau-sac, size)
-            var value = $(this).val(); // Lấy giá trị (slug) của checkbox được chọn
+    // Xử lý khi checkbox được thay đổi
+    $('.attribute-checkbox').on('change', function () {
+        const groupName = $(this).attr('name'); // Nhóm thuộc tính (ví dụ: mau-sac, size)
+        const value = $(this).val();            // Giá trị của thuộc tính (ví dụ: do, l)
+        const isChecked = $(this).is(':checked'); // Trạng thái checkbox
 
-            // Nếu nhóm chưa tồn tại, khởi tạo là một mảng (nếu chưa có)
-            if (!selectedAttributes[groupName]) {
-                selectedAttributes[groupName] = [];
-            }
-
-            // Kiểm tra nếu selectedAttributes[groupName] không phải là mảng, khởi tạo lại
-            if (!Array.isArray(selectedAttributes[groupName])) {
-                selectedAttributes[groupName] = [];
-            }
-
-            // Thêm giá trị vào nhóm tương ứng
-            selectedAttributes[groupName].push(value);
-        });
-
-        // Chuyển mảng các giá trị thành chuỗi, phân tách bằng dấu phẩy
-        for (var key in selectedAttributes) {
-            selectedAttributes[key] = selectedAttributes[key].join(',');
+        // Nếu nhóm chưa tồn tại, khởi tạo là một mảng
+        if (!selectedAttributes[groupName]) {
+            selectedAttributes[groupName] = [];
         }
 
-        // Tạo URL với các thuộc tính đã chọn
-        createUrl();
-
-        // Hiển thị kết quả
-        console.log('Thuộc tính được chọn:', selectedAttributes);
+        if (isChecked) {
+            // Nếu được chọn, thêm giá trị vào nhóm
+            if (!selectedAttributes[groupName].includes(value)) {
+                selectedAttributes[groupName].push(value);
+            }
+        } else {
+            // Nếu bỏ chọn, xóa giá trị khỏi nhóm
+            selectedAttributes[groupName] = selectedAttributes[groupName].filter(attr => attr !== value);
+        }
+        createUrl()
     });
 
     function createUrl() {
         // 1. Lấy URL hiện tại và phân tích các tham số query
-        var currentUrl = window.location.origin + window.location.pathname;
-        var currentParams = new URLSearchParams(window.location.search); // Phân tích query string hiện tại
+
 
         // 2. Tạo danh sách các tham số (params)
         var params = new URLSearchParams();
 
         // Thêm tham số `page`
         params.set('page', page);
-
-        // Thêm `categories` nếu có giá trị
-        if (categories) {
-            params.set('categories', categories);
-        }
 
         // Thêm `minPrice` và `maxPrice` nếu có giá trị
         if (minPrice > 0) {
@@ -121,20 +101,18 @@ $(document).ready(function () {
 
         // 4. Ghép URL với query string đã cập nhật
         var finalUrl = currentUrl + '?' + params.toString();
-        console.log()
 
         // 5. Cập nhật URL mà không tải lại trang
         history.pushState(null, '', finalUrl);
-        callApiProductList(params.toString())
+        callApiProductList(params)
         return finalUrl;
     }
 
-    function callApiProductList(params){
-        $.ajax({
-            url: `${BASE_URL}/wp-json/custom-api/v1/products?mainCategory=${mainCategory}&${params}`,
-            method: "GET",
-            success: function (response) {
-                if (response.products) {
+    function callApiProductList(params) {
+        APIHandler.get(`/wp-json/custom-api/v1/products-filter?mainCategory=${mainCategory}&${params}`)
+            .done(function (response) {
+                $("#collection__content-product-wapper").html("");
+                if (response.products && response.products.length > 0) {
                     const dataProduct = response.products;
                     dataProduct.forEach(function (product) {
                         var productHtml = `
@@ -171,8 +149,35 @@ $(document).ready(function () {
                         $("#collection__content-product-wapper").append(productHtml);
                         $("#card__product-loading-wapper").addClass("under-active");
                     });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Không tìm được sản phẩm.",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    }).then(()=>{
+                        $("#collection__content-product-wapper").html("Không tìm được sản phẩm");
+                    });
                 }
-            },
-        });
+            })
+            .fail(function (err) {
+
+                Swal.fire({
+                    icon: "error",
+                    title: err.responseJSON.message ?? "Không tìm được sản phẩm.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                }).then(()=>{
+                    $("#collection__content-product-wapper").html("Không tìm được sản phẩm");
+                });
+            });
+
+
+
+
+
+
+
+
     }
 });

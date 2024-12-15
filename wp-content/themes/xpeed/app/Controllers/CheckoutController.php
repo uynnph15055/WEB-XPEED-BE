@@ -30,12 +30,111 @@ class CheckoutController extends BaseController
 
         return null; // Trả về null nếu không tìm thấy biến thể
     }
+    public function createOrder($request)
+    {
+        // Lấy thông tin giao hàng từ session
+        $userId = $request->get_param('userId') ?: get_current_user_id();
+        if (!$current_user = get_user_by('id', $userId)) {
+            return $this->fail('Người dùng chưa đăng nhập');
+        }
+
+        // Lấy dữ liệu từ cookie 'order'
+        $orderData = isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : [];
+        if (empty($orderData)) {
+            return $this->fail('Giỏ hàng trống, không thể tạo đơn hàng');
+        }
+
+        // Tạo một đơn hàng mới
+        $order = wc_create_order();
+
+        // Duyệt qua dữ liệu đơn hàng và kiểm tra tồn kho
+        foreach ($orderData as $item) {
+            $product = wc_get_product($item['product_id']);
+            if (!$product) {
+                return $this->fail("Sản phẩm không tồn tại: ID {$item['product_id']}");
+            }
+
+            $quantity = $item['quantity'] ?? 0;
+
+            // Kiểm tra số lượng tồn kho
+            $stock_quantity = $product->get_stock_quantity();
+            if ($stock_quantity === null) {
+                // Sản phẩm không quản lý kho
+                continue;
+            }
+
+            if ($quantity > $stock_quantity) {
+                return $this->fail("Sản phẩm '{$product->get_name()}' chỉ còn {$stock_quantity} chiếc trong kho.");
+            }
+        }
+
+        // Nếu kiểm tra tồn kho thành công, thêm sản phẩm vào đơn hàng và trừ kho
+        foreach ($orderData as $item) {
+            $product = wc_get_product($item['product_id']);
+            if (!$product) continue; // Bỏ qua nếu sản phẩm không tồn tại
+
+            $quantity = $item['quantity'] ?? 0;
+
+            // Kiểm tra sản phẩm có biến thể không
+            if ($product->is_type('variable')) {
+                $variation_id = $this->get_variation_id($item['product_id'], $item['attributes']);
+                if ($variation_id) {
+                    $order->add_product(wc_get_product($variation_id), $quantity);
+                    // Giảm số lượng sản phẩm trong kho
+
+                    wc_update_product_stock($variation_id, $stock_quantity- $quantity);
+                }
+            } else {
+                $order->add_product($product, $quantity);
+
+                // Giảm số lượng sản phẩm trong kho
+                wc_update_product_stock($product->get_id(), $stock_quantity- $quantity);
+            }
+        }
+
+        // Cập nhật thông tin địa chỉ giao hàng và thanh toán
+        $order->set_billing_first_name('');
+        $order->set_billing_last_name($current_user->display_name ?? null);
+        $order->set_billing_address_1('');
+        $order->set_billing_city('');
+        $order->set_billing_postcode('');
+        $order->set_billing_phone('');
+        $order->set_billing_state('');
+        $order->update_meta_data('apartment', ''); // Lưu thông tin căn hộ
+
+        // Cập nhật thông tin địa chỉ giao hàng
+        $order->set_shipping_first_name('');
+        $order->set_shipping_last_name($current_user->display_name ?? null);
+        $order->set_shipping_address_1('');
+        $order->set_shipping_city('');
+        $order->set_shipping_postcode('');
+        $order->set_shipping_phone('');
+        $order->set_shipping_state('');
+
+        // Đặt trạng thái đơn hàng thành "pending"
+        $order->update_status('pending', 'Order created and waiting for payment.');
+
+        // Lưu đơn hàng
+        $order->save();
+
+        // Lên lịch tự động hủy đơn hàng nếu không thanh toán sau 1 phút (hoàn lại kho)
+        wp_schedule_single_event(time() + 60, 'cancel_pending_order', ['order_id' => $order->get_id()]);
+
+        return [
+            'success' => true,
+            'message' => 'Order created successfully.',
+            'order_id' => $order->get_id(),
+        ];
+    }
+
+
 
     public function moveCartToOrder($request, $type = 'json')
     {
         // Lấy dữ liệu từ session và cookie giỏ hàng
         $cart_data = (isset($_SESSION['cart']) ? $_SESSION['cart'] : [])
             + (isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []);
+
         // Kiểm tra nếu giỏ hàng trống
         if (empty($cart_data)) {
             return $this->fail('Không có sản phẩm');
@@ -51,7 +150,7 @@ class CheckoutController extends BaseController
             $product_id = $item['product_id'];
             $product = wc_get_product($product_id);
 
-            if (!$product) {
+            if (empty($product)) {
                 return $this->fail('Không tìm thấy sản phẩm');
             }
 

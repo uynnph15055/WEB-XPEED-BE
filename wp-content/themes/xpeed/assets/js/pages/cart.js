@@ -173,6 +173,8 @@ $(document).ready(function () {
                         title: error.responseJSON.message ?? "Thanh toán thất bại. Vui lòng thử lại.",
                         showConfirmButton: false,
                         timer: 1500
+                    }).then(()=>{
+                        window.location.href = window.location.href;
                     });
                 });
         }

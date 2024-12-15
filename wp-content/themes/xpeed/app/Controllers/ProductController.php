@@ -3,6 +3,7 @@
 namespace app\Controllers;
 
 use WP_REST_Response;
+use WP_REST_Request;
 use WP_Query;
 
 use app\Controllers\Controller as BaseController;
@@ -143,19 +144,40 @@ class ProductController extends BaseController
         return $attribute_values;
     }
 
-    private function getProductCategories()
-    {
-        $terms = get_terms(array(
-            'taxonomy' => 'product_cat',
-            'hide_empty' => false,
-        ));
+private function getProductCategories()
+{
+    $terms = get_terms(array(
+        'taxonomy'   => 'product_cat',
+        'hide_empty' => false,
+        'parent'     => 0, 
+    ));
 
-        if (is_wp_error($terms)) {
-            return [];
-        }
-
-        return array_values($terms);
+    if (is_wp_error($terms)) {
+        return [];
     }
+
+    // Lọc danh mục theo ngôn ngữ hiện tại
+    $current_language = pll_current_language(); // Lấy ngôn ngữ hiện tại
+    $filtered_terms   = [];
+
+    foreach ($terms as $term) {
+        // Lấy ID của danh mục theo ngôn ngữ hiện tại
+        $translated_term_id = pll_get_term($term->term_id, $current_language);
+
+        if ($translated_term_id) {
+            $translated_term = get_term($translated_term_id, 'product_cat');
+            if ($translated_term && !is_wp_error($translated_term)) {
+                // Thêm liên kết vào đối tượng term
+                $translated_term->link = get_term_link($translated_term);
+
+                $filtered_terms[] = $translated_term;
+            }
+        }
+    }
+
+    return array_values($filtered_terms);
+}
+
 
     public function getCategoryLink($category_id)
     {
@@ -169,10 +191,18 @@ class ProductController extends BaseController
     public function getProductLimitItemPageHome($category_id = null)
     {
         $args = array(
+            'post_type' => 'product',
             'limit' => 5,
             'orderby' => 'date',
             'return' => 'objects',
             'category' => get_term($category_id, 'product_cat')->slug,
+            // 'meta_query' => array(
+            //     array(
+            //         'key' => '_show_on_homepage',
+            //         'value' => '0', 
+            //         'compare' => '='
+            //     )
+            // )
         );
 
         $products = wc_get_products($args);
@@ -377,297 +407,279 @@ class ProductController extends BaseController
     public function getProductByCategory()
     {
         global $wpdb;
+
+        // Lấy slug của category từ URL
         $mainCategorySlug = $this->getCategorySlugUrl();
         $urlData = $_GET;
+
+        // Lấy thông tin category chính
         $mainCategory = get_term_by('slug', $mainCategorySlug, 'product_cat');
-        if (!$mainCategory) return []; // Không tồn tại category chính
+        if (!$mainCategory) {
+            return []; // Không tồn tại category chính
+        }
+
         $mainCategoryID = $mainCategory->term_id;
 
-
-        // Lấy danh sách ID của các category bổ sung
-        $additionalCategories = !empty($urlData['categories']) ? explode(',', $urlData['categories']) : [];
-
-        $additionalCategoryIDs = !empty($additionalCategories) ? array_filter(array_map(fn($slug) => get_term_by('slug', $slug, 'product_cat')->term_id ?? null, $additionalCategories)) : [];
-
+        // Lấy giá trị lọc giá
         $minPrice = !empty($urlData['minPrice']) ? (float)$urlData['minPrice'] : 0;
-        $maxPrice = !empty($urlData['maxPrice']) ? (float)$urlData['maxPrice'] : 0;
-        // Lọc và xử lý các tham số bổ sung
-        $processedParams = array_map(fn($value) => explode(',', $value), array_diff_key($urlData, array_flip(['page', 'categories', 'minPrice', 'maxPrice'])));
+        $maxPrice = !empty($urlData['maxPrice']) ? (float)$urlData['maxPrice'] : PHP_INT_MAX;
 
-        $placeholders = implode(',', array_fill(0, count($additionalCategoryIDs), '%d'));
+        // Xử lý các tham số bổ sung (các attributes)
+        $processedParams = array_map(
+            fn($value) => explode(',', $value),
+            array_diff_key($urlData, array_flip(['page', 'minPrice', 'maxPrice']))
+        );
 
-        $productWhereIn = [];
+        // Xây dựng tax_query cho attributes
+        $taxQuery = [
+            'relation' => 'AND',
+            [
+                'taxonomy' => 'product_cat',
+                'field'    => 'term_id',
+                'terms'    => $mainCategoryID,
+            ],
+        ];
 
-// --------------------------------------------------------------------------------
-        // lọc theo category
-        if (!empty($additionalCategoryIDs)) {
-            $productWhereInString = implode(',', $productWhereIn);
-            $queryAdditionalCategories = $wpdb->prepare(
-                "SELECT tr1.object_id
-                     FROM wp_term_relationships tr1
-                     JOIN wp_term_taxonomy tt1 ON tr1.term_taxonomy_id = tt1.term_taxonomy_id
-                     WHERE tt1.term_id IN ($placeholders)",
-                ...$additionalCategoryIDs
-            );
-
-            $CategoryData = $wpdb->get_results($queryAdditionalCategories, ARRAY_A);
-
-            if (!empty($CategoryData)) {
-                foreach ($CategoryData as $category) {
-                    $productWhereIn[] = (int)$category['object_id'];
-                }
+        foreach ($processedParams as $attribute => $values) {
+            $filteredValues = array_filter($values); // Loại bỏ giá trị rỗng
+            if (!empty($filteredValues)) {
+                $taxQuery[] = [
+                    'taxonomy' => 'pa_' . sanitize_title($attribute),
+                    'field'    => 'slug',
+                    'terms'    => $filteredValues,
+                ];
             }
         }
 
-// --------------------------------------------------------------------------------
-        if (!empty($processedParams)) {
-            $additionalParamsCondition = $this->buildAdditionalParamsCondition($processedParams);
-            $productWhereInString = !empty($productWhereIn) ? implode(',', $productWhereIn) : '';
+        // Xây dựng meta_query để lọc giá
+        $metaQuery = [
+            'relation' => 'AND',
+            [
+                'key'     => '_price',
+                'value'   => [$minPrice, $maxPrice],
+                'type'    => 'NUMERIC',
+                'compare' => 'BETWEEN',
+            ],
+        ];
 
-            $attributes = "
-        SELECT parent.ID
-        FROM {$wpdb->prefix}posts parent
-        JOIN {$wpdb->prefix}posts child ON child.post_parent = parent.ID
-        JOIN {$wpdb->prefix}postmeta pm ON child.ID = pm.post_id
-        WHERE child.post_type = 'product_variation'
-        " . ($productWhereInString ? "AND parent.ID IN ($productWhereInString)" : '') . "
-        AND ($additionalParamsCondition)
-    ";
+        // Lấy trang hiện tại
+        $paged = !empty($urlData['page']) ? (int)$urlData['page'] : 1;
 
-            $attributesData = $wpdb->get_results($attributes, ARRAY_A);
-            $productWhereIn = !empty($attributesData) ? array_map(fn($attr) => (int)$attr['ID'], $attributesData) : [];
+        // Lấy các sản phẩm cha
+        $parentProductID = isset($urlData['parentProductID']) ? (int)$urlData['parentProductID'] : 0;
+
+        // Xây dựng WP_Query
+        $args = [
+            'post_type'      => 'product',
+            'posts_per_page' => 20, // Số sản phẩm trên mỗi trang
+            'paged'          => $paged,
+            'post_status'    => 'publish', // Chỉ lấy sản phẩm được xuất bản
+            'tax_query'      => $taxQuery,
+            'meta_query'     => $metaQuery,
+        ];
+
+        // Nếu có ID của sản phẩm cha, chỉ lấy sản phẩm con của nó
+        if ($parentProductID) {
+            $args['post_parent'] = $parentProductID;
         }
 
+        $query = new WP_Query($args);
 
-// --------------------------------------------------------------------------------
-        // lọc theo price
-        if ($maxPrice > 0 && $maxPrice >= $minPrice) {
-            $productWhereInString = !empty($productWhereIn) ? implode(',', $productWhereIn) : '';
-
-            $price = "
-        SELECT parent.ID
-        FROM {$wpdb->prefix}posts parent
-        JOIN {$wpdb->prefix}posts child ON child.post_parent = parent.ID
-        JOIN {$wpdb->prefix}postmeta pm ON child.ID = pm.post_id
-        WHERE child.post_type = 'product_variation'
-        " . ($productWhereInString ? "AND parent.ID IN ($productWhereInString)" : '') . "
-        AND (pm.meta_key = '_price' AND CAST(pm.meta_value AS UNSIGNED) BETWEEN $minPrice AND $maxPrice)
-    ";
-
-            $priceData = $wpdb->get_results($price, ARRAY_A);
-            $productWhereIn = !empty($priceData) ? array_map(fn($item) => (int)$item['ID'], $priceData) : [];
-        }
-
-
-        $productWhereInString = !empty($productWhereIn) ? implode(',', $productWhereIn) : 0;
-        $query = "SELECT p.* 
-FROM wp_posts p
-JOIN wp_term_relationships tr ON p.ID = tr.object_id
-JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-WHERE tt.term_id = $mainCategoryID
-  " . ($productWhereInString ? "AND p.ID IN ($productWhereInString)" : '') . "
-  AND p.post_type = 'product'
-  AND p.post_status = 'publish'";
-        if (!empty($additionalCategoryIDs) || $maxPrice > 0 || !empty($processedParams)) {
-            if ($productWhereInString == 0) {
-                $query = "SELECT p.* 
-FROM wp_posts p
-JOIN wp_term_relationships tr ON p.ID = tr.object_id
-JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-WHERE tt.term_id = $mainCategoryID
-  AND 1 != 1
-  AND p.post_type = 'product'
-  AND p.post_status = 'publish'";
-            }
-        }
-        // Truy vấn SQL chính đơn giản hóa
-
-        // Thực thi truy vấn
-        $products = $wpdb->get_results($query);
-
-        // Định dạng dữ liệu sản phẩm
+        // Xử lý dữ liệu sản phẩm trả về
         $formattedProducts = [];
-        foreach ($products as $product) {
-            $title = get_the_title($product->ID);
-            $url = get_permalink($product->ID);
-            $image = wp_get_attachment_url(get_post_thumbnail_id($product->ID));
-            $price = get_post_meta($product->ID, '_price', true);
-            $sale_price = get_post_meta($product->ID, '_sale_price', true);
-            $firstCategory = wp_get_post_terms($product->ID, 'product_cat', ['orderby' => 'term_id', 'number' => 1]);
-            $firstTag = wp_get_post_terms($product->ID, 'product_tag', ['orderby' => 'term_id', 'number' => 1]);
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
 
-            $formattedProducts[] = [
-                'ID' => $product->ID,
-                'title' => $title,
-                'url' => $url,
-                'image' => $image,
-                'price' => $price,
-                'sale_price' => $sale_price,
-                'first_category' => $firstCategory ? $firstCategory[0]->name : null,
-                'first_tag' => $firstTag ? $firstTag[0]->name : null,
-            ];
+                $product = wc_get_product(get_the_ID());
+
+                if (!$product) {
+                    continue;
+                }
+
+                // Lấy thông tin sản phẩm
+                $title = get_the_title();
+                $url = get_permalink();
+                $image = get_the_post_thumbnail_url($product->get_id(), 'full');
+                $price = (float)$product->get_regular_price();
+                $sale_price = $product->get_sale_price();
+                $categories = get_the_terms($product->get_id(), 'product_cat');
+                $tags = get_the_terms($product->get_id(), 'product_tag');
+
+                // Kiểm tra giá và sale_price có tồn tại không
+                if (empty($price) && !empty($product->price)) {
+                    $price = (float)$product->price;
+                }
+
+                // Nếu có sale_price thì lấy sale_price thay vì price
+                if (!empty($sale_price)) {
+                    $price = (float)$sale_price;
+                }
+
+                $formattedProducts[] = [
+                    'ID'              => $product->get_id(),
+                    'title'           => $title,
+                    'url'             => $url,
+                    'image'           => $image,
+                    'price'           => $price,
+                    'sale_price'      => $sale_price,
+                    'first_category'  => $categories ? $categories[0]->name : null,
+                    'first_tag'       => $tags ? $tags[0]->name : null,
+                ];
+            }
+            wp_reset_postdata();
         }
 
-        return $formattedProducts;
+        // Trả về dữ liệu sản phẩm và thông tin phân trang
+        return [
+            'products' => $formattedProducts,
+            'pagination' => [
+                'total'    => $query->max_num_pages,
+                'current'  => $paged,
+                'per_page' => 20,
+            ],
+        ];
     }
 
-    public function getListProductsApi()
+    public function getProductByCategoryApi(WP_REST_Request $request)
     {
         global $wpdb;
-        $urlData = $_GET;
-        $mainCategorySlug = $urlData["mainCategory"];
+
+        // Lấy các tham số từ request
+        $urlData = $request->get_params();
+        $mainCategorySlug = $urlData['mainCategory'] ?? null;
+dd($urlData);
+        if (!$mainCategorySlug) {
+            return new WP_REST_Response(['error' => 'mainCategory is required'], 400);
+        }
+
+        // Lấy thông tin category chính
         $mainCategory = get_term_by('slug', $mainCategorySlug, 'product_cat');
-        if (!$mainCategory) return []; // Không tồn tại category chính
+        if (!$mainCategory) {
+            return new WP_REST_Response(['error' => 'Category not found'], 404);
+        }
+
         $mainCategoryID = $mainCategory->term_id;
 
-
-        // Lấy danh sách ID của các category bổ sung
-        $additionalCategories = !empty($urlData['categories']) ? explode(',', $urlData['categories']) : [];
-
-        $additionalCategoryIDs = !empty($additionalCategories) ? array_filter(array_map(fn($slug) => get_term_by('slug', $slug, 'product_cat')->term_id ?? null, $additionalCategories)) : [];
-
+        // Lấy giá trị lọc giá
         $minPrice = !empty($urlData['minPrice']) ? (float)$urlData['minPrice'] : 0;
-        $maxPrice = !empty($urlData['maxPrice']) ? (float)$urlData['maxPrice'] : 0;
-        // Lọc và xử lý các tham số bổ sung
-        $processedParams = array_map(fn($value) => explode(',', $value), array_diff_key($urlData, array_flip(['page', 'categories', 'minPrice', 'maxPrice'])));
+        $maxPrice = !empty($urlData['maxPrice']) ? (float)$urlData['maxPrice'] : PHP_INT_MAX;
 
-        $placeholders = implode(',', array_fill(0, count($additionalCategoryIDs), '%d'));
+        // Xử lý các tham số bổ sung (các attributes)
+        $processedParams = array_map(
+            fn($value) => explode(',', $value),
+            array_diff_key($urlData, array_flip(['mainCategory', 'page', 'minPrice', 'maxPrice']))
+        );
 
-        $productWhereIn = [];
+        // Xây dựng tax_query cho attributes
+        $taxQuery = [
+            'relation' => 'AND',
+            [
+                'taxonomy' => 'product_cat',
+                'field'    => 'term_id',
+                'terms'    => $mainCategoryID,
+            ],
+        ];
 
-// --------------------------------------------------------------------------------
-        // lọc theo category
-        if (!empty($additionalCategoryIDs)) {
-            $productWhereInString = implode(',', $productWhereIn);
-            $queryAdditionalCategories = $wpdb->prepare(
-                "SELECT tr1.object_id
-                     FROM wp_term_relationships tr1
-                     JOIN wp_term_taxonomy tt1 ON tr1.term_taxonomy_id = tt1.term_taxonomy_id
-                     WHERE tt1.term_id IN ($placeholders)",
-                ...$additionalCategoryIDs
-            );
-
-            $CategoryData = $wpdb->get_results($queryAdditionalCategories, ARRAY_A);
-
-            if (!empty($CategoryData)) {
-                foreach ($CategoryData as $category) {
-                    $productWhereIn[] = (int)$category['object_id'];
-                }
+        foreach ($processedParams as $attribute => $values) {
+            $filteredValues = array_filter($values); // Loại bỏ giá trị rỗng
+            if (!empty($filteredValues)) {
+                $taxQuery[] = [
+                    'taxonomy' => 'pa_' . sanitize_title($attribute),
+                    'field'    => 'slug',
+                    'terms'    => $filteredValues,
+                ];
             }
         }
 
-// --------------------------------------------------------------------------------
-        if (!empty($processedParams)) {
-            $additionalParamsCondition = $this->buildAdditionalParamsCondition($processedParams);
-            $productWhereInString = !empty($productWhereIn) ? implode(',', $productWhereIn) : '';
+        // Xây dựng meta_query để lọc giá
+        $metaQuery = [
+            'relation' => 'AND',
+            [
+                'key'     => '_price',
+                'value'   => [$minPrice, $maxPrice],
+                'type'    => 'NUMERIC',
+                'compare' => 'BETWEEN',
+            ],
+        ];
 
-            $attributes = "
-        SELECT parent.ID
-        FROM {$wpdb->prefix}posts parent
-        JOIN {$wpdb->prefix}posts child ON child.post_parent = parent.ID
-        JOIN {$wpdb->prefix}postmeta pm ON child.ID = pm.post_id
-        WHERE child.post_type = 'product_variation'
-        " . ($productWhereInString ? "AND parent.ID IN ($productWhereInString)" : '') . "
-        AND ($additionalParamsCondition)
-    ";
+        // Lấy trang hiện tại
+        $paged = !empty($urlData['page']) ? (int)$urlData['page'] : 1;
 
-            $attributesData = $wpdb->get_results($attributes, ARRAY_A);
-            $productWhereIn = !empty($attributesData) ? array_map(fn($attr) => (int)$attr['ID'], $attributesData) : [];
+        // Lấy các sản phẩm cha
+        $parentProductID = $urlData['parentProductID'] ?? 0;
+
+        // Xây dựng WP_Query
+        $args = [
+            'post_type'      => 'product',
+            'posts_per_page' => 20, // Số sản phẩm trên mỗi trang
+            'paged'          => $paged,
+            'post_status'    => 'publish', // Chỉ lấy sản phẩm được xuất bản
+            'tax_query'      => $taxQuery,
+            'meta_query'     => $metaQuery,
+        ];
+
+        // Nếu có ID của sản phẩm cha, chỉ lấy sản phẩm con của nó
+        if ($parentProductID) {
+            $args['post_parent'] = $parentProductID;
         }
 
+        $query = new WP_Query($args);
 
-// --------------------------------------------------------------------------------
-        // lọc theo price
-        if ($maxPrice > 0 && $maxPrice >= $minPrice) {
-            $productWhereInString = !empty($productWhereIn) ? implode(',', $productWhereIn) : '';
-
-            $price = "
-        SELECT parent.ID
-        FROM {$wpdb->prefix}posts parent
-        JOIN {$wpdb->prefix}posts child ON child.post_parent = parent.ID
-        JOIN {$wpdb->prefix}postmeta pm ON child.ID = pm.post_id
-        WHERE child.post_type = 'product_variation'
-        " . ($productWhereInString ? "AND parent.ID IN ($productWhereInString)" : '') . "
-        AND (pm.meta_key = '_price' AND CAST(pm.meta_value AS UNSIGNED) BETWEEN $minPrice AND $maxPrice)
-    ";
-
-            $priceData = $wpdb->get_results($price, ARRAY_A);
-            $productWhereIn = !empty($priceData) ? array_map(fn($item) => (int)$item['ID'], $priceData) : [];
-        }
-
-
-        $productWhereInString = !empty($productWhereIn) ? implode(',', $productWhereIn) : 0;
-
-        $query = "SELECT p.* 
-FROM wp_posts p
-JOIN wp_term_relationships tr ON p.ID = tr.object_id
-JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-WHERE tt.term_id = 15
-  " . ($productWhereInString ? "AND p.ID IN ($productWhereInString)" : '') . "
-  AND p.post_type = 'product'
-  AND p.post_status = 'publish'";
-        if (!empty($additionalCategoryIDs) || $maxPrice > 0 || !empty($processedParams)) {
-            if ($productWhereInString == 0) {
-                $query = "SELECT p.* 
-FROM wp_posts p
-JOIN wp_term_relationships tr ON p.ID = tr.object_id
-JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-WHERE tt.term_id = 15
-  AND 1 != 1
-  AND p.post_type = 'product'
-  AND p.post_status = 'publish'";
-            }
-        }
-        // Truy vấn SQL chính đơn giản hóa
-
-        // Thực thi truy vấn
-        $products = $wpdb->get_results($query);
-
-        // Định dạng dữ liệu sản phẩm
+        // Xử lý dữ liệu sản phẩm trả về
         $formattedProducts = [];
-        foreach ($products as $product) {
-            $title = get_the_title($product->ID);
-            $url = get_permalink($product->ID);
-            $image = wp_get_attachment_url(get_post_thumbnail_id($product->ID));
-            $price = get_post_meta($product->ID, '_price', true);
-            $sale_price = get_post_meta($product->ID, '_sale_price', true);
-            $firstCategory = wp_get_post_terms($product->ID, 'product_cat', ['orderby' => 'term_id', 'number' => 1]);
-            $firstTag = wp_get_post_terms($product->ID, 'product_tag', ['orderby' => 'term_id', 'number' => 1]);
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
 
-            $formattedProducts[] = [
-                'ID' => $product->ID,
-                'title' => $title,
-                'url' => $url,
-                'image' => $image,
-                'price' => $price,
-                'sale_price' => $sale_price,
-                'first_category' => $firstCategory ? $firstCategory[0]->name : null,
-                'first_tag' => $firstTag ? $firstTag[0]->name : null,
-            ];
-        }
-        return new WP_REST_Response(array(
-            'current_page' => 1,
-            'total_pages' => 4,
-            'products' => $formattedProducts,
-        ), 200);
-    }
+                $product = wc_get_product(get_the_ID());
 
-    private function buildAdditionalParamsCondition($params)
-    {
-        $conditions = [];
+                if (!$product) {
+                    continue;
+                }
 
-        foreach ($params as $key => $values) {
-            // Thêm tiền tố 'attribute_pa_' vào key
-            $attributeKey = 'attribute_pa_' . $key;
+                // Lấy thông tin sản phẩm
+                $title = get_the_title();
+                $url = get_permalink();
+                $image = get_the_post_thumbnail_url($product->get_id(), 'full');
+                $price = (float)$product->get_regular_price();
+                $sale_price = $product->get_sale_price();
+                $categories = get_the_terms($product->get_id(), 'product_cat');
+                $tags = get_the_terms($product->get_id(), 'product_tag');
 
-            // Kiểm tra nếu tham số này có giá trị
-            if (!empty($values)) {
-                // Xây dựng điều kiện SQL chỉ với meta_value
-                $conditions[] = "pm.meta_value IN ('" . implode("','", array_map('esc_sql', $values)) . "')";
+                // Kiểm tra giá và sale_price có tồn tại không
+                if (empty($price) && !empty($product->price)) {
+                    $price = (float)$product->price;
+                }
+
+                // Nếu có sale_price thì lấy sale_price thay vì price
+                if (!empty($sale_price)) {
+                    $price = (float)$sale_price;
+                }
+
+                $formattedProducts[] = [
+                    'ID'              => $product->get_id(),
+                    'title'           => $title,
+                    'url'             => $url,
+                    'image'           => $image,
+                    'price'           => $price,
+                    'sale_price'      => $sale_price,
+                    'first_category'  => $categories ? $categories[0]->name : null,
+                    'first_tag'       => $tags ? $tags[0]->name : null,
+                ];
             }
+            wp_reset_postdata();
         }
 
-        return implode(" OR ", $conditions);
+        // Trả về dữ liệu sản phẩm và thông tin phân trang dưới dạng JSON
+        return new WP_REST_Response([
+            'products'   => $formattedProducts,
+            'pagination' => [
+                'total'    => $query->max_num_pages,
+                'current'  => $paged,
+                'per_page' => 20,
+            ],
+        ], 200);
     }
 
 

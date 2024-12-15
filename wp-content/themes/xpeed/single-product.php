@@ -11,6 +11,7 @@ use app\Controllers\CartController;
 get_header();
 $productController = new ProductController();
 $product = $productController->getProductInfo();
+
 ?>
     <script>
         var productData = <?= json_encode($product, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
@@ -39,7 +40,7 @@ $product = $productController->getProductInfo();
                         </div>
                         <?php
                         // dd($product["gallery_images"]);
-                        foreach (array_slice($product["gallery_images"], 0, -2) as $key => $galleryImage) { ?>
+                        foreach (array_slice($product["gallery_images"], 0, -1) as $key => $galleryImage) { ?>
                             <div class="thumbnail-item__wrapper">
                                 <img
                                         src="<?= $galleryImage ?>"
@@ -56,12 +57,12 @@ $product = $productController->getProductInfo();
                 <div class="product-content__right">
                     <div class="product-detail">
                         <div class="product-detail__top-line">
-                            <div class="product-detail__brand-logo">
-                                <img class="brand-logo__img"
-                                     src="https://i.ebayimg.com/images/g/3loAAOSwPYZU2PmE/s-l1200.jpg"
-                                     alt=""/>
-                            </div>
-                            <div class="product-detail__badge">
+                            <!--<div class="product-detail__brand-logo">-->
+                            <!--    <img class="brand-logo__img"-->
+                            <!--         src="https://i.ebayimg.com/images/g/3loAAOSwPYZU2PmE/s-l1200.jpg"-->
+                            <!--         alt=""/>-->
+                            <!--</div>-->
+                            <div class="product-detail__badge" style="transform: translateX(-10px)">
                                 <span class="product-detail__badge product-detail__badge--new">MỚI</span>
                             </div>
                         </div>
@@ -104,6 +105,7 @@ $product = $productController->getProductInfo();
                                 <button aria-label="<?= home_url() ?>" class="product-detail__quantity-increase">+
                                 </button>
                             </div>
+                            <div class="product-detail__quantity-inventory" style="margin-top: 5px"></div>
                         </div>
 
                         <div class="product-detail__actions">
@@ -162,6 +164,7 @@ $product = $productController->getProductInfo();
     <script>
         const product = <?= json_encode($product["attributes"], JSON_HEX_TAG) ?>;
     </script>
+
     <?php get_footer(); ?>
 
 <?php } else {

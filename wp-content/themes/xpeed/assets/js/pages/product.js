@@ -4,6 +4,8 @@ import {BASE_URL} from "../variable.js";
 import {formatVND} from "../common.js";
 
 $(document).ready(function () {
+
+    const language = current_locale != 'vi' ? 'en' : '';
 //--------------------------------------PRODUCT IMAGE----------------------------------
     $(".thumbnail-item__img").on("click", function () {
         const src = $(this).attr("src");
@@ -34,16 +36,18 @@ $(document).ready(function () {
         // Chuyển attributeKey thành slug và thêm tiền tố
         const slugAttributeKey = "pa_" + toSlug(attributeKey);
         selectedAttributes[slugAttributeKey] = toSlug(selectedValue);
-        console.log(' đủ thuộc tính:', selectedAttributes);
-        console.log(' sản phẩm :', product);
+
+
         if (Object.keys(selectedAttributes).length === Object.keys(productData.attributes).length) {
             selectedProduct = productData.variations.find(product => {
                 return Object.keys(selectedAttributes).every(key => {
-                    return selectedAttributes[key] === product.attributes["attribute_" + key];
+
+                    return selectedAttributes[key]+'-'+language === product.attributes["attribute_" + key];
                 });
             });
             if (selectedProduct) {
-                console.log(selectedProduct);
+
+                $(".product-detail__quantity-inventory").text((selectedProduct.max_qty ?? 0) + ' sản phẩm có sẵn');
                 $(".product-detail__quantity-input").val(0);
                 if (selectedProduct.max_qty >= 1) {
                     $(".product-detail__quantity-input").val(1);
@@ -54,7 +58,6 @@ $(document).ready(function () {
             }
         } else {
             toggleQuantityControls(true);
-            console.log('Chưa đủ thuộc tính:', productData);
         }
     });
 
@@ -179,7 +182,7 @@ $(document).ready(function () {
                         showConfirmButton: false,
                         timer: 1500,
                     }).then(() => {
-                        $("#product-count").text(Object.keys(response.data.session_cart).length);
+                        $("#icon-cart").append(`<div class="header_main-cart-count" id="product-count">${Object.keys(response.data.session_cart).length}</div>`);
                     });
                 })
                 .fail(function (err) {
@@ -326,7 +329,7 @@ $(document).ready(function () {
 //         success: function (response) {
 //             if (response.attributes) {
 //                 const attributes = response.attributes;
-//                 console.log(attributes);
+//
 //
 //                 attributes.forEach(function (attribute) {
 //                     var attributeHtml = `
