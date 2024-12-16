@@ -18,10 +18,10 @@ class Timeofday
             '
 í
 google/type/timeofday.protogoogle.type"K
-	TimeOfDay
+	TimeOfDay
 hours (
 minutes (
-seconds (
+seconds (
 nanos (Bl
 com.google.typeBTimeOfDayProtoPZ>google.golang.org/genproto/googleapis/type/timeofday;timeofdayø¢GTPbproto3'
         , true);

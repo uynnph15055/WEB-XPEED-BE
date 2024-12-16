@@ -53,7 +53,7 @@ define('NONCE_SALT',       'put your unique phrase here');
 
 /**#@-*/
 define('WP_DEBUG_LOG', true);
-define('WP_DEBUG_DISPLAY', true);
+define('WP_DEBUG_DISPLAY', false);
 /**
  * WordPress database table prefix.
  *
@@ -78,7 +78,7 @@ define('WP_DEBUG', true);
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-
+define('ALTERNATE_WP_CRON', true);
 
 /* That's all, stop editing! Happy publishing. */
 

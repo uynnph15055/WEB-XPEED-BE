@@ -25,7 +25,7 @@ google.rpc"“
 domain (	5
 metadata (2#.google.rpc.ErrorInfo.MetadataEntry/
 MetadataEntry
-key (	
+key (	
 value (	:8";
 	RetryInfo.
 retry_delay (2.google.protobuf.Duration"2
@@ -48,7 +48,7 @@ violations (2).google.rpc.PreconditionFailure.Violation?
 
 BadRequest?
 field_violations (2%.google.rpc.BadRequest.FieldViolation4
-FieldViolation
+FieldViolation
 field (	
 description (	"7
 RequestInfo
@@ -57,7 +57,7 @@ request_id (	
 serving_data (	"`
 ResourceInfo
 resource_type (	
-resource_name (	
+resource_name (	
 owner (	
 description (	"V
 Help$

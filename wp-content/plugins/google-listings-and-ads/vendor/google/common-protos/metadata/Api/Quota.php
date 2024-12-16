@@ -27,7 +27,7 @@ MetricRule
 selector (	=
 metric_costs (2\'.google.api.MetricRule.MetricCostsEntry2
 MetricCostsEntry
-key (	
+key (	
 value (:8"•
 
 QuotaLimit
@@ -43,7 +43,7 @@ QuotaLimit
  (2".google.api.QuotaLimit.ValuesEntry
 display_name (	-
 ValuesEntry
-key (	
+key (	
 value (:8Bl
 com.google.apiB
 QuotaProtoPZEgoogle.golang.org/genproto/googleapis/api/serviceconfig;serviceconfig¢GAPIbproto3'

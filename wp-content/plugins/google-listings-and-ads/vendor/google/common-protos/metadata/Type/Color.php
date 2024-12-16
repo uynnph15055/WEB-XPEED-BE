@@ -20,7 +20,7 @@ class Color
 ï
 google/type/color.protogoogle.type"]
 Color
-red (
+red (
 green (
 blue (*
 alpha (2.google.protobuf.FloatValueB`

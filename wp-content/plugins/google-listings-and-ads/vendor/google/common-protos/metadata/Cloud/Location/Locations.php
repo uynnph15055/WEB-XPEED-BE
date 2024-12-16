@@ -39,7 +39,7 @@ page_token (	"d
 labels (2+.google.cloud.location.Location.LabelsEntry&
 metadata (2.google.protobuf.Any-
 LabelsEntry
-key (	
+key (	
 value (	:82¤
 	Locations«
 ListLocations+.google.cloud.location.ListLocationsRequest,.google.cloud.location.ListLocationsResponse"?‚Óä“9/v1/{name=locations}Z!/v1/{name=projects/*}/locationsž

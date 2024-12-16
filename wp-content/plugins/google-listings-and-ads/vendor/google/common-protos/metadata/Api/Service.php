@@ -37,11 +37,11 @@ class Service
         \GPBMetadata\Google\Protobuf\Wrappers::initOnce();
         $pool->internalAddGeneratedFile(
             '
-É
+É
 google/api/service.proto
 google.apigoogle/api/backend.protogoogle/api/billing.protogoogle/api/client.protogoogle/api/context.protogoogle/api/control.protogoogle/api/documentation.protogoogle/api/endpoint.protogoogle/api/http.protogoogle/api/log.protogoogle/api/logging.protogoogle/api/metric.proto#google/api/monitored_resource.protogoogle/api/monitoring.protogoogle/api/quota.protogoogle/api/source_info.proto!google/api/system_parameter.protogoogle/api/usage.protogoogle/protobuf/api.protogoogle/protobuf/type.protogoogle/protobuf/wrappers.proto"‚
 Service
-name (	
+name (	
 title (	
 producer_project_id (	
 

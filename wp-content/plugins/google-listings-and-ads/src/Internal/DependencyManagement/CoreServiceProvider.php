@@ -65,6 +65,7 @@ use Automattic\WooCommerce\GoogleListingsAndAds\Menu\Reports;
 use Automattic\WooCommerce\GoogleListingsAndAds\Menu\Settings;
 use Automattic\WooCommerce\GoogleListingsAndAds\Menu\SetupAds;
 use Automattic\WooCommerce\GoogleListingsAndAds\Menu\SetupMerchantCenter;
+use Automattic\WooCommerce\GoogleListingsAndAds\MerchantCenter\AccountService;
 use Automattic\WooCommerce\GoogleListingsAndAds\MerchantCenter\AccountService as MerchantAccountService;
 use Automattic\WooCommerce\GoogleListingsAndAds\MerchantCenter\ContactInformation;
 use Automattic\WooCommerce\GoogleListingsAndAds\MerchantCenter\MerchantCenterAwareInterface;
@@ -125,6 +126,7 @@ use Automattic\WooCommerce\GoogleListingsAndAds\Utility\AddressUtility;
 use Automattic\WooCommerce\GoogleListingsAndAds\Utility\DateTimeUtility;
 use Automattic\WooCommerce\GoogleListingsAndAds\Utility\ImageUtility;
 use Automattic\WooCommerce\GoogleListingsAndAds\Utility\ISOUtility;
+use Automattic\WooCommerce\GoogleListingsAndAds\Utility\WPCLIMigrationGTIN;
 use Automattic\WooCommerce\GoogleListingsAndAds\Vendor\League\ISO3166\ISO3166DataProvider;
 use Automattic\WooCommerce\GoogleListingsAndAds\Vendor\Psr\Container\ContainerInterface;
 use Automattic\WooCommerce\GoogleListingsAndAds\View\PHPViewFactory;
@@ -215,6 +217,7 @@ class CoreServiceProvider extends AbstractServiceProvider {
 		AttributeMapping::class          => true,
 		MarketingChannelRegistrar::class => true,
 		OAuthService::class              => true,
+		WPCLIMigrationGTIN::class        => true,
 	];
 
 	/**
@@ -254,7 +257,7 @@ class CoreServiceProvider extends AbstractServiceProvider {
 		$this->share_with_tags( MerchantCenterService::class );
 
 		// Set up Notifications service.
-		$this->share_with_tags( NotificationsService::class, MerchantCenterService::class );
+		$this->share_with_tags( NotificationsService::class, MerchantCenterService::class, AccountService::class );
 
 		// Set up OAuthService service.
 		$this->share_with_tags( OAuthService::class );
@@ -430,5 +433,8 @@ class CoreServiceProvider extends AbstractServiceProvider {
 			$this->share_with_tags( GLAChannel::class, MerchantCenterService::class, AdsCampaign::class, Ads::class, MerchantStatuses::class, ProductSyncStats::class );
 			$this->share_with_tags( MarketingChannelRegistrar::class, GLAChannel::class, WC::class );
 		}
+
+		// ClI Classes
+		$this->conditionally_share_with_tags( WPCLIMigrationGTIN::class, ProductRepository::class, AttributeManager::class );
 	}
 }

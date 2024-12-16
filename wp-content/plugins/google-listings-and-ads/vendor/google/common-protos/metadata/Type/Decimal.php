@@ -18,7 +18,7 @@ class Decimal
             '
 ²
 google/type/decimal.protogoogle.type"
-Decimal
+Decimal
 value (	Bf
 com.google.typeBDecimalProtoPZ:google.golang.org/genproto/googleapis/type/decimal;decimalø¢GTPbproto3'
         , true);

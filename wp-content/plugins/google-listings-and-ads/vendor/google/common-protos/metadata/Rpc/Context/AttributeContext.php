@@ -40,7 +40,7 @@ extensions (2.google.protobuf.Anyæ
 	principal (	
 region_code (	-
 LabelsEntry
-key (	
+key (	
 value (	:8L
 Api
 service (	
@@ -60,7 +60,7 @@ extensions (2.google.protobuf.Anyæ
 headers (29.google.rpc.context.AttributeContext.Request.HeadersEntry
 path (	
 host (	
-scheme (	
+scheme (	
 query (	(
 time	 (2.google.protobuf.Timestamp
 size
@@ -69,7 +69,7 @@ extensions (2.google.protobuf.Anyæ
 reason (	7
 auth (2).google.rpc.context.AttributeContext.Auth.
 HeadersEntry
-key (	
+key (	
 value (	:8Å
 Response
 code (
@@ -78,7 +78,7 @@ extensions (2.google.protobuf.Anyæ
 time (2.google.protobuf.Timestamp2
 backend_latency (2.google.protobuf.Duration.
 HeadersEntry
-key (	
+key (	
 value (	:8ê
 Resource
 service (	
@@ -95,10 +95,10 @@ extensions (2.google.protobuf.Anyæ
 etag (	
 location (	-
 LabelsEntry
-key (	
+key (	
 value (	:82
 AnnotationsEntry
-key (	
+key (	
 value (	:8Bã
 com.google.rpc.contextBAttributeContextProtoPZUgoogle.golang.org/genproto/googleapis/rpc/context/attribute_context;attribute_context¯bproto3'
         , true);

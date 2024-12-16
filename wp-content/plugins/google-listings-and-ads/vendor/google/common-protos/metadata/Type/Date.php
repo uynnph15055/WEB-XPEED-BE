@@ -19,7 +19,7 @@ class Date
 ¾
 google/type/date.protogoogle.type"0
 Date
-year (
+year (
 month (
 day (B]
 com.google.typeB	DateProtoPZ4google.golang.org/genproto/googleapis/type/date;dateø¢GTPbproto3'

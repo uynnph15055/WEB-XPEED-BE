@@ -1,3 +1,3 @@
-<?php
-if (!defined('ABSPATH')) exit;
-interface ActionScheduler_Exception {}
+<?php
+if (!defined('ABSPATH')) exit;
+interface ActionScheduler_Exception {}

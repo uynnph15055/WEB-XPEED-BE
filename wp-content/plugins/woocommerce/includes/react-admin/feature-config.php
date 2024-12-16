@@ -7,6 +7,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'activity-panels' => true,
 			'analytics' => true,
 			'product-block-editor' => true,
+			'product-data-views' => false,
 			'experimental-blocks' => false,
 			'coupons' => true,
 			'core-profiler' => true,
@@ -41,6 +42,9 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'async-product-editor-category-field' => false,
 			'launch-your-store' => true,
 			'product-editor-template-system' => false,
+			'blueprint' => false,
+			'reactify-classic-payments-settings' => false,
+			'use-wp-horizon' => false,
 		);
 	}
 }

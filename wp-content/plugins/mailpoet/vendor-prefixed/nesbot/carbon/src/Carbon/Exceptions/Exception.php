@@ -1,7 +1,7 @@
-<?php
-namespace MailPoetVendor\Carbon\Exceptions;
-if (!defined('ABSPATH')) exit;
-interface Exception
-{
- //
-}
+<?php
+namespace MailPoetVendor\Carbon\Exceptions;
+if (!defined('ABSPATH')) exit;
+interface Exception
+{
+ //
+}

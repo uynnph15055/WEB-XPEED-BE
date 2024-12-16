@@ -33,13 +33,13 @@ google.apigoogle/api/launch_stage.protogoogle/protobuf/struct.proto"À
 type (	9
 labels (2).google.api.MonitoredResource.LabelsEntry-
 LabelsEntry
-key (	
+key (	
 value (	:8"Ê
 MonitoredResourceMetadata.
 system_labels (2.google.protobuf.StructJ
 user_labels (25.google.api.MonitoredResourceMetadata.UserLabelsEntry1
 UserLabelsEntry
-key (	
+key (	
 value (	:8By
 com.google.apiBMonitoredResourceProtoPZCgoogle.golang.org/genproto/googleapis/api/monitoredres;monitoredresø¢GAPIbproto3'
         , true);

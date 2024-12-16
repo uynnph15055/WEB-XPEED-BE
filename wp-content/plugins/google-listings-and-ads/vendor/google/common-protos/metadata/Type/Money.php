@@ -19,8 +19,8 @@ class Money
 Î
 google/type/money.protogoogle.type"<
 Money
-currency_code (	
-units (
+currency_code (	
+units (
 nanos (B`
 com.google.typeB
 MoneyProtoPZ6google.golang.org/genproto/googleapis/type/money;moneyø¢GTPbproto3'
