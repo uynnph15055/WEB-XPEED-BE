@@ -9,12 +9,18 @@ check_user_login_and_redirect();
 
 use app\Controllers\CheckoutController;
 
-if (!isset($_GET['token']) || empty($_GET['token'])) {
+if (!isset($_GET['id']) || empty($_GET['id'])) {
     header('Location: ' . home_url('cart'));
 }
-$orderId = $_GET['token'];
+$orderId = $_GET['id'];
 $checkoutController = new CheckoutController();
+
 $orders = $checkoutController->getOrderHandler($orderId);
+
+if (!$orders["success"]) {
+    header('Location: ' . home_url('cart'));
+}
+
 $totalCarts = 0;
 get_header();
 
@@ -128,7 +134,8 @@ get_header();
         <div class="payment_cart">
             <div class="payment_cart-header"><?= _e('Đơn hàng' , 'xpeed') ?></div>
             <div class="payment_products">
-                <?php foreach ($orders as $key => $order) { ?>
+
+                <?php foreach ($orders['order']["items"] as $key => $order) { ?>
                     <div class="payment_products--item">
                         <div class="payment_products--item-image-group">
                             <img
@@ -144,7 +151,7 @@ get_header();
 
                         <div class="payment_products--item-content-group">
                             <div class="payment_products--item-content">
-                                <p class="payment_products--item-name"><?= $order["product_name"] ?? '' ?></p>
+                                <p class="payment_products--item-name"><?= $order["name"] ?? '' ?></p>
                                 <p class="payment_products--item-size"> <?= $order["variation_title"] ?? '' ?></p>
                             </div>
                         </div>

@@ -36,15 +36,18 @@ $(document).ready(function () {
         // Chuyển attributeKey thành slug và thêm tiền tố
         const slugAttributeKey = "pa_" + toSlug(attributeKey);
         selectedAttributes[slugAttributeKey] = toSlug(selectedValue);
-
-
+        console.log(' đủ thuộc tính:', selectedAttributes);
+        console.log(' sản phẩm :', product);
+        console.log(' productData:', productData);
         if (Object.keys(selectedAttributes).length === Object.keys(productData.attributes).length) {
             selectedProduct = productData.variations.find(product => {
-                return Object.keys(selectedAttributes).every(key => {
 
-                    return selectedAttributes[key]+'-'+language === product.attributes["attribute_" + key];
+                return Object.keys(selectedAttributes).every(key => {
+                    console.log(selectedAttributes[key] ,'-----',product.attributes["attribute_" + key]);
+                    return selectedAttributes[key] === product.attributes["attribute_" + key];
                 });
             });
+            console.log(' sản phẩm đã chọn  :', selectedProduct);
             if (selectedProduct) {
 
                 $(".product-detail__quantity-inventory").text((selectedProduct.max_qty ?? 0) + ' sản phẩm có sẵn');
@@ -193,6 +196,9 @@ $(document).ready(function () {
                             "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.",
                         showConfirmButton: false,
                         timer: 3000,
+                    }).then(() => {
+                        // Tải lại trang sau khi thông báo
+                        location.reload();
                     });
                 });
         }

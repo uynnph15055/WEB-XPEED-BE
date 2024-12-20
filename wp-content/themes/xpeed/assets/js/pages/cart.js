@@ -165,7 +165,7 @@ $(document).ready(function () {
             APIHandler.get('/wp-json/custom-api/v1/order/create?userId='+userId)
                 .done(function (response) {
                     // Chuyển hướng tới trang thanh toán với orderId trả về
-                    window.location.href = baseUrl + '/payment?token=' + (response.data.orderId ?? '');
+                    window.location.href = baseUrl + '/payment?id=' + ( response.orderId ?? '' );
                 })
                 .fail(function (error) {
                     Swal.fire({

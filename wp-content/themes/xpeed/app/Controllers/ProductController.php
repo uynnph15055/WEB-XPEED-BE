@@ -331,7 +331,10 @@ private function getProductCategories()
 
                         // Nếu term tồn tại và không bị lỗi, thêm tên term vào mảng
                         if ($term && !is_wp_error($term)) {
-                            $term_names[] = $term->name;
+                            $term_names[] = [
+                                'name' => $term->name,
+                                'slug' => $term->slug
+                            ];
                         }
                     }
 
@@ -427,8 +430,11 @@ private function getProductCategories()
         // Xử lý các tham số bổ sung (các attributes)
         $processedParams = array_map(
             fn($value) => explode(',', $value),
-            array_diff_key($urlData, array_flip(['page', 'minPrice', 'maxPrice']))
+            array_diff_key($urlData, array_flip(['page', 'minPrice', 'maxPrice', 'lang']))
         );
+
+        // Lấy ngôn ngữ từ URL hoặc WPML/Polylang
+        $lang = !empty($urlData['lang']) ? sanitize_text_field($urlData['lang']) : apply_filters('wpml_current_language', null);
 
         // Xây dựng tax_query cho attributes
         $taxQuery = [
@@ -465,20 +471,25 @@ private function getProductCategories()
         // Lấy trang hiện tại
         $paged = !empty($urlData['page']) ? (int)$urlData['page'] : 1;
 
-        // Lấy các sản phẩm cha
+        // Lấy ID sản phẩm cha
         $parentProductID = isset($urlData['parentProductID']) ? (int)$urlData['parentProductID'] : 0;
 
         // Xây dựng WP_Query
         $args = [
             'post_type'      => 'product',
-            'posts_per_page' => 20, // Số sản phẩm trên mỗi trang
+            'posts_per_page' => 20,
             'paged'          => $paged,
-            'post_status'    => 'publish', // Chỉ lấy sản phẩm được xuất bản
+            'post_status'    => 'publish',
             'tax_query'      => $taxQuery,
             'meta_query'     => $metaQuery,
         ];
 
-        // Nếu có ID của sản phẩm cha, chỉ lấy sản phẩm con của nó
+        // Thêm ngôn ngữ nếu có
+        if (!empty($lang)) {
+            $args['lang'] = $lang;
+        }
+
+        // Lọc sản phẩm theo parent ID nếu có
         if ($parentProductID) {
             $args['post_parent'] = $parentProductID;
         }
@@ -541,6 +552,7 @@ private function getProductCategories()
         ];
     }
 
+
     public function getProductByCategoryApi(WP_REST_Request $request)
     {
         global $wpdb;
@@ -548,7 +560,7 @@ private function getProductCategories()
         // Lấy các tham số từ request
         $urlData = $request->get_params();
         $mainCategorySlug = $urlData['mainCategory'] ?? null;
-dd($urlData);
+
         if (!$mainCategorySlug) {
             return new WP_REST_Response(['error' => 'mainCategory is required'], 400);
         }

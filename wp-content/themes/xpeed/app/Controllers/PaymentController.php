@@ -6,12 +6,16 @@ use app\Controllers\Controller as BaseController;
 
 class PaymentController extends BaseController
 {
+    public $currentLanguage = '';
+
     public function __construct()
     {
         check_user_login_and_redirect();
         if (session_status() === PHP_SESSION_NONE) {
             session_start(); // Chỉ khởi động session nếu chưa khởi động
         }
+
+        $this->currentLanguage = strtok(get_locale() ?? 'en', '_');
     }
 
     // Đường dẫn MoMo API
@@ -32,11 +36,35 @@ class PaymentController extends BaseController
     {
         $orderInfo = $request->get_param('orderInfo') ?? 'MoMo Payment';
         $shippingInfo = $request->get_param('shippingInfo') ?? '';
-        $orderId = $request->get_param('orderId') ?? '';
-        $amount = $this->getOrderTotal($orderId) ?? (float)$request->get_param('amount');
+        $orderId = $request->get_param('orderId') ?? 0;
+
+        if (!$orderId) {
+            return $this->fail('Invalid order ID.');
+        }
+
+        // Get the order object
+        $order = wc_get_order($orderId);
+        if (!$order) {
+            return $this->fail('Order not found.');
+        }
+
+        // Check order status and creator
+        $currentUserId = get_current_user_id();
+        if ($order->get_status() !== 'pending' || $order->get_customer_id() !== $currentUserId) {
+            return $this->fail('You are not authorized to process this order, or the order is not in pending payment status.');
+        }
+
+        // Calculate the subtotal of items
+        $amount = 0;
+
+        foreach ($order->get_items() as $item) {
+            $amount += (float)$item->get_subtotal();
+
+        }
         if (empty($amount) || empty($shippingInfo) || empty($orderId)) {
             return $this->fail('Thông tin không hợp lệ .');
         }
+        $amount += 50000;
         if (10000 > (float)$amount) {
             return $this->fail('Số tiền thanh toán tối thiểu 10,000 đ .');
         } else if ((float)$amount > 50000000) {
@@ -85,7 +113,7 @@ class PaymentController extends BaseController
             'orderInfo' => $orderInfo,
             'redirectUrl' => $redirectUrl,
             'ipnUrl' => $ipnUrl,
-            'lang' => 'vi',
+            'lang' => $this->currentLanguage,
             'extraData' => $extraData,
             'requestType' => $requestType,
             'signature' => $signature
@@ -127,6 +155,61 @@ class PaymentController extends BaseController
             return false;
         }
     }
+
+
+    /**
+     * Kiểm tra trạng thái giao dịch trên MoMo
+     *
+     * @param string $orderId Mã đơn hàng
+     * @param string $requestId Mã yêu cầu duy nhất
+     * @return array|bool Thông tin trạng thái giao dịch hoặc thất bại
+     */
+    public function getTransactionStatus($orderId, $requestId)
+    {
+        // Đường dẫn kiểm tra trạng thái giao dịch
+        $statusEndpoint = "https://test-payment.momo.vn/v2/gateway/api/query";
+
+        // Tạo chữ ký (signature) cho yêu cầu
+        $rawHash = "accessKey=" . $this->accessKey .
+            "&orderId=" . $orderId .
+            "&partnerCode=" . $this->partnerCode .
+            "&requestId=" . $requestId;
+
+        $signature = hash_hmac("sha256", $rawHash, $this->secretKey);
+
+        // Dữ liệu gửi đến API
+        $data = [
+            "partnerCode" => $this->partnerCode,
+            "orderId" => $orderId,
+            "requestId" => $requestId,
+            "signature" => $signature,
+            'lang' => $this->currentLanguage,
+        ];
+
+        // Gửi yêu cầu POST tới API MoMo
+        $response = json_decode($this->sendRequest($statusEndpoint, json_encode($data)), true);
+
+        // Kiểm tra kết quả trả về
+        if ($response && isset($response['resultCode'])) {
+            if ($response['resultCode'] == self::STATUS_SUCCESSFUL) {
+                return [
+                    'status' => 'success',
+                    'data' => $response ?? []
+                ];
+            } else {
+                return [
+                    'status' => 'error',
+                    'data' => $response ?? []
+                ];
+            }
+        }
+
+        return [
+            'status' => 'error',
+            'message' => 'Failed to get transaction status.'
+        ];
+    }
+
 
     public function createOrder()
     {
@@ -173,7 +256,6 @@ class PaymentController extends BaseController
 
         return $order;
     }
-
 
     public function getOrderTotal($orderId)
     {

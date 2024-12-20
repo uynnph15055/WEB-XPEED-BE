@@ -81,6 +81,7 @@ if (!function_exists('check_user_login_and_redirect')) {
             exit;
         }
     }
+
     function getCurrentUrl()
     {
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
@@ -174,7 +175,7 @@ add_action('init', function () {
     }
 });
 
-add_action('init', function() {
+add_action('init', function () {
     load_textdomain('woocommerce', '/path/to/woocommerce/languages/woocommerce.mo');
 });
 
@@ -182,10 +183,12 @@ function my_theme_setup()
 {
     load_theme_textdomain('xpeed', get_template_directory() . '/languages');
 }
+
 add_action('after_setup_theme', 'my_theme_setup');
 
 add_action('woocommerce_product_options_general_product_data', 'add_home_display_checkbox');
-function add_home_display_checkbox() {
+function add_home_display_checkbox()
+{
     woocommerce_wp_checkbox(
         array(
             'id' => '_show_on_homepage',
@@ -196,12 +199,17 @@ function add_home_display_checkbox() {
 }
 
 add_action('woocommerce_process_product_meta', 'save_home_display_checkbox');
-function save_home_display_checkbox($post_id) {
+function save_home_display_checkbox($post_id)
+{
     $is_checked = isset($_POST['_show_on_homepage']) ? 'yes' : 'no';
     update_post_meta($post_id, '_show_on_homepage', $is_checked);
 }
+
+
 add_action('cancel_pending_order', 'handle_cancel_pending_order');
-function handle_cancel_pending_order($order_id) {
+
+function handle_cancel_pending_order($order_id)
+{
     $order = wc_get_order($order_id);
 
     if ($order && $order->get_status() === 'pending') {
@@ -210,15 +218,53 @@ function handle_cancel_pending_order($order_id) {
         // Ghi log trước khi hoàn lại kho
         error_log('Restocking items for order ID: ' . $order_id);
 
-        wc_increase_stock_levels($order_id);
-
-        // Kiểm tra sau khi gọi hàm hoàn lại kho
+        // Hoàn lại số lượng kho theo cách thủ công
         foreach ($order->get_items() as $item) {
             $product = $item->get_product();
-            if ($product) {
-                $stock_quantity = $product->get_stock_quantity();
-                error_log('Stock for product ID ' . $product->get_id() . ' is now: ' . $stock_quantity);
+            $quantity = $item->get_quantity();
+
+            if ($product && $product->managing_stock()) {
+                // Cập nhật số lượng tồn kho
+                $new_stock = $product->get_stock_quantity() + $quantity;
+                $product->set_stock_quantity($new_stock);
+                $product->save();
+
+                // Ghi log sau khi hoàn lại kho
+                error_log('Restocked product ID ' . $product->get_id() . ': New stock quantity is ' . $new_stock);
             }
         }
     }
 }
+
+function check_language_in_url($url)
+{
+    $path = parse_url($url, PHP_URL_PATH);
+    return preg_match('/\/(vi|en)\//', $path) ? true : false;
+}
+
+function custom_home_url_with_language($url)
+{
+    // Lấy ngôn ngữ hiện tại
+    $current_language = strtok(get_locale(), '_');
+
+    // Kiểm tra nếu đang sử dụng endpoint wp-json và không có ngôn ngữ trong URL
+    if (strpos($url, '/wp-json') == false) {
+        // Nếu ngôn ngữ là tiếng Anh, thêm '/en' trước '/wp-json'
+        if ($current_language === 'en') {
+            $parsed_url = parse_url($url);
+            if (!check_language_in_url($url)) {
+                if (isset($parsed_url['host']) && $parsed_url["host"] == "localhost") {
+                    // Thêm '/en/' sau domain nếu chưa có
+                    $url = str_replace('localhost/WEB-XPEED-BE/', 'localhost/WEB-XPEED-BE/' . $current_language . '/', $url);
+                } else if (isset($parsed_url['host']) && $parsed_url["host"] != "localhost") {
+
+                    $url = str_replace($parsed_url["host"], $parsed_url["host"] . $current_language . '/', $url);
+                }
+            }
+        }
+    }
+    return $url;
+}
+
+// Áp dụng filter home_url
+add_filter('home_url', 'custom_home_url_with_language');

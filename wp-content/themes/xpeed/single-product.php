@@ -11,11 +11,8 @@ use app\Controllers\CartController;
 get_header();
 $productController = new ProductController();
 $product = $productController->getProductInfo();
-
 ?>
-    <script>
-        var productData = <?= json_encode($product, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-    </script>
+
 <?php if (!empty($product) && is_array($product)) { ?>
 
 
@@ -83,12 +80,13 @@ $product = $productController->getProductInfo();
                                     <label class="product-detail__size-label"> <?= $key ?? '' ?></label>
                                     <div class="product-detail__size-options" data-attribute-key="<?= $key ?>">
                                         <?php foreach ($attribute["value"] as $item) { ?>
+
                                             <input type="radio" name="<?= $key ?>"
-                                                   id="<?= $key ?>-<?= strtolower($item) ?>"
-                                                   value="<?= strtolower($item) ?>"
+                                                   id="<?= $key ?>-<?= strtolower($item['slug']) ?>"
+                                                   value="<?= strtolower($item['slug']) ?>"
                                                    class="product-detail__size-option"/>
-                                            <label for="<?= $key ?>-<?= strtolower($item) ?>" class="product-detail__size-label-option" >
-                                                <?= strtoupper($item) ?>
+                                            <label for="<?= $key ?>-<?= strtolower($item['slug']) ?>" class="product-detail__size-label-option" >
+                                                <?= strtoupper($item['name']) ?>
                                             </label>
                                         <?php } ?>
                                     </div>
@@ -161,7 +159,9 @@ $product = $productController->getProductInfo();
             </div>
         <?php } ?>
     </main>
+
     <script>
+        var productData = <?= json_encode($product, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
         const product = <?= json_encode($product["attributes"], JSON_HEX_TAG) ?>;
     </script>
 
