@@ -53,7 +53,7 @@ define('NONCE_SALT',       'put your unique phrase here');
 
 /**#@-*/
 define('WP_DEBUG_LOG', true);
-define('WP_DEBUG_DISPLAY', true);
+define('WP_DEBUG_DISPLAY', false);
 /**
  * WordPress database table prefix.
  *

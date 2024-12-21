@@ -232,175 +232,141 @@ private function getProductCategories()
             }
             $product_type = $wc_product->get_type();
 
-            // Debug product type and product data
+            // Check product type
             if (!in_array($product_type, ['variable'])) {
                 return 'Sản phẩm không phải loại variable! ';
             }
 
+            // Retrieve product categories
+            $categories = [];
+            foreach ($wc_product->get_category_ids() as $category_id) {
+                $category = get_term($category_id, 'product_cat');
+                if (!is_wp_error($category) && !empty($category)) {
+                    $categories[] = [
+                        'id' => $category->term_id,
+                        'name' => $category->name,
+                        'slug' => $category->slug,
+                        'link' => get_term_link($category),
+                    ];
+                }
+            }
 
-            if ($wc_product) {
-                // Retrieve product categories
-                $category_ids = $wc_product->get_category_ids();
-                $categories = [];
+            // Get gallery and main image
+            $gallery_images = array_map('wp_get_attachment_url', $wc_product->get_gallery_image_ids());
+            $main_image = $wc_product->get_image_id() ? wp_get_attachment_url($wc_product->get_image_id()) : ($gallery_images[0] ?? '');
 
-                foreach ($category_ids as $category_id) {
-                    $category = get_term($category_id, 'product_cat');
-                    if (!is_wp_error($category) && !empty($category)) {
-                        $categories[] = [
-                            'id' => $category->term_id,
-                            'name' => $category->name,
-                            'slug' => $category->slug,
-                            'link' => get_term_link($category)
+            // Retrieve attributes with custom order
+            $attributes = [];
+            $variations = [];
+
+            foreach ($wc_product->get_attributes() as $key => $attribute) {
+                $attribute_name = wc_attribute_label($key);
+                $is_taxonomy = $attribute->is_taxonomy();
+                $term_ids = $attribute->get_options();
+                $term_names = [];
+
+                if ($is_taxonomy) {
+                    // Get terms with custom order
+                    $terms = get_terms([
+                        'taxonomy'   => $key,
+                        'include'    => $term_ids,
+                        'orderby'    => 'term_order', // Order by custom order
+                        'hide_empty' => false,
+                    ]);
+
+                    foreach ($terms as $term) {
+                        $term_names[] = [
+                            'name' => $term->name,
+                            'slug' => $term->slug,
+                        ];
+                    }
+                } else {
+                    // For non-taxonomy attributes, use raw options
+                    foreach ($term_ids as $value) {
+                        $term_names[] = [
+                            'name' => $value,
+                            'slug' => sanitize_title($value),
                         ];
                     }
                 }
 
-                // Get gallery and main image
-                $gallery_images = array_map('wp_get_attachment_url', $wc_product->get_gallery_image_ids());
+                $attributes[$attribute_name] = ['value' => $term_names];
 
-                $main_image = $wc_product->get_image_id() ? wp_get_attachment_url($wc_product->get_image_id()) : ($gallery_images[0] ?? '');
-
-                // Retrieve images from attributes (variations)
-                if ($wc_product->is_type('variable')) {
-                    $variations = $wc_product->get_children();
-                    foreach ($variations as $variation_id) {
-                        $variation_product = wc_get_product($variation_id);
-                        if ($variation_product && $variation_product->get_image_id()) {
-                            $variation_image = wp_get_attachment_url($variation_product->get_image_id());
-                            if ($variation_image && !in_array($variation_image, $gallery_images)) {
-                                $gallery_images[] = $variation_image;
-                            }
-                        }
-                    }
+                if ($is_taxonomy) {
+                    $attribute_values = $wc_product->get_available_variations();
+                    $variations = $attribute_values;
+                } else {
+                    $variations = $attribute->get_options();
                 }
+            }
 
-                // Retrieve Upsell Products
-                $upsell_ids = $wc_product->get_upsell_ids();
-                $upsell_products = [];
+            if (empty($attributes)) {
+                return 'Sản phẩm không có biến thể!';
+            }
 
-                if (!empty($upsell_ids)) {
-                    foreach ($upsell_ids as $upsell_id) {
-                        $upsell_product = wc_get_product($upsell_id);
-
-                        if ($upsell_product) {
-                            // Get upsell product categories
-                            $upsell_category_ids = $upsell_product->get_category_ids();
-                            $upsell_categories = [];
-
-                            foreach ($upsell_category_ids as $upsell_category_id) {
-                                $upsell_category = get_term($upsell_category_id, 'product_cat');
-                                if (!is_wp_error($upsell_category) && !empty($upsell_category)) {
-                                    $upsell_categories[] = [
-                                        'id' => $upsell_category->term_id,
-                                        'name' => $upsell_category->name,
-                                        'slug' => $upsell_category->slug,
-                                        'link' => get_term_link($upsell_category)
-                                    ];
-                                }
-                            }
-
-                            $upsell_products[] = [
-                                'id' => $upsell_product->get_id(),
-                                'name' => $upsell_product->get_name(),
-                                'price' => $upsell_product->get_price(),
-                                'image_url' => wp_get_attachment_url($upsell_product->get_image_id()),
-                                'link' => get_permalink($upsell_product->get_id()),
-                                'categories' => $upsell_categories,
-                            ];
-                        }
-                    }
-                }
-
-                // Retrieve product attributes
-                $attributes = [];
-                $variations = [];
-
-                foreach ($wc_product->get_attributes() as $attribute) {
-                    // Lấy tên thuộc tính
-                    $name = wc_attribute_label($attribute->get_name());
-                    // Lấy các term IDs của thuộc tính
-                    $term_ids = $attribute->get_options();
-
-                    // Mảng chứa tên của các term
-                    $term_names = [];
-
-                    // Lặp qua các term IDs để lấy tên của các term
-                    foreach ($term_ids as $term_id) {
-                        // Lấy đối tượng term từ ID
-                        $term = get_term($term_id);
-
-                        // Nếu term tồn tại và không bị lỗi, thêm tên term vào mảng
-                        if ($term && !is_wp_error($term)) {
-                            $term_names[] = [
-                                'name' => $term->name,
-                                'slug' => $term->slug
-                            ];
-                        }
-                    }
-
-                    $attributes[$name] = ['value' => $term_names];
-
-
-                    if ($attribute->is_taxonomy()) {
-
-                        $attribute_values = $wc_product->get_available_variations();
-                        $variations = $attribute_values;
-                    } else {
-                        $variations = $attribute->get_options();
-                    }
-                }
-                if (empty($attributes)) {
-                    return 'Sản phẩm không có biến thể!';
-                }
-                // Retrieve product meta data
-                $meta_data = [];
-                foreach ($wc_product->get_meta_data() as $meta) {
-                    $meta_data[] = [
-                        'key' => $meta->key,
-                        'value' => $meta->value,
-                    ];
-                }
-
-
-//                return $this->success(data:[
-//                    'id' => $wc_product->get_id(),
-//                    'name' => $wc_product->get_name(),
-//                    'price' => $wc_product->get_price(),
-////                    'short_description' => $wc_product->get_short_description(),
-////                    'full_description' => $wc_product->get_description(),
-//                    'short_description' => '',
-//                    'full_description' => '',
-//                    'main_image' => $main_image,
-//                    'gallery_images' => $gallery_images,
-//                    'stock_quantity' => $wc_product->get_stock_quantity(),
-//                    'attributes' => $attributes,
-//                    'variations' => $variations,
-//                    'productType' => !empty($attributes) ? 'variable' : 'simple',
-//                    'meta_data' => $meta_data,
-//                    'categories' => $categories,
-//                    'upsell_products' => $upsell_products,
-//                ]);
-                return [
-                    'id' => $wc_product->get_id(),
-                    'name' => $wc_product->get_name(),
-                    'price' => $wc_product->get_price(),
-                    'short_description' => $wc_product->get_short_description(),
-                    'full_description' => $wc_product->get_description(),
-                    'main_image' => $main_image,
-                    'gallery_images' => $gallery_images,
-                    'stock_quantity' => $wc_product->get_stock_quantity(),
-                    'attributes' => $attributes,
-                    'variations' => $variations,
-                    'productType' => !empty($attributes) ? 'variable' : 'simple',
-                    'meta_data' => $meta_data,
-                    'categories' => $categories,
-                    'upsell_products' => $upsell_products,
+            // Retrieve product meta data
+            $meta_data = [];
+            foreach ($wc_product->get_meta_data() as $meta) {
+                $meta_data[] = [
+                    'key' => $meta->key,
+                    'value' => $meta->value,
                 ];
             }
+
+            // Retrieve upsell products
+            $upsell_ids = $wc_product->get_upsell_ids();
+            $upsell_products = [];
+
+            foreach ($upsell_ids as $upsell_id) {
+                $upsell_product = wc_get_product($upsell_id);
+                if ($upsell_product) {
+                    $upsell_category_ids = $upsell_product->get_category_ids();
+                    $upsell_categories = [];
+
+                    foreach ($upsell_category_ids as $upsell_category_id) {
+                        $upsell_category = get_term($upsell_category_id, 'product_cat');
+                        if (!is_wp_error($upsell_category) && !empty($upsell_category)) {
+                            $upsell_categories[] = [
+                                'id' => $upsell_category->term_id,
+                                'name' => $upsell_category->name,
+                                'slug' => $upsell_category->slug,
+                                'link' => get_term_link($upsell_category),
+                            ];
+                        }
+                    }
+
+                    $upsell_products[] = [
+                        'id' => $upsell_product->get_id(),
+                        'name' => $upsell_product->get_name(),
+                        'price' => $upsell_product->get_price(),
+                        'image_url' => wp_get_attachment_url($upsell_product->get_image_id()),
+                        'link' => get_permalink($upsell_product->get_id()),
+                        'categories' => $upsell_categories,
+                    ];
+                }
+            }
+
+            return [
+                'id' => $wc_product->get_id(),
+                'name' => $wc_product->get_name(),
+                'price' => $wc_product->get_price(),
+                'short_description' => $wc_product->get_short_description(),
+                'full_description' => $wc_product->get_description(),
+                'main_image' => $main_image,
+                'gallery_images' => $gallery_images,
+                'stock_quantity' => $wc_product->get_stock_quantity(),
+                'attributes' => $attributes,
+                'variations' => $variations,
+                'productType' => !empty($attributes) ? 'variable' : 'simple',
+                'meta_data' => $meta_data,
+                'categories' => $categories,
+                'upsell_products' => $upsell_products,
+            ];
         }
 
-        return 'Sản phẩm không hợp lệ!3';
+        return 'Sản phẩm không hợp lệ!';
     }
+
 
     public function getCategorySlugUrl()
     {
@@ -423,14 +389,10 @@ private function getProductCategories()
 
         $mainCategoryID = $mainCategory->term_id;
 
-        // Lấy giá trị lọc giá
-        $minPrice = !empty($urlData['minPrice']) ? (float)$urlData['minPrice'] : 0;
-        $maxPrice = !empty($urlData['maxPrice']) ? (float)$urlData['maxPrice'] : PHP_INT_MAX;
-
         // Xử lý các tham số bổ sung (các attributes)
         $processedParams = array_map(
             fn($value) => explode(',', $value),
-            array_diff_key($urlData, array_flip(['page', 'minPrice', 'maxPrice', 'lang']))
+            array_diff_key($urlData, array_flip(['page', 'lang']))
         );
 
         // Lấy ngôn ngữ từ URL hoặc WPML/Polylang
@@ -457,17 +419,6 @@ private function getProductCategories()
             }
         }
 
-        // Xây dựng meta_query để lọc giá
-        $metaQuery = [
-            'relation' => 'AND',
-            [
-                'key'     => '_price',
-                'value'   => [$minPrice, $maxPrice],
-                'type'    => 'NUMERIC',
-                'compare' => 'BETWEEN',
-            ],
-        ];
-
         // Lấy trang hiện tại
         $paged = !empty($urlData['page']) ? (int)$urlData['page'] : 1;
 
@@ -477,11 +428,9 @@ private function getProductCategories()
         // Xây dựng WP_Query
         $args = [
             'post_type'      => 'product',
-            'posts_per_page' => 20,
-            'paged'          => $paged,
+            'posts_per_page' => -1, // Lấy tất cả sản phẩm
             'post_status'    => 'publish',
             'tax_query'      => $taxQuery,
-            'meta_query'     => $metaQuery,
         ];
 
         // Thêm ngôn ngữ nếu có
@@ -503,7 +452,6 @@ private function getProductCategories()
                 $query->the_post();
 
                 $product = wc_get_product(get_the_ID());
-
                 if (!$product) {
                     continue;
                 }
@@ -512,20 +460,22 @@ private function getProductCategories()
                 $title = get_the_title();
                 $url = get_permalink();
                 $image = get_the_post_thumbnail_url($product->get_id(), 'full');
-                $price = (float)$product->get_regular_price();
-                $sale_price = $product->get_sale_price();
-                $categories = get_the_terms($product->get_id(), 'product_cat');
-                $tags = get_the_terms($product->get_id(), 'product_tag');
 
-                // Kiểm tra giá và sale_price có tồn tại không
-                if (empty($price) && !empty($product->price)) {
-                    $price = (float)$product->price;
+                // Lấy giá sản phẩm
+                $regular_price = $product->get_regular_price();
+                $sale_price = $product->get_sale_price();
+                $price = $product->get_price();
+
+                if (empty($price)) {
+                    $price = (float)$regular_price;
                 }
 
-                // Nếu có sale_price thì lấy sale_price thay vì price
                 if (!empty($sale_price)) {
                     $price = (float)$sale_price;
                 }
+
+                $categories = get_the_terms($product->get_id(), 'product_cat');
+                $tags = get_the_terms($product->get_id(), 'product_tag');
 
                 $formattedProducts[] = [
                     'ID'              => $product->get_id(),
@@ -541,16 +491,18 @@ private function getProductCategories()
             wp_reset_postdata();
         }
 
-        // Trả về dữ liệu sản phẩm và thông tin phân trang
+        // Sắp xếp danh sách sản phẩm theo first_tag
+        usort($formattedProducts, function ($a, $b) {
+            return strcmp($a['first_tag'] ?? '', $b['first_tag'] ?? '');
+        });
+
+        // Trả về dữ liệu sản phẩm
         return [
             'products' => $formattedProducts,
-            'pagination' => [
-                'total'    => $query->max_num_pages,
-                'current'  => $paged,
-                'per_page' => 20,
-            ],
         ];
     }
+
+
 
 
     public function getProductByCategoryApi(WP_REST_Request $request)
@@ -624,11 +576,9 @@ private function getProductCategories()
         // Xây dựng WP_Query
         $args = [
             'post_type'      => 'product',
-            'posts_per_page' => 20, // Số sản phẩm trên mỗi trang
-            'paged'          => $paged,
-            'post_status'    => 'publish', // Chỉ lấy sản phẩm được xuất bản
+            'posts_per_page' => -1, // Lấy tất cả sản phẩm
+            'post_status'    => 'publish',
             'tax_query'      => $taxQuery,
-            'meta_query'     => $metaQuery,
         ];
 
         // Nếu có ID của sản phẩm cha, chỉ lấy sản phẩm con của nó

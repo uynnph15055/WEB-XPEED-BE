@@ -238,7 +238,11 @@ function handle_cancel_pending_order($order_id)
 
 function check_language_in_url($url)
 {
-    $path = parse_url($url, PHP_URL_PATH);
+    if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+        return false; // URL không hợp lệ
+    }
+
+    $path = parse_url($url, PHP_URL_PATH) ?? '';
     return preg_match('/\/(vi|en)\//', $path) ? true : false;
 }
 
@@ -258,7 +262,7 @@ function custom_home_url_with_language($url)
                     $url = str_replace('localhost/WEB-XPEED-BE/', 'localhost/WEB-XPEED-BE/' . $current_language . '/', $url);
                 } else if (isset($parsed_url['host']) && $parsed_url["host"] != "localhost") {
 
-                    $url = str_replace($parsed_url["host"], $parsed_url["host"] . $current_language . '/', $url);
+                    $url = str_replace($parsed_url["host"], $parsed_url["host"] . '/'. $current_language , $url);
                 }
             }
         }

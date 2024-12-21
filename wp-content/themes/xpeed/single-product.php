@@ -77,6 +77,7 @@ $product = $productController->getProductInfo();
                         <?php if (!empty($product["attributes"])) { ?>
                             <div class="product-detail__size" data-product-id="<?= $product["id"] ?? 0 ?>">
                                 <?php foreach ($product["attributes"] as $key => $attribute) { ?>
+                                    <?= dd($key ,$product["attributes"]); ?>
                                     <label class="product-detail__size-label"> <?= $key ?? '' ?></label>
                                     <div class="product-detail__size-options" data-attribute-key="<?= $key ?>">
                                         <?php foreach ($attribute["value"] as $item) { ?>

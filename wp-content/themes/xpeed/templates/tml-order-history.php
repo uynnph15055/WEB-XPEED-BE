@@ -10,7 +10,7 @@ use app\Controllers\OrderController;
 check_user_login_and_redirect();
 $orderController = new OrderController();
 $orders = $orderController->getAllOrdersForCurrentUser();
-
+$current_lang = pll_current_language();
 get_header();
 ?>
     <div class="content__page">
@@ -56,7 +56,7 @@ get_header();
                                     </span>
                                             </div>
                                             <div class="invoice__detail-cell"
-                                                 onclick="window.location.href='<?= home_url('/chi-tiet-don-hang') . '?orderId=' . $order['order_id'] ?>'">
+                                                 onclick="window.location.href='<?= home_url($current_lang == 'vi' ? '/chi-tiet-don-hang' : '/en/order-detail') . '?orderId=' . $order['order_id'] ?>'">
                                                 <button aria-label="<?= home_url() ?>"class="invoice__detail-button">
                                                     <ion-icon
                                                             name="wallet-outline"
