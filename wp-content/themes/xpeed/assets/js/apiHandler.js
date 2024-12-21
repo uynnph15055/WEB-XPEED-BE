@@ -1,10 +1,10 @@
 import userLoading from './loading.js';
-import { BASE_URL } from './variable.js';
+import {BASE_URL} from './variable.js';
 
 class APIHandler {
     static post(url, data, isLoading = true) {
-       userLoading.show(); // Hiển thị loading nếu isLoading là true
-       console.log('isLoading',isLoading)
+        userLoading.show(); // Hiển thị loading nếu isLoading là true
+        console.log('isLoading', isLoading)
         return $.ajax({
             url: this.buildUrl(url),
             method: 'POST',

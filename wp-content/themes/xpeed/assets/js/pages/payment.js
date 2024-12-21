@@ -3,9 +3,6 @@ import locationsData from '../locations.js';
 
 $(document).ready(function() {
     const errorClass = 'input-error';
-    window.onbeforeunload = function() {
-        return 'Are you sure you want to navigate away from this page?';
-    };
 
     // Initialize event listeners
     $('.payment_actions--continue').on('click', handlePayment);

@@ -95,7 +95,7 @@ $product = $productController->getProductInfo();
                         <?php } ?>
                         <!--*****************************************-->
                         <div class="product-detail__quantity">
-                            <label class="product-detail__quantity-label">Số lượng</label>
+                            <label class="product-detail__quantity-label"><?= _e('Số lượng' , 'xpeed') ?></label>
                             <div class="product-detail__quantity-controls">
                                 <button aria-label="<?= home_url() ?>" class="product-detail__quantity-decrease">-
                                 </button>
@@ -110,12 +110,13 @@ $product = $productController->getProductInfo();
                             <button aria-label="<?= home_url() ?>" style="display: none;"
                                     class="button button--primary product-detail__buy-now"
                                     data-userID="<?= get_current_user_id() ?? 0 ?>">
-                                Mua ngay
+                               <?= _e('Mua ngay' , 'xpeed')?>
                             </button>
                             <button aria-label="<?= home_url() ?>"
                                     class="button button--cart product-detail__add-to-cart"
                                     data-userID="<?= get_current_user_id() ?? 0 ?>">
-                                Thêm vào giỏ hàng
+                                
+                                 <?= _e('Thêm vào giỏ hàng' , 'xpeed')?>
                             </button>
                         </div>
 
@@ -139,7 +140,7 @@ $product = $productController->getProductInfo();
 
                         <div class="shopify__product">
                             <a href="" class="shopify__product-image-wrapper">
-                                <span class="shopify__product-badge shopify__product-badge--new">MỚI</span>
+                                <span class="shopify__product-badge shopify__product-badge--new"><?= _e('MỚI' , 'xpeed')?></span>
                                 <img src="<?= $relatedProduct["image_url"] ?? '' ?>"
                                      alt="<?= $relatedProduct["name"] ?? '' ?>" class="shopify__product-image"/>
                             </a>

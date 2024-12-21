@@ -36,7 +36,7 @@ if (!empty($_GET)) {
     </script>
     <div class="header-overlay collection__header" style="max-height: 200px">
         <img class="header-overlay__img collection__header-img"
-             src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg" alt=""/>
+             src="https://xpeed-helmets.com/wp-content/uploads/2024/12/NEX-30.png" alt=""/>
         <h1 id="collection-title" class="header-overlay__heading collection__heading">
             <?= _e('Sản phẩm', 'xpeed') ?>
         </h1>

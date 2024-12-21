@@ -43,7 +43,7 @@ $(document).ready(function () {
             selectedProduct = productData.variations.find(product => {
 
                 return Object.keys(selectedAttributes).every(key => {
-                    console.log(selectedAttributes[key] ,'-----',product.attributes["attribute_" + key]);
+                    console.log(selectedAttributes[key], '-----', product.attributes["attribute_" + key]);
                     return selectedAttributes[key] === product.attributes["attribute_" + key];
                 });
             });
@@ -153,6 +153,8 @@ $(document).ready(function () {
         } else {
             const userId = parseInt($(this).data('userid'), 10);
             if (userId < 1) {
+                const currentUrl = window.location.href;
+                setCookie('redirect_after_login', currentUrl, 3600);
                 Swal.fire({
                     icon: "error",
                     title: "Vui đăng nhập trước khi mua!",
@@ -203,6 +205,11 @@ $(document).ready(function () {
                 });
         }
     });
+
+    function setCookie(name, value, seconds) {
+        const expires = new Date(Date.now() + seconds * 1000).toUTCString();
+        document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+    }
 
     $(".product-detail__buy-now").on("click", function () {
         if (Object.keys(selectedProduct).length === 0) {

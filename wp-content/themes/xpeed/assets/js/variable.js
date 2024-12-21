@@ -1,1 +1,1 @@
-export const BASE_URL = "http://localhost/WEB-XPEED-BE";
+export const BASE_URL = "https://xpeed-helmets.com";

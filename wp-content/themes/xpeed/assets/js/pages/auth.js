@@ -1,11 +1,13 @@
 // apiHandler.js
 import APIHandler from '../apiHandler.js';
 import Validator from '../validation.js';
+import {BASE_URL} from '../variable.js';
 
 // main.js
 $(document).ready(function () {
     const redirectAfterLogin = decodeURIComponent(getCookie('redirect_after_login'));
-    const redirectUrl = (redirectAfterLogin && redirectAfterLogin.trim() !== '') ? redirectAfterLogin : baseUrl;
+    console.log('redirectAfterLogin',redirectAfterLogin,BASE_URL)
+    const redirectUrl = (redirectAfterLogin && redirectAfterLogin.trim() !== '' && redirectAfterLogin != "null")  ? redirectAfterLogin : BASE_URL;
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);

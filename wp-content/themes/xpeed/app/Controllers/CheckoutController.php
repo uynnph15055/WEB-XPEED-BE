@@ -449,10 +449,10 @@ class CheckoutController extends BaseController
 
         // Kiểm tra kết quả thanh toán
 
-        if ($result && isset($result['orderId']) && isset($result['resultCode']) && $result['resultCode'] != '0') {
+        if ($result && isset($result['orderId']) && isset($result['resultCode']) && $result['resultCode'] == '0') {
             $transaction = $paymentController->getTransactionStatus($result["orderId"], $result["requestId"]);
 
-            if ($transaction["status"] == 'error') {
+            if ($transaction["status"] != 'error') {
 
                 $result = $this->handlePaymentSuccess($result['orderId'], $transaction);
                 $paymentsuccess = $result != false ? "true" : "false";

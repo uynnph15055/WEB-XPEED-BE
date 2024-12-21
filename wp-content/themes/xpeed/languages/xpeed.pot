@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xpeed\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-12 01:39+0000\n"
+"POT-Creation-Date: 2024-12-16 05:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -165,8 +165,20 @@ msgstr ""
 msgid "Lịch sử đơn hàng gần đây"
 msgstr ""
 
+#: single-product.php:113
+msgid "Mua ngay"
+msgstr ""
+
 #: templates/tml-order-detail.php:64
 msgid "Mã đơn hàng: #"
+msgstr ""
+
+#: single-product.php:143
+msgid "MỚI"
+msgstr ""
+
+#: single-product.php:65
+msgid "MỚI "
 msgstr ""
 
 #: templates/tml-order-detail.php:52
@@ -235,7 +247,8 @@ msgstr ""
 msgid "Sản phẩm đã hết hàng"
 msgstr ""
 
-#: templates/tml-cart.php:29 templates/tml-order-detail.php:127
+#: single-product.php:99 templates/tml-cart.php:29
+#: templates/tml-order-detail.php:127
 msgid "Số lượng"
 msgstr ""
 
@@ -253,6 +266,10 @@ msgstr ""
 
 #: templates/tml-payment.php:176
 msgid "Thành tiền"
+msgstr ""
+
+#: single-product.php:119
+msgid "Thêm vào giỏ hàng"
 msgstr ""
 
 #: templates/tml-profile.php:20
