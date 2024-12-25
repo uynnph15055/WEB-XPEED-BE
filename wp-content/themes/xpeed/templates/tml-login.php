@@ -5,6 +5,7 @@
  * Author: Phuongdd
  */
 get_header();
+$current_lang = pll_current_language();
 ?>
     <main class="auth-wrapper">
         <div class="auth-wrapper__container">
@@ -29,7 +30,7 @@ get_header();
                         <a class="auth-wrapper__link" href=""><?= _e('Quên mật khẩu', 'xpeed') ?></a>
                     </div>
                     <div class="auth-wrapper__link-item">
-                        <a class="auth-wrapper__link" href=""><?= _e('Đăng ký', 'xpeed') ?></a>
+                        <a class="auth-wrapper__link" href="<?= home_url($current_lang == 'vi' ? '/dang-ky/' : '/en/register') ?>"><?= _e('Đăng ký', 'xpeed') ?></a>
                     </div>
                 </div>
                 <div class="auth-wrapper__divider">
