@@ -144,39 +144,39 @@ class ProductController extends BaseController
         return $attribute_values;
     }
 
-private function getProductCategories()
-{
-    $terms = get_terms(array(
-        'taxonomy'   => 'product_cat',
-        'hide_empty' => false,
-        'parent'     => 0, 
-    ));
+    private function getProductCategories()
+    {
+        $terms = get_terms(array(
+            'taxonomy' => 'product_cat',
+            'hide_empty' => false,
+            'parent' => 0,
+        ));
 
-    if (is_wp_error($terms)) {
-        return [];
-    }
+        if (is_wp_error($terms)) {
+            return [];
+        }
 
-    // Lọc danh mục theo ngôn ngữ hiện tại
-    $current_language = pll_current_language(); // Lấy ngôn ngữ hiện tại
-    $filtered_terms   = [];
+        // Lọc danh mục theo ngôn ngữ hiện tại
+        $current_language = pll_current_language(); // Lấy ngôn ngữ hiện tại
+        $filtered_terms = [];
 
-    foreach ($terms as $term) {
-        // Lấy ID của danh mục theo ngôn ngữ hiện tại
-        $translated_term_id = pll_get_term($term->term_id, $current_language);
+        foreach ($terms as $term) {
+            // Lấy ID của danh mục theo ngôn ngữ hiện tại
+            $translated_term_id = pll_get_term($term->term_id, $current_language);
 
-        if ($translated_term_id) {
-            $translated_term = get_term($translated_term_id, 'product_cat');
-            if ($translated_term && !is_wp_error($translated_term)) {
-                // Thêm liên kết vào đối tượng term
-                $translated_term->link = get_term_link($translated_term);
+            if ($translated_term_id) {
+                $translated_term = get_term($translated_term_id, 'product_cat');
+                if ($translated_term && !is_wp_error($translated_term)) {
+                    // Thêm liên kết vào đối tượng term
+                    $translated_term->link = get_term_link($translated_term);
 
-                $filtered_terms[] = $translated_term;
+                    $filtered_terms[] = $translated_term;
+                }
             }
         }
-    }
 
-    return array_values($filtered_terms);
-}
+        return array_values($filtered_terms);
+    }
 
 
     public function getCategoryLink($category_id)
@@ -190,24 +190,55 @@ private function getProductCategories()
 
     public function getProductLimitItemPageHome($category_id = null)
     {
+        // Lấy slug của category từ ID
+        $category = get_term($category_id, 'product_cat');
+        if (!$category) {
+            return []; // Không tồn tại category
+        }
+
+        $categorySlug = $category->slug;
+
+        // Lấy ngôn ngữ hiện tại
+        $current_language = pll_current_language(); // Polylang
+        $current_language = $current_language ?: apply_filters('wpml_current_language', null); // WPML fallback
+
+        // Xây dựng tham số cho wc_get_products
         $args = array(
             'post_type' => 'product',
             'limit' => 10,
             'orderby' => 'date',
             'return' => 'objects',
-            'category' => get_term($category_id, 'product_cat')->slug,
-            // 'meta_query' => array(
-            //     array(
-            //         'key' => '_show_on_homepage',
-            //         'value' => '0', 
-            //         'compare' => '='
-            //     )
-            // )
+            'category' => $categorySlug,
+            'meta_query' => array(
+                array(
+                    'key' => '_language_code', // Meta key của Polylang cho ngôn ngữ
+                    'value' => $current_language,
+                    'compare' => '='
+                )
+            )
         );
 
+        // Lấy danh sách sản phẩm
         $products = wc_get_products($args);
+
+        // Sắp xếp sản phẩm theo first_tag (đảo ngược)
+        usort($products, function ($a, $b) {
+            // Lấy tag đầu tiên của sản phẩm A
+            $tagsA = get_the_terms($a->get_id(), 'product_tag');
+            $firstTagA = $tagsA ? $tagsA[0]->name : '';
+
+            // Lấy tag đầu tiên của sản phẩm B
+            $tagsB = get_the_terms($b->get_id(), 'product_tag');
+            $firstTagB = $tagsB ? $tagsB[0]->name : '';
+
+            // Đảo ngược thứ tự so sánh
+            return strcmp($firstTagB, $firstTagA);
+        });
+
         return $products;
     }
+
+
 
     public function getProductInfo()
     {
@@ -267,9 +298,9 @@ private function getProductCategories()
                 if ($is_taxonomy) {
                     // Get terms with custom order
                     $terms = get_terms([
-                        'taxonomy'   => $key,
-                        'include'    => $term_ids,
-                        'orderby'    => 'term_order', // Order by custom order
+                        'taxonomy' => $key,
+                        'include' => $term_ids,
+                        'orderby' => 'term_order', // Order by custom order
                         'hide_empty' => false,
                     ]);
 
@@ -291,7 +322,7 @@ private function getProductCategories()
 
                 $attributes[$attribute_name] = [
                     'value' => $term_names,
-                    'attribute_slug' => "attribute_". $key
+                    'attribute_slug' => "attribute_" . $key
                 ];
 
                 if ($is_taxonomy) {
@@ -405,8 +436,8 @@ private function getProductCategories()
             'relation' => 'AND',
             [
                 'taxonomy' => 'product_cat',
-                'field'    => 'term_id',
-                'terms'    => $mainCategoryID,
+                'field' => 'term_id',
+                'terms' => $mainCategoryID,
             ],
         ];
 
@@ -415,8 +446,8 @@ private function getProductCategories()
             if (!empty($filteredValues)) {
                 $taxQuery[] = [
                     'taxonomy' => 'pa_' . sanitize_title($attribute),
-                    'field'    => 'slug',
-                    'terms'    => $filteredValues,
+                    'field' => 'slug',
+                    'terms' => $filteredValues,
                 ];
             }
         }
@@ -429,10 +460,10 @@ private function getProductCategories()
 
         // Xây dựng WP_Query
         $args = [
-            'post_type'      => 'product',
+            'post_type' => 'product',
             'posts_per_page' => -1, // Lấy tất cả sản phẩm
-            'post_status'    => 'publish',
-            'tax_query'      => $taxQuery,
+            'post_status' => 'publish',
+            'tax_query' => $taxQuery,
         ];
 
         // Thêm ngôn ngữ nếu có
@@ -480,14 +511,14 @@ private function getProductCategories()
                 $tags = get_the_terms($product->get_id(), 'product_tag');
 
                 $formattedProducts[] = [
-                    'ID'              => $product->get_id(),
-                    'title'           => $title,
-                    'url'             => $url,
-                    'image'           => $image,
-                    'price'           => $price,
-                    'sale_price'      => $sale_price,
-                    'first_category'  => $categories ? $categories[0]->name : null,
-                    'first_tag'       => $tags ? $tags[0]->name : null,
+                    'ID' => $product->get_id(),
+                    'title' => $title,
+                    'url' => $url,
+                    'image' => $image,
+                    'price' => $price,
+                    'sale_price' => $sale_price,
+                    'first_category' => $categories ? $categories[0]->name : null,
+                    'first_tag' => $tags ? $tags[0]->name : null,
                 ];
             }
             wp_reset_postdata();
@@ -503,8 +534,6 @@ private function getProductCategories()
             'products' => $formattedProducts,
         ];
     }
-
-
 
 
     public function getProductByCategoryApi(WP_REST_Request $request)
@@ -542,8 +571,8 @@ private function getProductCategories()
             'relation' => 'AND',
             [
                 'taxonomy' => 'product_cat',
-                'field'    => 'term_id',
-                'terms'    => $mainCategoryID,
+                'field' => 'term_id',
+                'terms' => $mainCategoryID,
             ],
         ];
 
@@ -552,8 +581,8 @@ private function getProductCategories()
             if (!empty($filteredValues)) {
                 $taxQuery[] = [
                     'taxonomy' => 'pa_' . sanitize_title($attribute),
-                    'field'    => 'slug',
-                    'terms'    => $filteredValues,
+                    'field' => 'slug',
+                    'terms' => $filteredValues,
                 ];
             }
         }
@@ -562,9 +591,9 @@ private function getProductCategories()
         $metaQuery = [
             'relation' => 'AND',
             [
-                'key'     => '_price',
-                'value'   => [$minPrice, $maxPrice],
-                'type'    => 'NUMERIC',
+                'key' => '_price',
+                'value' => [$minPrice, $maxPrice],
+                'type' => 'NUMERIC',
                 'compare' => 'BETWEEN',
             ],
         ];
@@ -577,10 +606,10 @@ private function getProductCategories()
 
         // Xây dựng WP_Query
         $args = [
-            'post_type'      => 'product',
+            'post_type' => 'product',
             'posts_per_page' => -1, // Lấy tất cả sản phẩm
-            'post_status'    => 'publish',
-            'tax_query'      => $taxQuery,
+            'post_status' => 'publish',
+            'tax_query' => $taxQuery,
         ];
 
         // Nếu có ID của sản phẩm cha, chỉ lấy sản phẩm con của nó
@@ -622,14 +651,14 @@ private function getProductCategories()
                 }
 
                 $formattedProducts[] = [
-                    'ID'              => $product->get_id(),
-                    'title'           => $title,
-                    'url'             => $url,
-                    'image'           => $image,
-                    'price'           => $price,
-                    'sale_price'      => $sale_price,
-                    'first_category'  => $categories ? $categories[0]->name : null,
-                    'first_tag'       => $tags ? $tags[0]->name : null,
+                    'ID' => $product->get_id(),
+                    'title' => $title,
+                    'url' => $url,
+                    'image' => $image,
+                    'price' => $price,
+                    'sale_price' => $sale_price,
+                    'first_category' => $categories ? $categories[0]->name : null,
+                    'first_tag' => $tags ? $tags[0]->name : null,
                 ];
             }
             wp_reset_postdata();
@@ -637,10 +666,10 @@ private function getProductCategories()
 
         // Trả về dữ liệu sản phẩm và thông tin phân trang dưới dạng JSON
         return new WP_REST_Response([
-            'products'   => $formattedProducts,
+            'products' => $formattedProducts,
             'pagination' => [
-                'total'    => $query->max_num_pages,
-                'current'  => $paged,
+                'total' => $query->max_num_pages,
+                'current' => $paged,
                 'per_page' => 20,
             ],
         ], 200);

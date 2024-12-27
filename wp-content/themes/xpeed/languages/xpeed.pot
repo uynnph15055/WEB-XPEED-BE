@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xpeed\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-26 09:32+0000\n"
+"POT-Creation-Date: 2024-12-26 08:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -110,7 +110,7 @@ msgstr ""
 msgid "Giới thiệu"
 msgstr ""
 
-#: templates/tml-login.php:25 templates/tml-register.php:45
+#: templates/tml-login.php:24 templates/tml-register.php:45
 msgid "Gửi"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Hoá đơn chi tiết"
 msgstr ""
 
-#: templates/tml-login.php:39 templates/tml-register.php:50
+#: templates/tml-login.php:37 templates/tml-register.php:50
 msgid "HOẶC"
 msgstr ""
 
@@ -174,7 +174,7 @@ msgid ""
 "                                theo."
 msgstr ""
 
-#: templates/menuTab.php:7 templates/sidebar.php:22
+#: templates/menuTab.php:7 templates/sideBar.php:22 templates/sidebar.php:22
 msgid "Lịch sử mua hàng"
 msgstr ""
 
@@ -231,7 +231,6 @@ msgid "Nhập mật khẩu"
 msgstr ""
 
 #: templates/tml-register.php:17
-msgctxt "Enter username"
 msgid "Nhập tên người dùng"
 msgstr ""
 
@@ -272,7 +271,7 @@ msgid "Product List"
 msgstr ""
 
 #. Name of the template
-#: templates/sidebar.php:3 templates/tml-profile.php:3
+#: templates/sideBar.php:3 templates/tml-profile.php:3 templates/sidebar.php:3
 msgid "Profile"
 msgstr ""
 
@@ -280,7 +279,7 @@ msgstr ""
 msgid "Quay lại giỏ hàng"
 msgstr ""
 
-#: templates/tml-login.php:31
+#: templates/tml-login.php:30
 msgid "Quên mật khẩu"
 msgstr ""
 
@@ -347,7 +346,6 @@ msgid "Thành tiền"
 msgstr ""
 
 #: single-product.php:119
-msgctxt "Add to cart"
 msgid "Thêm vào giỏ hàng"
 msgstr ""
 
@@ -363,7 +361,7 @@ msgstr ""
 msgid "Thông tin đơn hàng:"
 msgstr ""
 
-#: templates/sidebar.php:40
+#: templates/sideBar.php:40 templates/sidebar.php:40
 msgid "Thẻ hồ sơ"
 msgstr ""
 
@@ -388,7 +386,6 @@ msgid "Tài khoản của tôi"
 msgstr ""
 
 #: templates/tml-profile.php:33
-msgctxt "Search by order number or product name"
 msgid "Tìm kiếm theo số đơn hàng hoặc tên sản phẩm "
 msgstr ""
 
@@ -434,7 +431,7 @@ msgstr ""
 msgid "Điện thoại"
 msgstr ""
 
-#: templates/tml-login.php:35 templates/tml-register.php:11
+#: templates/tml-login.php:33 templates/tml-register.php:11
 msgid "Đăng ký"
 msgstr ""
 
@@ -442,7 +439,7 @@ msgstr ""
 msgid "Đăng nhập"
 msgstr ""
 
-#: templates/sidebar.php:65
+#: templates/sideBar.php:65 templates/sidebar.php:65
 msgid "Đăng xuất"
 msgstr ""
 
