@@ -45,7 +45,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _api
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   BASE_URL: () => (/* binding */ BASE_URL)\n/* harmony export */ });\nvar BASE_URL = \"http://localhost/WEB-XPEED-BE\";\n\n//# sourceURL=webpack://xpeed/./assets/js/variable.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   BASE_URL: () => (/* binding */ BASE_URL)\n/* harmony export */ });\nvar BASE_URL = \"https://xpeed-helmets.com\";\n\n//# sourceURL=webpack://xpeed/./assets/js/variable.js?");
 
 /***/ })
 
