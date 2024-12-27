@@ -31,7 +31,7 @@ $(document).ready(function () {
         // Kiểm tra nếu Min Price lớn hơn Max Price
         if (minPrice > maxPrice) {
             // Hiển thị cảnh báo
-            alert('Min Price không được lớn hơn Max Price. Đặt lại giá trị về 0.');
+            alert(translate('Min Price không được lớn hơn Max Price. Đặt lại giá trị về 0.', 'Min Price cannot be greater than Max Price. Reset value to 0.'));
 
             // Đặt lại giá trị về 0
             $('input[name="filter.v.price.gte"]').val(0);

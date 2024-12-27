@@ -52,7 +52,7 @@ $(document).ready(function () {
         } else {
             Swal.fire({
                 icon: "error",
-                title: "Không thể thêm quá số lượng tồn kho.",
+                title:  translate("Không thể thêm quá số lượng tồn kho.", "Cannot add more than the stock quantity."),
                 showConfirmButton: false,
                 timer: 1500
             });
@@ -74,7 +74,7 @@ $(document).ready(function () {
             calculateTotalCart();
             Swal.fire({
                 icon: "error",
-                title: "Số lượng không được vượt quá tồn kho.",
+                title: translate("Số lượng không được vượt quá tồn kho.", "Quantity must not exceed inventory."),
                 showConfirmButton: false,
                 timer: 1500
             });
@@ -103,7 +103,7 @@ $(document).ready(function () {
                     isPayment = true;
                     Swal.fire({
                         icon: "success",
-                        title: "Giỏ hàng đã được cập nhật!",
+                        title: translate("Giỏ hàng đã được cập nhật!", "Cart has been updated!"),
                         showConfirmButton: false,
                         timer: 1500
                     });
@@ -112,7 +112,7 @@ $(document).ready(function () {
 
                     Swal.fire({
                         icon: "error",
-                        title: err.responseJSON.message ?? "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.",
+                        title: err.responseJSON.message ?? translate("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.", "The product could not be added to the cart. Please try again later."),
                         showConfirmButton: false,
                         timer: 3000,
                     });
@@ -140,7 +140,7 @@ $(document).ready(function () {
             .fail(function () {
                 Swal.fire({
                     icon: "error",
-                    title: "Xóa sản phẩm không thành công. Vui lòng thử lại.",
+                    title: translate("Xóa sản phẩm không thành công. Vui lòng thử lại.", "Product deletion failed. Please try again."),
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -154,7 +154,7 @@ $(document).ready(function () {
         if (!isPayment) {
             Swal.fire({
                 icon: "error",
-                title: "Cập nhật giỏ hàng trước khi thanh toán.",
+                title:  translate("Cập nhật giỏ hàng trước khi thanh toán.", "Update cart before checkout."),
                 showConfirmButton: false,
                 timer: 3000,
             });
@@ -168,7 +168,7 @@ $(document).ready(function () {
                 .fail(function (error) {
                     Swal.fire({
                         icon: "error",
-                        title: error.responseJSON.message ?? "Thanh toán thất bại. Vui lòng thử lại.",
+                        title: error.responseJSON.message ?? translate("Thanh toán thất bại. Vui lòng thử lại.", "Payment failed. Please try again."),
                         showConfirmButton: false,
                         timer: 1500
                     }).then(()=>{
