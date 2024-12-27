@@ -41,12 +41,12 @@ get_header();
                     <div class="payment_address">
                         <h3 class="payment_address--title"> <?= _e('Địa chỉ giao hàng' , 'xpeed') ?></h3>
 
-                        <input type="text" class="payment_form--input" name="name" placeholder="Tên"/>
+                        <input type="text" class="payment_form--input" name="name" placeholder="<?= _e('Tên ' , 'xpeed') ?>"/>
 
                         <input
                                 type="text"
                                 class="payment_form--input" name="zipCode"
-                                placeholder="Mã zip"
+                                placeholder=" <?= _e('Mã zip ' , 'xpeed') ?>"
                         />
 
                         <div class="payment_form--group">
@@ -93,9 +93,7 @@ get_header();
                             <label
                                     for="addressCheckbox"
                                     class="payment_address--checkbox-label"
-                            ><?= _e('Lưu thông tin vận chuyển của bạn cho đơn hàng tiếp
-                                theo.' , 'xpeed') ?></label
-                            >
+                            ><?= _e('Lưu thông tin vận chuyển của bạn cho đơn hàng tiếp theo.' , 'xpeed') ?></label>
                         </div>
                     </div>
 
@@ -189,7 +187,7 @@ get_header();
                 </div>
                 <div class="payment_cart--summary-item payment_cart--summary-total">
                     <div class="payment_cart--summary-total-details">
-                        <span class="payment_cart--summary-total-label">Tổng tiền</span>
+                        <span class="payment_cart--summary-total-label"><?= _e('Tổng tiền' , 'xpeed') ?></span>
                         <!--                        <span class="payment_cart--summary-total-tax"-->
                         <!--                        >Đã bao gồm thuế -->
                         <? //= number_format((float)$totalCarts) ?? '' ?><!-- đ</span-->

@@ -36,8 +36,7 @@ $product = $productController->getProductInfo();
                             />
                         </div>
                         <?php
-                        // dd($product["gallery_images"]);
-                        foreach (array_slice($product["gallery_images"], 0, -1) as $key => $galleryImage) { ?>
+                        foreach ($product["gallery_images"] as $key => $galleryImage) { ?>
                             <div class="thumbnail-item__wrapper">
                                 <img
                                         src="<?= $galleryImage ?>"
