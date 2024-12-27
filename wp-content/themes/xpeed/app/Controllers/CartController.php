@@ -136,7 +136,9 @@ class CartController extends BaseController
             }
 
             // Tạo chuỗi để kiểm tra kết hợp product_id và attributes
-            $attribute_key = $product_id . '-' . json_encode($variation);
+            $variation = json_encode(array_column(array_map(fn($pair) => explode(':', $pair), explode(',', $variation)), 1, 0));
+
+            $attribute_key = $product_id . '-' . $variation;
 
             // Tạo mảng sản phẩm để cập nhật vào giỏ hàng
             $cart_item = [
@@ -144,6 +146,7 @@ class CartController extends BaseController
                 'quantity' => $quantity,
                 'attributes' => $variation
             ];
+
             $product = wc_get_product($product_id);
             if (!$product) {
                 continue;  // Bỏ qua nếu không tìm thấy sản phẩm
@@ -169,26 +172,28 @@ class CartController extends BaseController
     private function updateCartItem(&$cart, $attribute_key, $cart_item)
     {
         // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng
+
         if (isset($cart[$attribute_key])) {
             $cart[$attribute_key]['quantity'] = $cart_item['quantity'];
         } else {
             // Nếu chưa có, thêm mới
             $cart[$attribute_key] = $cart_item;
         }
+
     }
 
     function getCartHandler() {
-
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $cart_items = [];
         $data = (isset($_SESSION['cart']) ? $_SESSION['cart'] : [])
             + (isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : []);
-
 
         // Kiểm tra nếu giỏ hàng trống
         if (empty($data)) {
             return [];
         }
-
 
         foreach ($data as $key => $item) {
             // Lấy product_id và variation_key
@@ -248,7 +253,13 @@ class CartController extends BaseController
             }
         }
 
-        //return $this->success(data:$cart_items);
+        $current_language = pll_current_language();
+
+        // Kiểm tra nếu có ngôn ngữ và lưu vào session
+        if ($current_language) {
+            $_SESSION['current_language'] = $current_language;
+        }
+
         return $cart_items;
     }
 

@@ -1,4 +1,5 @@
 <?php
+define( 'WP_DISABLE_FATAL_ERROR_HANDLER', true );
 /** Enable W3 Total Cache */
 define('WP_CACHE', true); // Added by W3 Total Cache
 
@@ -21,16 +22,16 @@ define('WP_CACHE', true); // Added by W3 Total Cache
  * @package WordPress
  */
 
-define('DB_NAME', 'educa_crm_staging');
+define('DB_NAME', 'xpeed');
 
 /** Database username */
-define('DB_USER', 'mysql_crm_edu');
+define('DB_USER', 'root');
 
 /** Database password */
-define('DB_PASSWORD', 'BKiS2jiL6H52BABg');
+define('DB_PASSWORD', '');
 
 /** Database hostname */
-define('DB_HOST', '192.168.1.248');
+define('DB_HOST', '127.0.0.1');
 /**#@+
  * Authentication unique keys and salts.
  *
@@ -53,7 +54,7 @@ define('NONCE_SALT',       'put your unique phrase here');
 
 /**#@-*/
 define('WP_DEBUG_LOG', true);
-define('WP_DEBUG_DISPLAY', false);
+define('WP_DEBUG_DISPLAY', true);
 /**
  * WordPress database table prefix.
  *

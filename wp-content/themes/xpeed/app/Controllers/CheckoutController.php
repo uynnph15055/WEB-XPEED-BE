@@ -152,7 +152,6 @@ class CheckoutController extends BaseController
     }
 
 
-
     public function moveCartToOrder($request, $type = 'json')
     {
         // Lấy dữ liệu từ session và cookie giỏ hàng
@@ -324,68 +323,114 @@ class CheckoutController extends BaseController
         }
     }
 
-
     public function handlePaymentSuccess($orderId, $transaction)
     {
-        // Lấy thông tin đơn hàng từ ID
-        $orderId = strtok($orderId, '_');
-        $order = wc_get_order($orderId);
-        if (!$order) {
-            return false; // Không tìm thấy đơn hàng
+        $currentDate = date('Y-m-d');
+        $log_file = 'payment-success-' . $currentDate . '.log';
+
+        $logger = wc_get_logger();
+        $context = ['source' => 'payment-handler'];
+        $logger->add('payment', '------------------------------------------------------------------', $log_file);
+
+        $result = [
+            'success' => false,
+            'message' => checkTranslate(
+                'Có lỗi xảy ra trong quá trình xử lý thanh toán.',
+                'An error occurred while processing the payment.'
+            ),
+        ];
+
+        $logger->add('payment', 'Thông tin giao dịch: ' . json_encode($transaction), $log_file);
+
+        try {
+            $orderId = strtok($orderId, '_');
+            $order = wc_get_order($orderId);
+
+            if (!$order) {
+                $result['message'] = checkTranslate(
+                    'Không tìm thấy đơn hàng.',
+                    'Order not found.'
+                );
+                $logger->add('payment', $result['message'] . ': ' . $orderId, $log_file);
+                return $result;
+            }
+
+            $logger->add('payment', 'Thông tin đơn hàng: ' . json_encode($order->get_data()), $log_file);
+
+            $currentUserId = get_post_field('post_author', $orderId);
+
+            if (!$currentUserId) {
+                $result['message'] = checkTranslate(
+                    'Không có người dùng đang đăng nhập.',
+                    'No logged-in user found.'
+                );
+                $logger->add('payment', $orderId . '-' . $result['message'], $log_file);
+                return $result;
+            }
+
+            $order->set_customer_id($currentUserId);
+
+            $shippingInfo = $_SESSION['shippingInfo'] ?? null;
+            if (!$shippingInfo) {
+                $result['message'] = checkTranslate(
+                    'Không có thông tin giao hàng.',
+                    'Shipping information is missing.'
+                );
+                $logger->add('payment', $orderId . '-' . $result['message'], $log_file);
+                return $result;
+            }
+
+            if ($order->get_status() !== 'pending') {
+                $result['message'] = checkTranslate(
+                    'Đơn hàng không phải thể thanh toán.',
+                    'Order is not payable.'
+                );
+                $logger->add('payment', $orderId . '-' . $result['message'], $log_file);
+                return $result;
+            }
+
+            $this->updateOrderAddresses($order, $shippingInfo);
+
+            $totalAmount = $order->get_subtotal();
+            $shippingFee = 50000;
+
+            $transactionAmount = (float)$transaction["data"]["amount"];
+            if ($transactionAmount < ($totalAmount + $shippingFee)) {
+                $result['message'] = checkTranslate(
+                    'Số tiền giao dịch không đủ.',
+                    'Transaction amount is insufficient.'
+                );
+                $logger->add('payment', $orderId . '-' . $result['message'], $log_file);
+                return $result;
+            }
+
+            $this->addShippingFee($order, $shippingFee);
+
+            $order->set_total($totalAmount + $shippingFee);
+            $order->set_payment_method('momo');
+            $order->set_payment_method_title('MoMo Payment');
+            $order->update_status('processing');
+
+            $order->save();
+
+            $logger->add('payment', 'Thông tin giao dịch thành công: ' . json_encode($transaction), $log_file);
+
+            return [
+                'success' => true,
+                'message' => checkTranslate(
+                    'Đơn hàng đã được xử lý thành công.',
+                    'Order has been successfully processed.'
+                ),
+            ];
+
+        } catch (Exception $e) {
+            $logger->add('payment', 'Lỗi khi xử lý đơn hàng: ' . $e->getMessage(), $log_file);
+            $logger->add('payment', 'Thông tin giao dịch: ' . json_encode($transaction), $log_file);
+            $logger->add('payment', 'Thông tin đơn hàng: ' . json_encode($order ?? null), $log_file);
+
+            return $result;
         }
-
-        // Kiểm tra người dùng đang đăng nhập
-        $currentUserId = get_current_user_id();
-
-        if ($currentUserId) {
-            $order->set_customer_id($currentUserId); // Gán ID người dùng hiện tại
-        } else {
-            return false; // Không có người dùng đang đăng nhập
-        }
-
-        // Lấy thông tin giao hàng từ session (hoặc từ nguồn khác nếu cần)
-        $shippingInfo = $_SESSION['shippingInfo'] ?? null;
-        if (!$shippingInfo) {
-            return false; // Không có thông tin giao hàng
-        }
-
-        // Kiểm tra trạng thái đơn hàng
-        if ($order->get_status() !== 'pending') {
-            return false; // Đơn hàng không phải 'pending'
-        }
-
-        // Cập nhật thông tin địa chỉ giao hàng và thanh toán
-        $this->updateOrderAddresses($order, $shippingInfo);
-
-        // Tính toán tổng tiền đơn hàng và phí vận chuyển
-        $totalAmount = $order->get_subtotal();
-        $shippingFee = 50000; // Phí vận chuyển cố định
-
-        // Kiểm tra số tiền giao dịch
-        $transactionAmount = (float)$transaction["data"]["amount"];
-        if ($transactionAmount < ($totalAmount + $shippingFee)) {
-            return false; // Số tiền giao dịch không đủ
-        }
-
-        // Thêm phí vận chuyển vào đơn hàng
-        $this->addShippingFee($order, $shippingFee);
-
-        // Cập nhật tổng tiền đơn hàng (tổng tiền sản phẩm + phí vận chuyển)
-        $order->set_total($totalAmount + $shippingFee);
-
-        // Cập nhật trạng thái và phương thức thanh toán
-        $order->set_payment_method('momo'); // Thay thế bằng phương thức thanh toán thực tế của bạn
-        $order->set_payment_method_title('MoMo Payment');
-        $order->update_status('processing'); // Hoặc 'completed' nếu đơn hàng đã hoàn tất ngay
-
-        // Lưu đơn hàng
-        $order->save();
-
-        return $order;
     }
-
-
-
 
     /**
      * Hàm thêm phí vận chuyển vào đơn hàng
@@ -469,6 +514,7 @@ class CheckoutController extends BaseController
     {
         $result = $_GET;
         $paymentController = new PaymentController();
+        $currentLocale = isset($_SESSION['current_language']) ? $_SESSION['current_language'] : 'vi';
         // Lưu log vào file log trong thư mục wp-content
         $logFile = WP_CONTENT_DIR . '/momo_ipn_log.txt'; // Đường dẫn đến file log
 
@@ -480,18 +526,18 @@ class CheckoutController extends BaseController
 
             if ($transaction["status"] != 'error') {
                 $result = $this->handlePaymentSuccess($result['orderId'], $transaction);
+
                 $paymentsuccess = $result != false ? "true" : "false";
             } else {
                 $paymentsuccess = false;
             }
 
             // Chuyển hướng tới URL redirectUrl
-
-            header('Location: ' . home_url('/') . '?paymentsuccess=' . $paymentsuccess);
+            header('Location: ' . home_url($currentLocale == 'vi' ? '/' : '/en/home') . '?paymentsuccess=' . $paymentsuccess);
             exit;
         } else {
 
-            header('Location: ' . home_url('cart'));
+            header('Location: ' . home_url($currentLocale == 'vi' ? '/gio-hang/' : '/en/cart'));
         }
     }
 }

@@ -190,52 +190,56 @@ class ProductController extends BaseController
 
     public function getProductLimitItemPageHome($category_id = null)
     {
-        // Lấy slug của category từ ID
+
+        // Lấy thông tin danh mục từ ID
         $category = get_term($category_id, 'product_cat');
         if (!$category) {
             return []; // Không tồn tại category
         }
 
-        $categorySlug = $category->slug;
-
-        // Lấy ngôn ngữ hiện tại
-        $current_language = pll_current_language(); // Polylang
-        $current_language = $current_language ?: apply_filters('wpml_current_language', null); // WPML fallback
-
-        // Xây dựng tham số cho wc_get_products
+        // Lấy danh sách sản phẩm trong danh mục
         $args = array(
             'post_type' => 'product',
-            'limit' => 10,
-            'orderby' => 'date',
-            'return' => 'objects',
-            'category' => $categorySlug,
-            'meta_query' => array(
+            'posts_per_page' => -1, // Lấy tất cả sản phẩm
+            'tax_query' => array(
                 array(
-                    'key' => '_language_code', // Meta key của Polylang cho ngôn ngữ
-                    'value' => $current_language,
-                    'compare' => '='
-                )
-            )
+                    'taxonomy' => 'product_cat',
+                    'field' => 'slug',
+                    'terms' => $category->slug,
+                ),
+            ),
+            'lang' => apply_filters('wpml_current_language', null) ?? 'vi', // Thêm ngôn ngữ vào truy vấn
         );
 
-        // Lấy danh sách sản phẩm
-        $products = wc_get_products($args);
+        $products = get_posts($args);
 
-        // Sắp xếp sản phẩm theo first_tag (đảo ngược)
-        usort($products, function ($a, $b) {
-            // Lấy tag đầu tiên của sản phẩm A
-            $tagsA = get_the_terms($a->get_id(), 'product_tag');
-            $firstTagA = $tagsA ? $tagsA[0]->name : '';
+        // Lấy danh sách tag đầu tiên của mỗi sản phẩm
+        $firstTags = array_unique(array_map(function($product) {
+            $tags = get_the_terms($product->ID, 'product_tag');
+            return $tags ? $tags[0]->name : null;
+        }, $products));
 
-            // Lấy tag đầu tiên của sản phẩm B
-            $tagsB = get_the_terms($b->get_id(), 'product_tag');
-            $firstTagB = $tagsB ? $tagsB[0]->name : '';
-
-            // Đảo ngược thứ tự so sánh
-            return strcmp($firstTagB, $firstTagA);
+        // Lọc sản phẩm theo tag đầu tiên
+        $filteredProducts = array_filter($products, function($product) use ($firstTags) {
+            $tags = get_the_terms($product->ID, 'product_tag');
+            return $tags && in_array($tags[0]->name, $firstTags);
         });
 
-        return $products;
+        // Gán ảnh và giá cho sản phẩm, sau đó sắp xếp theo tag
+        foreach ($filteredProducts as $product) {
+            $tags = get_the_terms($product->ID, 'product_tag');
+            $product->image_url = get_the_post_thumbnail_url($product->ID, 'full');
+            $product->price = (float)get_post_meta($product->ID, '_price', true);
+        }
+        // Sắp xếp sản phẩm theo tag đầu tiên (đảo ngược thứ tự)
+        usort($filteredProducts, function($a, $b) {
+            $tagsA = get_the_terms($a->ID, 'product_tag');
+            $tagsB = get_the_terms($b->ID, 'product_tag');
+            return strcmp($tagsB[0]->name, $tagsA[0]->name);
+        });
+
+        // Trả về sản phẩm giới hạn (10 sản phẩm)
+        return array_slice($filteredProducts, 0, 10);
     }
 
 

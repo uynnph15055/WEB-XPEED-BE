@@ -59,6 +59,14 @@ if (!function_exists('dd')) {
         die;
     }
 }
+if (!function_exists('checkTranslate')) {
+    function checkTranslate($stringVi = '', $stringEn = '')
+    {
+        $currentLocale = isset($_SESSION['current_language']) ? $_SESSION['current_language'] : 'vi';
+
+        return $currentLocale !== 'vi' ? $stringEn : $stringVi;
+    }
+}
 if ( ! function_exists( 'getCurrentLanguage' ) ) {
     function getCurrentLanguage() {
         // Nếu Polylang được cài đặt, trả về ngôn ngữ hiện tại

@@ -143,25 +143,26 @@ function convertToProductUrl($link, $name)
                         <div class="shopify__product-slider">
                             <?php
                             foreach ($productFirst as $product):
-                                $tags = wp_get_post_terms($product->get_id(), 'product_tag'); ?>
-                                <a href="<?= convertToProductUrl(esc_url(get_permalink($product->get_id())), $product->get_name() ? esc_html($product->get_name()) : '') ?>"
+
+                                $tags = wp_get_post_terms($product->ID, 'product_tag'); ?>
+                                <a href="<?= convertToProductUrl(esc_url(get_permalink($product->ID)), $product->post_title ? esc_html($product->post_title) : '') ?>"
                                    class="shopify__product-item">
                                     <div class="shopify__product-image-wrapper">
                                         <?php if (isset($tags[0]->name)) { ?>
                                             <span
                                                     class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ? esc_html($tags[0]->name) : '' ?></span>
                                         <?php } ?>
-                                        <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ? esc_url(wp_get_attachment_url($product->get_image_id())) : '' ?>"
-                                             alt="<?= esc_attr($product->get_name()) ? esc_attr($product->get_name()) : '' ?>"
+                                        <img src="<?= $product->image_url ? $product->image_url : '' ?>"
+                                             alt="<?= esc_attr($product->post_title) ? esc_attr($product->post_title) : '' ?>"
                                              class="shopify__product-image"/>
                                     </div>
                                     <div class="shopify__product-details">
                                         <h3 class="shopify__product-title">
-                                            <?= $product->get_name() ? esc_html($product->get_name()) : '' ?>
+                                            <?= $product->post_title ? esc_html($product->post_title) : '' ?>
                                         </h3>
                                         <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                         </p>
-                                        <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
+                                        <span class="shopify__product-price"><?= number_format($product->price, 0, ',', '.') ? number_format($product->price, 0, ',', '.') : '' ?>
                                           </span>đ
                                     </div>
                                 </a>
@@ -182,6 +183,7 @@ function convertToProductUrl($link, $name)
                     ?>
                     <div id="shopify-2" class="shopify-section">
                         <div class="shopify__image-container">
+
                             <img src=<?= wp_get_attachment_url(get_term_meta($categories[1]->term_id, 'thumbnail_id', true)) ?>
                                  alt="" class="shopify__image"/>
                             <div class="shopify__image-overlay">
@@ -192,26 +194,26 @@ function convertToProductUrl($link, $name)
                         <div class="shopify__product-slider">
                             <?php
                             foreach ($productSecond as $product):
-                                $tags = wp_get_post_terms($product->get_id(), 'product_tag');
+                                $tags = wp_get_post_terms($product->ID, 'product_tag');
                                 ?>
-                                <a href="<?= convertToProductUrl(esc_url(get_permalink($product->get_id())), $product->get_name() ? esc_html($product->get_name()) : '') ?>"
+                                <a href="<?= convertToProductUrl(esc_url(get_permalink($product->ID)), $product->post_title ? esc_html($product->post_title) : '') ?>"
                                    class="shopify__product-item">
                                     <div class="shopify__product-image-wrapper">
                                         <?php if (isset($tags[0]->name)) { ?>
                                             <span
                                                     class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ? esc_html($tags[0]->name) : '' ?></span>
                                         <?php } ?>
-                                        <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ? esc_url(wp_get_attachment_url($product->get_image_id())) : '' ?>"
-                                             alt="<?= esc_attr($product->get_name()) ? esc_attr($product->get_name()) : '' ?>"
+                                        <img src="<?= $product->image_url ? $product->image_url : '' ?>"
+                                             alt="<?= esc_attr($product->post_title) ? esc_attr($product->post_title) : '' ?>"
                                              class="shopify__product-image"/>
                                     </div>
                                     <div class="shopify__product-details">
                                         <h3 class="shopify__product-title">
-                                            <?= $product->get_name() ? esc_html($product->get_name()) : '' ?>
+                                            <?= $product->post_title ? esc_html($product->post_title) : '' ?>
                                         </h3>
                                         <p class="shopify__product-cate"><?= esc_html($categories[1]->name) ?>
                                         </p>
-                                        <span class="shopify__product-price"><?= number_format($product->get_price(), 0, ',', '.') ? number_format($product->get_price(), 0, ',', '.') : '' ?>
+                                        <span class="shopify__product-price"><?= number_format($product->price, 0, ',', '.') ? number_format($product->price, 0, ',', '.') : '' ?>
                                           </span>đ
                                     </div>
                                 </a>
@@ -238,24 +240,24 @@ function convertToProductUrl($link, $name)
                         </div>
                         <div class="shopify__product-slider">
                             <?php foreach ($productThird as $product):
-                                $categories = wp_get_post_terms($product->get_id(), 'product_cat');
-                                $tags = wp_get_post_terms($product->get_id(), 'product_tag'); ?>
-                                <a href="<?= convertToProductUrl(esc_url(get_permalink($product->get_id())), $product->get_name() ? esc_html($product->get_name()) : '') ?>"
+                                $categories = wp_get_post_terms($product->ID, 'product_cat');
+                                $tags = wp_get_post_terms($product->ID, 'product_tag'); ?>
+                                <a href="<?= convertToProductUrl(esc_url(get_permalink($product->ID)), $product->post_title ? esc_html($product->post_title) : '') ?>"
                                    class="shopify__product-item">
                                     <div class="shopify__product-image-wrapper">
                                           <span
                                                   class="shopify__product-badge shopify__product-badge--new shopify__product-badge--new"><?= esc_html($tags[0]->name) ?></span>
-                                        <img src="<?= esc_url(wp_get_attachment_url($product->get_image_id())) ?>"
-                                             alt="<?= esc_attr($product->get_name()) ?>"
+                                        <img src="<?= $product->image_url ? $product->image_url : '' ?>"
+                                             alt="<?= esc_attr($product->post_title) ?>"
                                              class="shopify__product-image"/>
                                     </div>
                                     <div class="shopify__product-details">
                                         <h3 class="shopify__product-title">
-                                            <?= $product->get_name() ? esc_html($product->get_name()) : '' ?>
+                                            <?= $product->post_title ? esc_html($product->post_title) : '' ?>
                                         </h3>
                                         <p class="shopify__product-cate"><?= esc_html($categories[0]->name) ?>
                                         </p>
-                                        <span class="shopify__product-price"><?= number_format((float)$product->get_price(), 0, ',', '.') ?>
+                                        <span class="shopify__product-price"><?= number_format((float)$product->price, 0, ',', '.') ?>
                                           </span>đ
                                     </div>
                                 </a>

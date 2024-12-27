@@ -89,10 +89,8 @@ $(document).ready(function () {
         $('.cart__item').each(function () {
             const productId = $(this).data('product-id');
             const quantity = $(this).find('.cart__item-quantity-input').val();
-            const variation = {
-                pa_size: $(this).find('.cart__item-size').data('variation-size') // Lấy kích thước từ data-attribute
-            };
-
+            const variationSize = $(this).find('.cart__item-size').data('variation-size');
+            const variation = variationSize ?? null;
             products.push({
                 productId: productId,
                 quantity: quantity,
