@@ -29,7 +29,7 @@ async function loadPageModule() {
         await import("./pages/payment.js");
         console.log("Đã tải module: payment.js");
     }
-    else if (currentUrl.includes("/profile")) {
+    else if (currentUrl.includes("/profile")||currentUrl.includes("/tai-khoan")) {
         await import("./pages/profile.js");
         console.log("Đã tải module: profile.js");
         await import("./pages/auth.js");

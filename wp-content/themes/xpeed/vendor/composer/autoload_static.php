@@ -4,12 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc333d241c20ddb944ccc6d468e4ae5b9
+class ComposerStaticInit5e4ed69eb7b968b4fb1cdc39a94680a9
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
+        '23f09fe3194f8c2f70923f90d6702129' => __DIR__ . '/..' . '/illuminate/collections/functions.php',
         '60799491728b879e74601d83e38b2cad' => __DIR__ . '/..' . '/illuminate/collections/helpers.php',
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
@@ -40,12 +41,20 @@ class ComposerStaticInitc333d241c20ddb944ccc6d468e4ae5b9
             'Psr\\Container\\' => 14,
             'Psr\\Clock\\' => 10,
         ),
+        'L' => 
+        array (
+            'Laravel\\SerializableClosure\\' => 28,
+        ),
         'I' => 
         array (
             'Illuminate\\Support\\' => 19,
             'Illuminate\\Database\\' => 20,
             'Illuminate\\Contracts\\' => 21,
             'Illuminate\\Container\\' => 21,
+        ),
+        'F' => 
+        array (
+            'Facebook\\' => 9,
         ),
         'D' => 
         array (
@@ -103,6 +112,10 @@ class ComposerStaticInitc333d241c20ddb944ccc6d468e4ae5b9
         array (
             0 => __DIR__ . '/..' . '/psr/clock/src',
         ),
+        'Laravel\\SerializableClosure\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
+        ),
         'Illuminate\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/macroable',
@@ -121,6 +134,10 @@ class ComposerStaticInitc333d241c20ddb944ccc6d468e4ae5b9
         'Illuminate\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
+        ),
+        'Facebook\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
         ),
         'Doctrine\\Inflector\\' => 
         array (
@@ -158,9 +175,9 @@ class ComposerStaticInitc333d241c20ddb944ccc6d468e4ae5b9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc333d241c20ddb944ccc6d468e4ae5b9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc333d241c20ddb944ccc6d468e4ae5b9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc333d241c20ddb944ccc6d468e4ae5b9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5e4ed69eb7b968b4fb1cdc39a94680a9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5e4ed69eb7b968b4fb1cdc39a94680a9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5e4ed69eb7b968b4fb1cdc39a94680a9::$classMap;
 
         }, null, ClassLoader::class);
     }

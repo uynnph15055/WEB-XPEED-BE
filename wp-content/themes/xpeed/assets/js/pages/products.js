@@ -152,11 +152,11 @@ $(document).ready(function () {
                 } else {
                     Swal.fire({
                         icon: "error",
-                        title: "Không tìm được sản phẩm.",
+                        title: translate("Không tìm được sản phẩm", "No product found"),
                         showConfirmButton: false,
                         timer: 3000,
                     }).then(()=>{
-                        $("#collection__content-product-wapper").html("Không tìm được sản phẩm");
+                        $("#collection__content-product-wapper").html(translate("Không tìm được sản phẩm", "No product found"));
                     });
                 }
             })
@@ -164,11 +164,11 @@ $(document).ready(function () {
 
                 Swal.fire({
                     icon: "error",
-                    title: err.responseJSON.message ?? "Không tìm được sản phẩm.",
+                    title: err.responseJSON.message ?? translate("Không tìm được sản phẩm", "No product found"),
                     showConfirmButton: false,
                     timer: 3000,
                 }).then(()=>{
-                    $("#collection__content-product-wapper").html("Không tìm được sản phẩm");
+                    $("#collection__content-product-wapper").html(translate("Không tìm được sản phẩm", "No product found"));
                 });
             });
 

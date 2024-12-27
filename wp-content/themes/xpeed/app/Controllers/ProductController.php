@@ -192,7 +192,7 @@ private function getProductCategories()
     {
         $args = array(
             'post_type' => 'product',
-            'limit' => 5,
+            'limit' => 10,
             'orderby' => 'date',
             'return' => 'objects',
             'category' => get_term($category_id, 'product_cat')->slug,
@@ -264,7 +264,6 @@ private function getProductCategories()
                 $is_taxonomy = $attribute->is_taxonomy();
                 $term_ids = $attribute->get_options();
                 $term_names = [];
-
                 if ($is_taxonomy) {
                     // Get terms with custom order
                     $terms = get_terms([
@@ -290,7 +289,10 @@ private function getProductCategories()
                     }
                 }
 
-                $attributes[$attribute_name] = ['value' => $term_names];
+                $attributes[$attribute_name] = [
+                    'value' => $term_names,
+                    'attribute_slug' => "attribute_". $key
+                ];
 
                 if ($is_taxonomy) {
                     $attribute_values = $wc_product->get_available_variations();

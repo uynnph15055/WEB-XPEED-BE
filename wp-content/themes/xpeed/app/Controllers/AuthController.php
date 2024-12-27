@@ -1,5 +1,4 @@
 <?php
-
 namespace app\Controllers;
 
 use app\models\UserModel;
@@ -12,13 +11,17 @@ class AuthController extends BaseController
     // Phương thức để xử lý đăng nhập
     public function login($request)
     {
+        // Lấy ngôn ngữ hiện tại
+        $lang = getCurrentLanguage();
+
         // Tạo một instance của LoginRequest
         $loginRequest = new LoginRequest($request);
 
         // Thực hiện xác thực
         if (!$loginRequest->validate()) {
-            // Nếu xác thực thất bại, trả về thông báo lỗi
-            return $this->failData('Dữ liệu không hợp lệ.', $loginRequest->errors());
+            // Thông báo tùy theo ngôn ngữ
+            $message = $lang === 'vi' ? 'Dữ liệu không hợp lệ.' : 'Invalid data.';
+            return $this->failData($message, $loginRequest->errors());
         }
 
         // Lấy dữ liệu từ request
@@ -36,36 +39,50 @@ class AuthController extends BaseController
 
         // Nếu không tồn tại user hoặc mật khẩu không chính xác
         if (!$user || !wp_check_password($password, $user->user_pass, $user->ID)) {
-            return $this->unauthorized('Tài khoản không chính xác.');
+            // Thông báo tùy theo ngôn ngữ
+            $message = $lang === 'vi' ? 'Tài khoản không chính xác.' : 'Account is incorrect.';
+            return $this->unauthorized($message);
         }
 
         // Đăng nhập người dùng
         wp_set_current_user($user->ID);
         wp_set_auth_cookie($user->ID);
 
-        // Trả về thông tin người dùng
-        return $this->success('Đăng nhập thành công.', $user);
+        // Thông báo tùy theo ngôn ngữ
+        $message = $lang === 'vi' ? 'Đăng nhập thành công.' : 'Login successful.';
+        return $this->success($message, $user);
     }
 
+    // Phương thức để xử lý đăng xuất
     public function logout($request)
     {
+        // Lấy ngôn ngữ hiện tại
+        $lang = getCurrentLanguage();
+
         wp_logout();
-        return $this->success('Đăng xuất thành công.');
+
+        // Thông báo tùy theo ngôn ngữ
+        $message = $lang === 'vi' ? 'Đăng xuất thành công.' : 'Logout successful.';
+        return $this->success($message);
     }
 
+    // Phương thức để xử lý đăng ký
     public function register($request)
     {
+        // Lấy ngôn ngữ hiện tại
+        $lang = getCurrentLanguage();
+
         $registerRequest = new RegisterRequest($request);
 
         // Thực hiện xác thực
         if (!$registerRequest->validate()) {
-            // Nếu xác thực thất bại, trả về thông báo lỗi
-            return $this->failData('Dữ liệu không hợp lệ.', $registerRequest->errors(), 1, null, [], 400);
+            // Thông báo tùy theo ngôn ngữ
+            $message = $lang === 'vi' ? 'Dữ liệu không hợp lệ.' : 'Invalid data.';
+            return $this->failData($message, $registerRequest->errors(), 1, null, [], 400);
         }
 
         // Lấy dữ liệu hợp lệ
         $validatedData = $registerRequest->validated();
-        // Lấy dữ liệu từ request
         $userName = $request->get_param('username');
         $email = $request->get_param('email');
         $password = $request->get_param('password');
@@ -74,19 +91,26 @@ class AuthController extends BaseController
 
         // Tạo người dùng mới
         $user_id = wp_create_user($userName, $password, $email);
-        if (!empty($user_id)) {
-            UserModel::find($user_id)->update([
+
+        if (!is_wp_error($user_id)) { // Kiểm tra xem tạo người dùng có thành công không
+            // Cập nhật các thông tin khác cho người dùng
+            wp_update_user([
                 'ID' => $user_id,
                 'display_name' => $userName,
                 'user_url' => $user_url, // Cập nhật user_url
-                'user_address' => $address
             ]);
 
-            // Trả về thông báo thành công
-            return $this->success(
-                'Đăng ký thành công.',
-                ['ID' => $user_id, 'email' => $email, 'user_url' => $user_url]
-            );
+            // Lưu địa chỉ người dùng vào meta
+            update_user_meta($user_id, 'user_address', $address);
+
+            // Thông báo thành công
+            $message = $lang === 'vi' ? 'Đăng ký thành công.' : 'Registration successful.';
+            return $this->success($message, ['ID' => $user_id, 'email' => $email, 'user_url' => $user_url]);
+        } else {
+            // Nếu có lỗi khi tạo người dùng
+            $message = $lang === 'vi' ? 'Đăng ký không thành công.' : 'Registration failed.';
+            return $this->failData($message, $user_id->get_error_message(), 1, null, [], 400);
         }
     }
 }
+

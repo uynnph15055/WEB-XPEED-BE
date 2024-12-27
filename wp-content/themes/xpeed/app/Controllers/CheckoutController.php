@@ -84,12 +84,10 @@ class CheckoutController extends BaseController
                     if ($variation_id) {
                         $order->add_product(wc_get_product($variation_id), $quantity);
                         // Giảm số lượng sản phẩm trong kho
-
                         wc_update_product_stock($variation_id, $stock_quantity - $quantity);
                     }
                 } else {
                     $order->add_product($product, $quantity);
-
                     // Giảm số lượng sản phẩm trong kho
                     wc_update_product_stock($product->get_id(), $stock_quantity - $quantity);
                 }
@@ -117,6 +115,17 @@ class CheckoutController extends BaseController
             // Đặt trạng thái đơn hàng thành "pending"
             $order->update_status('pending', 'Order created and waiting for payment.');
 
+            // Lưu ngôn ngữ vào đơn hàng (vi hoặc en)
+            $language = pll_current_language(); // Lấy ngôn ngữ hiện tại từ Polylang
+            $order->update_meta_data('language', $language); // Lưu ngôn ngữ vào metadata của đơn hàng
+
+            // Đặt post_author cho đơn hàng
+
+            wp_update_post([
+                'ID' => $order->get_id(),
+                'post_author' => $userId, // ID người dùng từ request hoặc người dùng hiện tại
+            ]);
+
             // Lưu đơn hàng
             $order->save();
 
@@ -124,6 +133,7 @@ class CheckoutController extends BaseController
             wp_schedule_single_event(time() + 3600, 'cancel_pending_order', ['order_id' => $order->get_id()]);
             unset($_SESSION['cart']);
             setcookie('cart', '', time() - 3600, "/"); // Xóa cookie giỏ hàng nếu vẫn còn
+
             return [
                 'success' => true,
                 'message' => 'Order created successfully.',
@@ -140,6 +150,7 @@ class CheckoutController extends BaseController
             ];
         }
     }
+
 
 
     public function moveCartToOrder($request, $type = 'json')
@@ -323,14 +334,26 @@ class CheckoutController extends BaseController
             return false; // Không tìm thấy đơn hàng
         }
 
+        // Kiểm tra người dùng đang đăng nhập
+        $currentUserId = get_current_user_id();
+
+        if ($currentUserId) {
+            $order->set_customer_id($currentUserId); // Gán ID người dùng hiện tại
+        } else {
+            return false; // Không có người dùng đang đăng nhập
+        }
+
         // Lấy thông tin giao hàng từ session (hoặc từ nguồn khác nếu cần)
         $shippingInfo = $_SESSION['shippingInfo'] ?? null;
         if (!$shippingInfo) {
             return false; // Không có thông tin giao hàng
         }
-        if ($order->get_status() !== 'pending' || $order->get_customer_id() !== $orderId) {
-            return false; // Không có thông tin giao hàng
+
+        // Kiểm tra trạng thái đơn hàng
+        if ($order->get_status() !== 'pending') {
+            return false; // Đơn hàng không phải 'pending'
         }
+
         // Cập nhật thông tin địa chỉ giao hàng và thanh toán
         $this->updateOrderAddresses($order, $shippingInfo);
 
@@ -353,13 +376,16 @@ class CheckoutController extends BaseController
         // Cập nhật trạng thái và phương thức thanh toán
         $order->set_payment_method('momo'); // Thay thế bằng phương thức thanh toán thực tế của bạn
         $order->set_payment_method_title('MoMo Payment');
-        $order->update_status('processing');
+        $order->update_status('processing'); // Hoặc 'completed' nếu đơn hàng đã hoàn tất ngay
 
         // Lưu đơn hàng
         $order->save();
 
         return $order;
     }
+
+
+
 
     /**
      * Hàm thêm phí vận chuyển vào đơn hàng
@@ -453,7 +479,6 @@ class CheckoutController extends BaseController
             $transaction = $paymentController->getTransactionStatus($result["orderId"], $result["requestId"]);
 
             if ($transaction["status"] != 'error') {
-
                 $result = $this->handlePaymentSuccess($result['orderId'], $transaction);
                 $paymentsuccess = $result != false ? "true" : "false";
             } else {
@@ -465,6 +490,7 @@ class CheckoutController extends BaseController
             header('Location: ' . home_url('/') . '?paymentsuccess=' . $paymentsuccess);
             exit;
         } else {
+
             header('Location: ' . home_url('cart'));
         }
     }

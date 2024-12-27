@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xpeed\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-02 17:16+0000\n"
+"POT-Creation-Date: 2024-12-26 09:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,6 +15,10 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.6.14; wp-6.6.1\n"
 "X-Domain: xpeed"
+
+#: page.php:152
+msgid " Không tìm được sản phẩm"
+msgstr ""
 
 #: templates/tml-order-detail.php:91
 msgid " Địa chỉ thanh toán"
@@ -49,47 +53,64 @@ msgstr ""
 msgid "Checkout-result"
 msgstr ""
 
-#: templates/tml-payment.php:118
+#: templates/tml-payment.php:124
 msgid "Chính sách bảo mật"
 msgstr ""
 
-#: templates/tml-payment.php:112
+#: templates/tml-payment.php:118
 msgid "Chính sách hoàn tiền"
 msgstr ""
 
-#: templates/tml-payment.php:115
+#: templates/tml-payment.php:121
 msgid "Chính sách vận chuyển"
 msgstr ""
 
-#: templates/tml-payment.php:54
+#: templates/tml-payment.php:60
 msgid "Chọn Quận/Huyện "
 msgstr ""
 
-#: templates/tml-payment.php:49
+#: templates/tml-payment.php:55
 msgid "Chọn Tỉnh/Thành phố "
 msgstr ""
 
-#: templates/tml-payment.php:69
+#: templates/tml-payment.php:75
 msgid "Căn hộ, tòa nhà, v.v."
 msgstr ""
 
-#: templates/tml-cart.php:98
+#: templates/tml-checkout-result.php:42
+msgid "Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đang được xử lý."
+msgstr ""
+
+#: templates/tml-cart.php:100
 msgid "Cập nhật giỏ hàng"
 msgstr ""
 
+#: page.php:49
+msgid "Danh mục"
+msgstr ""
+
 #: footer.php:51
-msgid "Email: vuong.quyen@gmail.com"
+msgid "Email: Xpeedhelmets.marketing@gmail.com"
+msgstr ""
+
+#. Name of the template
+#: templates/tml-gallery.php:3 templates/tml-gallery.php:13
+msgid "Gallery"
 msgstr ""
 
 #: templates/tml-order-detail.php:124
 msgid "Giá"
 msgstr ""
 
-#: templates/tml-cart.php:20
+#: templates/tml-cart.php:22
 msgid "Giỏ hàng"
 msgstr ""
 
-#: templates/tml-login.php:23
+#: templates/tml-about.php:14
+msgid "Giới thiệu"
+msgstr ""
+
+#: templates/tml-login.php:25 templates/tml-register.php:45
 msgid "Gửi"
 msgstr ""
 
@@ -110,7 +131,7 @@ msgstr ""
 msgid "Hoá đơn chi tiết"
 msgstr ""
 
-#: templates/tml-login.php:36
+#: templates/tml-login.php:39 templates/tml-register.php:50
 msgid "HOẶC"
 msgstr ""
 
@@ -130,6 +151,10 @@ msgstr ""
 msgid "Hủy đơn hàng"
 msgstr ""
 
+#: templates/tml-checkout-result.php:48
+msgid "ID giao dịch:"
+msgstr ""
+
 #: templates/tml-profile.php:49
 msgid "Không tìm thấy lịch sử đơn hàng."
 msgstr ""
@@ -143,34 +168,79 @@ msgstr ""
 msgid "Loại"
 msgstr ""
 
-#: templates/tml-payment.php:90
+#: templates/tml-payment.php:96
 msgid ""
 "Lưu thông tin vận chuyển của bạn cho đơn hàng tiếp\n"
 "                                theo."
 msgstr ""
 
-#: templates/menuTab.php:7 templates/sideBar.php:22
+#: templates/menuTab.php:7 templates/sidebar.php:22
 msgid "Lịch sử mua hàng"
 msgstr ""
 
-#: templates/tml-profile.php:22
+#: templates/tml-order-history.php:23
+msgid "Lịch sử đơn hàng"
+msgstr ""
+
+#: templates/tml-order-history.php:25 templates/tml-profile.php:22
 msgid "Lịch sử đơn hàng gần đây"
+msgstr ""
+
+#: templates/tml-checkout-result.php:54
+msgid "Lỗi khi xử lý đơn hàng"
+msgstr ""
+
+#: templates/tml-checkout-result.php:59
+msgid "Lỗi thanh toán!"
+msgstr ""
+
+#: single-product.php:113
+msgid "Mua ngay"
+msgstr ""
+
+#: templates/tml-checkout-result.php:45
+msgid "Mã hóa đơn:"
+msgstr ""
+
+#: templates/tml-order-history.php:40
+msgid "Mã đơn"
 msgstr ""
 
 #: templates/tml-order-detail.php:64
 msgid "Mã đơn hàng: #"
 msgstr ""
 
+#: single-product.php:63 single-product.php:143
+msgid "MỚI"
+msgstr ""
+
+#: templates/tml-order-history.php:41
+msgid "Ngày mua"
+msgstr ""
+
 #: templates/tml-order-detail.php:52
 msgid "Ngày đặt hàng:"
 msgstr ""
 
-#: templates/tml-login.php:17
+#: templates/tml-register.php:24
+msgid "Nhập email"
+msgstr ""
+
+#: templates/tml-login.php:18 templates/tml-register.php:31
 msgid "Nhập mật khẩu"
 msgstr ""
 
-#: templates/tml-login.php:14
+#: templates/tml-register.php:17
+msgctxt "Enter username"
+msgid "Nhập tên người dùng"
+msgstr ""
+
+#: templates/tml-login.php:15
 msgid "Nhập tên người dùng hoặc email"
+msgstr ""
+
+#: templates/tml-register.php:38
+msgid "Nhập địa chỉ"
 msgstr ""
 
 #. Name of the template
@@ -181,6 +251,10 @@ msgstr ""
 #. Name of the template
 #: templates/tml-order-history.php:3
 msgid "Order_history"
+msgstr ""
+
+#: templates/tml-order-history.php:63
+msgid "Pay"
 msgstr ""
 
 #. Name of the template
@@ -198,15 +272,15 @@ msgid "Product List"
 msgstr ""
 
 #. Name of the template
-#: templates/sideBar.php:3 templates/tml-profile.php:3 templates/sidebar.php:3
+#: templates/sidebar.php:3 templates/tml-profile.php:3
 msgid "Profile"
 msgstr ""
 
-#: templates/tml-payment.php:100
+#: templates/tml-payment.php:106
 msgid "Quay lại giỏ hàng"
 msgstr ""
 
-#: templates/tml-login.php:29
+#: templates/tml-login.php:31
 msgid "Quên mật khẩu"
 msgstr ""
 
@@ -215,52 +289,97 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: page.php:19 templates/tml-cart.php:26 templates/tml-order-detail.php:119
+#: templates/tml-order-history.php:76
+msgid "Supplier Company"
+msgstr ""
+
+#: page.php:41 templates/tml-cart.php:28 templates/tml-order-detail.php:119
 msgid "Sản phẩm"
 msgstr ""
 
-#: templates/tml-cart.php:62
+#: templates/tml-cart.php:64
 msgid "sản phẩm"
 msgstr ""
 
-#: templates/tml-cart.php:59
+#: single-product.php:172
+msgid "Sản phẩm không hợp lệ !"
+msgstr ""
+
+#: single-product.php:137
+msgid "Sản phẩm liên quan"
+msgstr ""
+
+#: templates/tml-cart.php:61
 msgid "Sản phẩm đã hết hàng"
 msgstr ""
 
-#: templates/tml-cart.php:29 templates/tml-order-detail.php:127
+#: single-product.php:98 templates/tml-cart.php:31
+#: templates/tml-order-detail.php:127
 msgid "Số lượng"
 msgstr ""
 
-#: templates/tml-cart.php:62
+#: templates/tml-cart.php:64
 msgid "Số lượng sản phẩm không đủ, tối đa"
 msgstr ""
 
-#: templates/tml-cart.php:100
+#: templates/tml-checkout-result.php:46
+msgid "Số lượng:"
+msgstr ""
+
+#: templates/tml-order-history.php:42
+msgid "Số tiền hóa đơn"
+msgstr ""
+
+#: templates/tml-cart.php:102
 msgid "Thanh toán"
+msgstr ""
+
+#: templates/tml-checkout-result.php:41
+msgid "Thanh toán thành công!"
 msgstr ""
 
 #. Description of the theme
 msgid "Theme website bán mũ bảo hiểm xpeed"
 msgstr ""
 
-#: templates/tml-payment.php:176
+#: templates/tml-payment.php:183
 msgid "Thành tiền"
+msgstr ""
+
+#: single-product.php:119
+msgid "Thêm vào giỏ hàng"
+msgstr ""
+
+#: templates/tml-checkout-result.php:47
+msgid "Thông tin hóa đơn:"
 msgstr ""
 
 #: templates/tml-profile.php:20
 msgid "Thông tin tài khoản"
 msgstr ""
 
-#: templates/sideBar.php:40
+#: templates/tml-checkout-result.php:43
+msgid "Thông tin đơn hàng:"
+msgstr ""
+
+#: templates/sidebar.php:40
 msgid "Thẻ hồ sơ"
 msgstr ""
 
-#: templates/tml-payment.php:104
+#: templates/tml-checkout-result.php:49
+msgid "Tin nhắn:"
+msgstr ""
+
+#: templates/tml-payment.php:110
 msgid "Tiếp tục giao hàng"
 msgstr ""
 
-#: templates/tml-profile.php:26
+#: templates/tml-order-history.php:29 templates/tml-profile.php:26
 msgid "Trang của tôi"
+msgstr ""
+
+#: templates/tml-order-history.php:43
+msgid "Trạng thái"
 msgstr ""
 
 #: templates/menuTab.php:9
@@ -268,6 +387,7 @@ msgid "Tài khoản của tôi"
 msgstr ""
 
 #: templates/tml-profile.php:33
+msgctxt "Search by order number or product name"
 msgid "Tìm kiếm theo số đơn hàng hoặc tên sản phẩm "
 msgstr ""
 
@@ -275,7 +395,7 @@ msgstr ""
 msgid "Tạm tính"
 msgstr ""
 
-#: templates/tml-cart.php:31
+#: templates/tml-cart.php:33
 msgid "Tổng cộng"
 msgstr ""
 
@@ -293,11 +413,11 @@ msgid ""
 "Liêm, Hà Nội."
 msgstr ""
 
-#: templates/tml-payment.php:180
+#: templates/tml-payment.php:187
 msgid "Vận chuyển"
 msgstr ""
 
-#: templates/tml-cart.php:79
+#: templates/tml-cart.php:81
 msgid "Xoá"
 msgstr ""
 
@@ -305,27 +425,27 @@ msgstr ""
 msgid "Xpeed"
 msgstr ""
 
-#: templates/tml-payment.php:121
+#: templates/tml-payment.php:127
 msgid "Điều khoản dịch vụ"
 msgstr ""
 
-#: templates/tml-payment.php:73
+#: templates/tml-payment.php:79
 msgid "Điện thoại"
 msgstr ""
 
-#: templates/tml-login.php:32
+#: templates/tml-login.php:35 templates/tml-register.php:11
 msgid "Đăng ký"
 msgstr ""
 
-#: templates/tml-login.php:11
+#: templates/tml-login.php:12
 msgid "Đăng nhập"
 msgstr ""
 
-#: templates/sideBar.php:65
+#: templates/sidebar.php:65
 msgid "Đăng xuất"
 msgstr ""
 
-#: templates/tml-payment.php:129
+#: templates/tml-payment.php:135
 msgid "Đơn hàng"
 msgstr ""
 
@@ -333,14 +453,22 @@ msgstr ""
 msgid "Đại lý - địa chỉ"
 msgstr ""
 
+#: page.php:118
+msgid "Đến"
+msgstr ""
+
 #: templates/tml-order-detail.php:86
 msgid "ĐỊA CHỈ NHẬN HÀNG"
 msgstr ""
 
-#: templates/tml-payment.php:63
+#: templates/tml-payment.php:69
 msgid "Địa chỉ"
 msgstr ""
 
-#: templates/tml-payment.php:36
+#: templates/tml-payment.php:42
 msgid "Địa chỉ giao hàng"
+msgstr ""
+
+#: templates/tml-order-history.php:50
+msgid "đ"
 msgstr ""

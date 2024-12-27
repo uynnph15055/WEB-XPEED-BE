@@ -48,10 +48,10 @@ get_header();
                                     <span class="cart__item-name"><?= $cart["product_name"] ?? '' ?></span>
 
                                     <span class="cart__item-size"
-                                          data-variation-size="<?= $cart["attribute"] ?? '' ?>"
-                                          data-variation-key="<?= $cart["attribute_key"] ?? '' ?>"
+                                          data-variation-size="<?= $cart["variation_title"] ?? '' ?>"
+                                          data-variation-key="<?= $cart["variation_title"] ?? '' ?>"
                                     >
-                                        <?= $cart["variation_title"] ?? '' ?>
+
                                     </span>
                                     <span class="cart__item-stock-quantity"
                                           style="display: none"><?= $cart["stock_quantity"] ?? '' ?></span>

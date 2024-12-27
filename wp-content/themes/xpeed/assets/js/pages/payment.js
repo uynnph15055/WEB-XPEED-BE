@@ -15,10 +15,10 @@ $(document).ready(function() {
     function handlePayment() {
         if (validateForm()) {
             const amount = $('.payment_cart--summary-total-value').text().replace(/\D/g, '');
-            const orderInfo = "Thanh toán đơn hàng";
+            const orderInfo = translate("Thanh toán đơn hàng", "Order payment");
             const shippingInfo = collectShippingInfo();
             const orderId = $('.payment_form').data('orderid');
-            console.log('handlePayment',orderId )
+            console.log('handlePayment', orderId);
             localStorage.setItem('shippingInfo', JSON.stringify({
                 ...shippingInfo,
                 provinceId: $('#provinceSelect').val(), // Lưu ID tỉnh
@@ -33,12 +33,12 @@ $(document).ready(function() {
                     shippingInfo
                 })
                     .done(handlePaymentResponse)
-                    .fail((error) => showError(error.responseJSON.message ?? "Xảy ra lỗi khi xử lý thanh toán."));
+                    .fail((error) => showError(error.responseJSON.message ?? translate("Xảy ra lỗi khi xử lý thanh toán.", "An error occurred while processing payment.")));
             } else {
-                showError("Giỏ hàng rỗng, vui lòng kiểm tra lại.");
+                showError(translate("Giỏ hàng rỗng, vui lòng kiểm tra lại.", "The cart is empty, please check again."));
             }
         } else {
-            showError("Vui lòng điền đầy đủ tất cả các trường.");
+            showError(translate("Vui lòng điền đầy đủ tất cả các trường.", "Please fill in all fields."));
         }
     }
 
@@ -57,7 +57,7 @@ $(document).ready(function() {
         };
     }
 
-// Hàm để tìm tên của tỉnh hoặc quận
+    // Hàm để tìm tên của tỉnh hoặc quận
     function getLocationName(locations, id, parentId = null) {
         if (parentId) {
             const province = locations.find(loc => loc.Id === parentId);
@@ -68,11 +68,12 @@ $(document).ready(function() {
             return province ? province.Name : '';
         }
     }
+
     function handlePaymentResponse(response) {
         if (response && response.data.payUrl) {
             window.location.href = response.data.payUrl;
         } else {
-            showError("Không thể tạo yêu cầu thanh toán.");
+            showError(translate("Không thể tạo yêu cầu thanh toán.", "Unable to create payment request."));
         }
     }
 
@@ -81,7 +82,7 @@ $(document).ready(function() {
             if (validateForm()) {
                 const shippingInfo = collectShippingInfo();
                 localStorage.setItem('shippingInfo', JSON.stringify(shippingInfo));
-                showSuccess("Đại chỉ giao hàng đã được cập nhật!");
+                showSuccess(translate("Đại chỉ giao hàng đã được cập nhật!", "Shipping address has been updated!"));
             } else {
                 $(this).prop('checked', false);
             }
@@ -97,7 +98,7 @@ $(document).ready(function() {
 
         $('#provinceSelect').change(function() {
             loadDistricts($(this).val());
-            $('#wardSelect').html('<option value="">Chọn Phường/Xã</option>').prop('disabled', true);
+            $('#wardSelect').html(`<option value="">${translate("Chọn Phường/Xã", "Select Ward/Commune")}</option>`).prop('disabled', true);
         });
     }
 
@@ -105,7 +106,7 @@ $(document).ready(function() {
         const province = locationsData.find(loc => loc.Id === provinceId);
         const districts = province ? province.Districts : [];
 
-        $('#districtSelect').html('<option value="">Chọn Quận/Huyện</option>').prop('disabled', !districts.length);
+        $('#districtSelect').html(`<option value="">${translate("Chọn Quận/Huyện", "Select District")}</option>`).prop('disabled', !districts.length);
         districts.forEach(district => {
             $('#districtSelect').append(new Option(district.Name, district.Id));
         });
@@ -124,7 +125,7 @@ $(document).ready(function() {
         const district = province ? province.Districts.find(dist => dist.Id === districtId) : null;
         const wards = district ? district.Wards : [];
 
-        $('#wardSelect').html('<option value="">Chọn Phường/Xã</option>').prop('disabled', !wards.length);
+        $('#wardSelect').html(`<option value="">${translate("Chọn Phường/Xã", "Select Ward/Commune")}</option>`).prop('disabled', !wards.length);
         wards.forEach(ward => {
             $('#wardSelect').append(new Option(ward.Name, ward.Id));
         });

@@ -37,7 +37,7 @@ $(document).ready(function () {
                 .done(() => {
                     Swal.fire({
                         icon: "success",
-                        title: "Yêu cầu của bạn đã thực hiện thành công",
+                        title: translate("Yêu cầu của bạn đã thực hiện thành công", "Your request has been successfully completed"),
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {

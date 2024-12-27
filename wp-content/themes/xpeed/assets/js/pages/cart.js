@@ -127,7 +127,7 @@ $(document).ready(function () {
         const productId = $(this).closest('.cart__item').data('product-id');
         const variationSize = $(this).closest('.cart__item').find('.cart__item-size').data('variation-size');
         const $itemRow = $(this).closest('.cart__item'); // Dòng sản phẩm cần xóa
-        const variation = variationSize ? { pa_size: variationSize} : null;
+        const variation = variationSize ?? null;
 
         const data = {
             productId: productId,

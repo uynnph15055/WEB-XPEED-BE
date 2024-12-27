@@ -60,7 +60,7 @@ $product = $productController->getProductInfo();
                             <!--         alt=""/>-->
                             <!--</div>-->
                             <div class="product-detail__badge" style="transform: translateX(-10px)">
-                                <span class="product-detail__badge product-detail__badge--new">MỚI</span>
+                                <span class="product-detail__badge product-detail__badge--new"><?= _e('MỚI' , 'xpeed') ?></span>
                             </div>
                         </div>
 
@@ -77,9 +77,8 @@ $product = $productController->getProductInfo();
                         <?php if (!empty($product["attributes"])) { ?>
                             <div class="product-detail__size" data-product-id="<?= $product["id"] ?? 0 ?>">
                                 <?php foreach ($product["attributes"] as $key => $attribute) { ?>
-                                    <?= dd($key ,$product["attributes"]); ?>
                                     <label class="product-detail__size-label"> <?= $key ?? '' ?></label>
-                                    <div class="product-detail__size-options" data-attribute-key="<?= $key ?>">
+                                    <div class="product-detail__size-options" data-attribute-key="<?= $attribute['attribute_slug'] ?? $key ?>">
                                         <?php foreach ($attribute["value"] as $item) { ?>
 
                                             <input type="radio" name="<?= $key ?>"
@@ -135,7 +134,7 @@ $product = $productController->getProductInfo();
         </div>
         <?php if (isset($product["upsell_products"]) && count($product["upsell_products"]) > 0) { ?>
             <div class="product-related">
-                <h2 class="product-related__title">Sản phẩm liên quan</h2>
+                <h2 class="product-related__title"> <?= _e('Sản phẩm liên quan' , 'xpeed')?></h2>
                 <div class="product-related__list">
                     <?php foreach ($product["upsell_products"] as $relatedProduct) { ?>
 
@@ -170,5 +169,5 @@ $product = $productController->getProductInfo();
     <?php get_footer(); ?>
 
 <?php } else {
-    header('Location: ' . home_url('/') . '?status=error&message=' . $product ?? 'Sản phẩm không hợp lệ !');
+    header('Location: ' . home_url('/') . '?status=error&message=' . $product ?? _e('Sản phẩm không hợp lệ !' , 'xpeed'));
 } ?>

@@ -59,6 +59,18 @@ if (!function_exists('dd')) {
         die;
     }
 }
+if ( ! function_exists( 'getCurrentLanguage' ) ) {
+    function getCurrentLanguage() {
+        // Nếu Polylang được cài đặt, trả về ngôn ngữ hiện tại
+        if ( function_exists( 'pll_current_language' ) ) {
+            return pll_current_language();
+        }
+
+        // Nếu không có Polylang, mặc định dùng get_locale()
+        $locale = get_locale();
+        return strpos( $locale, 'vi' ) === 0 ? 'vi' : 'en';
+    }
+}
 
 if (!function_exists('check_user_login_and_redirect')) {
     function check_user_login_and_redirect($urlRedirect = null)
@@ -187,6 +199,7 @@ function my_theme_setup()
 add_action('after_setup_theme', 'my_theme_setup');
 
 add_action('woocommerce_product_options_general_product_data', 'add_home_display_checkbox');
+
 function add_home_display_checkbox()
 {
     woocommerce_wp_checkbox(
@@ -250,10 +263,13 @@ function custom_home_url_with_language($url)
 {
     // Lấy ngôn ngữ hiện tại
     $current_language = strtok(get_locale(), '_');
+    $excludeUrl = ['/wp-json', '/facebook-login-callback', '/google-login-callback'];
 
-    // Kiểm tra nếu đang sử dụng endpoint wp-json và không có ngôn ngữ trong URL
-    if (strpos($url, '/wp-json') == false) {
-        // Nếu ngôn ngữ là tiếng Anh, thêm '/en' trước '/wp-json'
+    // Kiểm tra nếu URL không chứa bất kỳ endpoint nào trong mảng $excludeUrl
+    $isExcluded = array_filter($excludeUrl, fn($path) => strpos($url, $path) !== false);
+
+    if (empty($isExcluded)) {
+        // Nếu ngôn ngữ là tiếng Anh, thêm '/en' trước URL
         if ($current_language === 'en') {
             $parsed_url = parse_url($url);
             if (!check_language_in_url($url)) {
@@ -261,14 +277,16 @@ function custom_home_url_with_language($url)
                     // Thêm '/en/' sau domain nếu chưa có
                     $url = str_replace('localhost/WEB-XPEED-BE/', 'localhost/WEB-XPEED-BE/' . $current_language . '/', $url);
                 } else if (isset($parsed_url['host']) && $parsed_url["host"] != "localhost") {
-
-                    $url = str_replace($parsed_url["host"], $parsed_url["host"] . '/'. $current_language , $url);
+                    // Thêm '/en/' cho các host khác
+                    $url = str_replace($parsed_url["host"], $parsed_url["host"] . '/' . $current_language, $url);
                 }
             }
         }
     }
+
     return $url;
 }
+
 
 // Áp dụng filter home_url
 add_filter('home_url', 'custom_home_url_with_language');

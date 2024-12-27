@@ -4,7 +4,6 @@ import {BASE_URL} from "../variable.js";
 import {formatVND} from "../common.js";
 
 $(document).ready(function () {
-
     const language = current_locale != 'vi' ? 'en' : '';
 //--------------------------------------PRODUCT IMAGE----------------------------------
     $(".thumbnail-item__img").on("click", function () {
@@ -32,10 +31,12 @@ $(document).ready(function () {
 
     $('.product-detail__size-options input[type="radio"]').on('change', function () {
         const attributeKey = $(this).closest('.product-detail__size-options').data('attribute-key');
+        console.log(' attributeKey', attributeKey);
         const selectedValue = $(this).val();
         // Chuyển attributeKey thành slug và thêm tiền tố
-        const slugAttributeKey = "pa_" + toSlug(attributeKey);
+        const slugAttributeKey = attributeKey;
         selectedAttributes[slugAttributeKey] = toSlug(selectedValue);
+
         console.log(' đủ thuộc tính:', selectedAttributes);
         console.log(' sản phẩm :', product);
         console.log(' productData:', productData);
@@ -43,14 +44,14 @@ $(document).ready(function () {
             selectedProduct = productData.variations.find(product => {
 
                 return Object.keys(selectedAttributes).every(key => {
-                    console.log(selectedAttributes[key], '-----', product.attributes["attribute_" + key]);
-                    return selectedAttributes[key] === product.attributes["attribute_" + key];
+                    console.log(selectedAttributes[key], '-----', product.attributes[key], '-----',key);
+                    return selectedAttributes[key] === product.attributes[ key];
                 });
             });
             console.log(' sản phẩm đã chọn  :', selectedProduct);
             if (selectedProduct) {
 
-                $(".product-detail__quantity-inventory").text((selectedProduct.max_qty ?? 0) + ' sản phẩm có sẵn');
+                $(".product-detail__quantity-inventory").text((selectedProduct.max_qty ?? 0) +   translate(' sản phẩm có sẵn', ' products available'));
                 $(".product-detail__quantity-input").val(0);
                 if (selectedProduct.max_qty >= 1) {
                     $(".product-detail__quantity-input").val(1);
@@ -145,7 +146,7 @@ $(document).ready(function () {
         if (Object.keys(selectedProduct).length === 0) {
             Swal.fire({
                 icon: "error",
-                title: "Vui lòng chọn sản phẩm!",
+                title: translate("Vui lòng chọn sản phẩm!", 'Please select product!'),
                 showConfirmButton: false,
                 timer: 3000,
             });
@@ -157,7 +158,7 @@ $(document).ready(function () {
                 setCookie('redirect_after_login', currentUrl, 3600);
                 Swal.fire({
                     icon: "error",
-                    title: "Vui đăng nhập trước khi mua!",
+                    title: translate("Vui đăng nhập trước khi mua!", "Please login before purchasing!"),
                     showConfirmButton: false,
                     timer: 3000,
                 });
@@ -183,7 +184,7 @@ $(document).ready(function () {
                 .done(function (response) {
                     Swal.fire({
                         icon: "success",
-                        title: "Sản phẩm đã được thêm vào giỏ hàng",
+                        title: translate("Sản phẩm đã được thêm vào giỏ hàng", "Product has been added to cart"),
                         showConfirmButton: false,
                         timer: 1500,
                     }).then(() => {
@@ -195,7 +196,7 @@ $(document).ready(function () {
                         icon: "error",
                         title:
                             err.responseJSON.message ??
-                            "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.",
+                            translate("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.", "The product could not be added to the cart. Please try again later."),
                         showConfirmButton: false,
                         timer: 3000,
                     }).then(() => {
@@ -215,7 +216,7 @@ $(document).ready(function () {
         if (Object.keys(selectedProduct).length === 0) {
             Swal.fire({
                 icon: "error",
-                title: "Vui lòng chọn sản phẩm!",
+                title: translate("Vui lòng chọn sản phẩm!", "Please select a product!"),
                 showConfirmButton: false,
                 timer: 3000,
             });
@@ -226,7 +227,7 @@ $(document).ready(function () {
             if (userId < 1) {
                 Swal.fire({
                     icon: "error",
-                    title: "Vui đăng nhập trước khi mua!",
+                    title: translate("Vui đăng nhập trước khi mua!", "Please login before purchasing!"),
                     showConfirmButton: false,
                     timer: 3000,
                 });
@@ -259,7 +260,7 @@ $(document).ready(function () {
 
                     Swal.fire({
                         icon: "error",
-                        title: err.responseJSON.message ?? "Không thể mua sản phẩm. Vui lòng thử lại sau.",
+                        title: err.responseJSON.message ?? translate("Không thể mua sản phẩm. Vui lòng thử lại sau.", "The product could not be purchased. Please try again later."),
                         showConfirmButton: false,
                         timer: 3000,
                     });

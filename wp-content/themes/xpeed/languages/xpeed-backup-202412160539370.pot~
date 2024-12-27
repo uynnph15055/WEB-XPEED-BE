@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xpeed\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 11:31+0000\n"
+"POT-Creation-Date: 2024-12-16 05:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -77,8 +77,12 @@ msgstr ""
 msgid "Cập nhật giỏ hàng"
 msgstr ""
 
+#: page.php:49
+msgid "Danh mục"
+msgstr ""
+
 #: footer.php:51
-msgid "Email: vuong.quyen@gmail.com"
+msgid "Email: Xpeedhelmets.marketing@gmail.com"
 msgstr ""
 
 #: templates/tml-order-detail.php:124
@@ -161,8 +165,16 @@ msgstr ""
 msgid "Lịch sử đơn hàng gần đây"
 msgstr ""
 
+#: single-product.php:113
+msgid "Mua ngay"
+msgstr ""
+
 #: templates/tml-order-detail.php:64
 msgid "Mã đơn hàng: #"
+msgstr ""
+
+#: single-product.php:65 single-product.php:143
+msgid "MỚI"
 msgstr ""
 
 #: templates/tml-order-detail.php:52
@@ -219,7 +231,7 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: page.php:19 templates/tml-cart.php:26 templates/tml-order-detail.php:119
+#: page.php:41 templates/tml-cart.php:26 templates/tml-order-detail.php:119
 msgid "Sản phẩm"
 msgstr ""
 
@@ -231,7 +243,8 @@ msgstr ""
 msgid "Sản phẩm đã hết hàng"
 msgstr ""
 
-#: templates/tml-cart.php:29 templates/tml-order-detail.php:127
+#: single-product.php:99 templates/tml-cart.php:29
+#: templates/tml-order-detail.php:127
 msgid "Số lượng"
 msgstr ""
 
@@ -249,6 +262,10 @@ msgstr ""
 
 #: templates/tml-payment.php:176
 msgid "Thành tiền"
+msgstr ""
+
+#: single-product.php:119
+msgid "Thêm vào giỏ hàng"
 msgstr ""
 
 #: templates/tml-profile.php:20

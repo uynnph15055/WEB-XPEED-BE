@@ -7,7 +7,6 @@
 
 check_user_login_and_redirect();
 $current_user = wp_get_current_user();
-$current_lang = pll_current_language();
 ?>
     <!-- account -->
         <div class="account__sidebar">
@@ -19,8 +18,7 @@ $current_lang = pll_current_language();
             </div>
 
             <div class="sidebar__menu">
-
-                <a href="<?= home_url($current_lang == 'vi' ? '/lich-su-dat-hang' : '/en/order-history') ?>" class="menu__item">
+                <a href="<?= home_url('/lich-su-dat-hang') ?>" class="menu__item">
                     <span class="menu__item-content"><?= _e('Lịch sử mua hàng' , 'xpeed') ?></span>
                     <ion-icon name="cart"></ion-icon>
                 </a>

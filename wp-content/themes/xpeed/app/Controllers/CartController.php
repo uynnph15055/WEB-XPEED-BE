@@ -216,7 +216,8 @@ class CartController extends BaseController
                 // Nếu có thuộc tính biến thể, lấy thông tin từ product
                 if (!empty($attributes)) {
                     foreach ($attributes as $attr_key => $attr_value) {
-                        $variation_title .= ucfirst($attr_key) . ': ' . $attr_value . ', ';
+                        $variation_title .= $attr_key . ':' . $attr_value . ',';
+
                         $attributeValue = $attr_value;
                         $attributeKey = $attr_key;
 
@@ -274,8 +275,10 @@ class CartController extends BaseController
         // Lấy giỏ hàng từ cookie nếu có
         $cart_cookie = isset($_COOKIE['cart']) ? json_decode(stripslashes($_COOKIE['cart']), true) : [];
 
+        $variation = json_encode(array_column(array_map(fn($pair) => explode(':', $pair), explode(',', $variation)), 1, 0));
         // Tạo chuỗi để kiểm tra kết hợp product_id và attributes
-        $attribute_key = !empty($variation) ? $product_id . '-' . json_encode($variation) : $product_id;
+        $attribute_key = !empty($variation) ? $product_id . '-' . $variation : $product_id;
+
         // Xóa sản phẩm trong session
         if (isset($_SESSION['cart'][$attribute_key])) {
             unset($_SESSION['cart'][$attribute_key]);

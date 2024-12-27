@@ -8,7 +8,7 @@ $(document).ready(function() {
         // Hiển thị thông báo
         Swal.fire({
             icon: isSuccess ? "success" : "error",
-            title: isSuccess ? "Mua hàng thành công!" : "Mua hàng thất bại!",
+            title: isSuccess ? translate("Mua hàng thành công!", "Purchase successful!") : translate("Mua hàng thất bại!", "Purchase failed!"),
             showConfirmButton: false,
             timer: isSuccess ? 3000 : 1500
         }).then(() => {
@@ -29,7 +29,7 @@ $(document).ready(function() {
         // Hiển thị thông báo dựa trên giá trị 'status'
         Swal.fire({
             icon: status === 'error' ? "error" : "success",
-            title: message,
+            title: translate(message, message), // Dùng hàm translate để thay đổi ngôn ngữ
             showConfirmButton: false,
             timer: 3000
         }).then(() => {
@@ -43,3 +43,9 @@ $(document).ready(function() {
         });
     }
 });
+
+// Hàm translate giữa tiếng Việt và tiếng Anh
+function translate(stringVi = '', stringEn = '') {
+    const language = current_locale !== 'vi' ? 'en' : 'vi';
+    return language === 'vi' ? stringVi : stringEn;
+}

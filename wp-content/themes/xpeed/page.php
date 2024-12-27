@@ -52,7 +52,7 @@ if (!empty($_GET)) {
 
 
                 <div id="filter-category" class="custom-select__options custom-select__options--visible">
-                    <select id="categories-select" name="categories"  >
+                    <select id="categories-select" name="categories" style="padding: 8px;margin:12px" >
                         <?php foreach ($options['categories'] as $category) { ?>
                                 <option value="<?php echo $category->link; ?>"
                                     <?php echo (!empty($mainCategorySlug) && $mainCategorySlug == $category->slug) ? 'selected' : ''; ?>>
@@ -115,7 +115,7 @@ if (!empty($_GET)) {
                                 <input data-max-range-input="" data-range-input="" class="input"
                                        name="filter.v.price.lte" id="filter-PRICE" type="number"
                                        placeholder="MAX" min="0" max="339000" value="<?php echo isset($params["maxPrice"]) ? (float)$params["maxPrice"] : 0; ?>"/>
-                                <label class="price-range-label visually-hidden" for="filter-PRICE">To</label>
+                                <label class="price-range-label visually-hidden" for="filter-PRICE"><?= _e('Đến' , 'xpeed') ?></label>
                             </div>
                         </div>
                     </div>
@@ -149,7 +149,7 @@ if (!empty($_GET)) {
                         </div>
                     <?php } ?>
                 <?php } else { ?>
-                    Không tìm được sản phẩm
+                    <?= _e(' Không tìm được sản phẩm' , 'xpeed') ?>
                 <?php } ?>
             </div>
         </div>
