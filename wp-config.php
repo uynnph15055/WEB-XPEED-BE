@@ -78,12 +78,18 @@ define('WP_DEBUG', true);
 
 /* Add any custom values between this line and the "stop editing" line. */
 
+// Thông tin Google Client
+define('GOOGLE_CLIENT_ID', '697902993845-08guf9k8u509h27075c73vcegav0ksmj.apps.googleusercontent.com');
+define('GOOGLE_CLIENT_SECRET', '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');
+
+define('FACEBOOK_APP_ID', '543697601517133');
+define('FACEBOOK_APP_SECRET', '24dc974cd6042c44738409c06eaf2f87');
 
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
 if (! defined('ABSPATH')) {
-	define('ABSPATH', __DIR__ . '/');
+    define('ABSPATH', __DIR__ . '/');
 }
 
 /** Sets up WordPress vars and included files. */
