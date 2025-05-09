@@ -13,7 +13,7 @@ $branchStoreController = new BranchStoreController;
     <div class="header-overlay blogs__header">
         <img class="header-overlay__img blogs__header-img" src="https://rt6moto.co.kr/cdn/shop/files/MAIN-full_face.jpg"
              alt="" />
-        <h1 id="blogs-title" class="blogs__heading"> Đại lý - địa chỉ</h1>
+        <h1 id="blogs-title" class="blogs__heading"> <?= _e('Đại lý - địa chỉ' , 'xpeed') ?></h1>
     </div>
 
     <main class="address-wrapper">
@@ -43,7 +43,6 @@ $branchStoreController = new BranchStoreController;
                                 </a>
                             </h3>
                             <p class="address-item__description-subtitle">
-                                <?php echo $branchStore['content'] ?>
                             </p>
                         </div>
                     </div>

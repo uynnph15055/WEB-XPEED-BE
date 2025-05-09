@@ -15,20 +15,20 @@ $totalCarts = 0;
 get_header();
 
 ?>
-    <div class="cart">
+    <div class="cart" style="min-height: 90vh">
         <div class="cart__container">
-            <h2 class="cart__title">Giỏ hàng</h2>
+            <h2 class="cart__title"><?= _e('Giỏ hàng' , 'xpeed') ?></h2>
             <div class="car-content">
                 <table class="cart__table">
                     <thead class="cart__header">
                     <tr class="cart__header-row">
                         <th class="cart__header-cell cart__header-cell--product">
-                            Sản phẩm
+                            <?= _e('Sản phẩm' , 'xpeed') ?>
                         </th>
                         <th class="cart__header-cell cart__header-cell--quantity">
-                            Số lượng
+                            <?= _e('Số lượng' , 'xpeed') ?>
                         </th>
-                        <th class="cart__header-cell cart__header-cell--total">Tổng cộng</th>
+                        <th class="cart__header-cell cart__header-cell--total">  <?= _e('Tổng cộng' , 'xpeed') ?></th>
                     </tr>
                     </thead>
                     <tbody class="cart__body">
@@ -56,10 +56,10 @@ get_header();
                                     <span class="cart__item-details-price"><?= number_format((float)$cart["price"]) ?? '' ?> đ</span>
                                     <?php
                                     if ((int)$cart["stock_quantity"] < 1) { ?>
-                                        <h3 style="color: red;"><i>Sản phẩm đã hết hàng</i></h3>
+                                        <h3 style="color: red;"><i><?= _e('Sản phẩm đã hết hàng' , 'xpeed') ?></i></h3>
                                         <?php
                                     } elseif ((int)$cart["stock_quantity"] < (int)$cart["quantity"]) { ?>
-                                        <h3 style="color: red;"><i>Số lượng sản phẩm không đủ, tối đa <?= $cart["stock_quantity"] ?? '' ?> sản phẩm</i></h3>
+                                        <h3 style="color: red;"><i><?= _e('Số lượng sản phẩm không đủ, tối đa' , 'xpeed') ?> <?= $cart["stock_quantity"] ?? '' ?> <?= _e('sản phẩm' , 'xpeed') ?></i></h3>
                                         <?php
                                     }
                                     ?>
@@ -76,7 +76,7 @@ get_header();
                                     />
                                     <button aria-label="<?= home_url() ?>"class="cart__item-quantity-increase">+</button>
                                 </div>
-                                <div class="cart__item-action-delete">Xoá</div>
+                                <div class="cart__item-action-delete"><?= _e('Xoá' , 'xpeed') ?></div>
                             </td>
                             <td class="cart__item-price"><?= number_format((float)$cart["total"]) ?? '' ?> đ</td>
                         </tr>
@@ -95,9 +95,9 @@ get_header();
                         <span class="cart__actions-total"><?= number_format((float)$totalCarts) ?? '' ?> đ</span>
                         <div class="cart__actions-buttons">
                             <button aria-label="<?= home_url() ?>"class="button button--primary-cart">
-                                Cập nhật giỏ hàng
+                                <?= _e('Cập nhật giỏ hàng' , 'xpeed') ?>
                             </button>
-                            <button aria-label="<?= home_url() ?>"class="button button--primary" id="paymentBtn" data-userID="<?= get_current_user_id() ?? 0 ?>">Thanh toán</button>
+                            <button aria-label="<?= home_url() ?>"class="button button--primary" id="paymentBtn" data-userID="<?= get_current_user_id() ?? 0 ?>"><?= _e('Thanh toán' , 'xpeed') ?></button>
                         </div>
                     </div>
                 </div>

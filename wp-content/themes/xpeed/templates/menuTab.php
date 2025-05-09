@@ -4,9 +4,9 @@
             <ion-icon name="person" class="menu__tab-iitem--icon"></ion-icon>
         </div>
 
-        <div href="#" class="menu__tab-item">Order History</div>
+        <div href="#" class="menu__tab-item"><?= _e('Lịch sử mua hàng' , 'xpeed') ?></div>
 
-        <div href="#" class="menu__tab-item">My Profile</div>
+        <div href="#" class="menu__tab-item"><?= _e('Tài khoản của tôi' , 'xpeed') ?></div>
     </div>
 
     <ion-icon

@@ -1,4 +1,6 @@
 <?php
+/** Enable W3 Total Cache */
+define('WP_CACHE', true); // Added by W3 Total Cache
 
 /**
  * The base configuration for WordPress
@@ -51,7 +53,7 @@ define('NONCE_SALT',       'put your unique phrase here');
 
 /**#@-*/
 define('WP_DEBUG_LOG', true);
-define('WP_DEBUG_DISPLAY', false);
+define('WP_DEBUG_DISPLAY', true);
 /**
  * WordPress database table prefix.
  *

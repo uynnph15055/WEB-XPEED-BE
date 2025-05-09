@@ -37,15 +37,15 @@ if ($paymentData['resultCode'] == '0') {
 
     if ( $order !== false) {
         // Hiển thị thông báo thành công
-        echo '<h1>Thanh toán thành công!</h1>';
-        echo '<p>Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đang được xử lý.</p>';
-        echo '<p>Thông tin đơn hàng:</p>';
+        echo '<h1><?= _e('Thanh toán thành công!' , 'xpeed') ?></h1>';
+        echo '<p><?= _e('Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đang được xử lý.' , 'xpeed') ?></p>';
+        echo '<p><?= _e('Thông tin đơn hàng:' , 'xpeed') ?></p>';
         echo '<ul>';
-        echo '<li>Order ID: ' . esc_html($paymentData['orderId']) . '</li>';
-        echo '<li>Amount: ' . esc_html($paymentData['amount']) . ' VND</li>';
-        echo '<li>Order Info: ' . esc_html($paymentData['orderInfo']) . '</li>';
-        echo '<li>Transaction ID: ' . esc_html($paymentData['transId']) . '</li>';
-        echo '<li>Message: ' . esc_html($paymentData['message']) . '</li>';
+        echo '<li><?= _e('Mã hóa đơn:' , 'xpeed') ?>' . esc_html($paymentData['orderId']) . '</li>';
+        echo '<li><?= _e('Số lượng:' , 'xpeed') ?>' . esc_html($paymentData['amount']) . ' VND</li>';
+        echo '<li><?= _e('Thông tin hóa đơn:' , 'xpeed') ?>' . esc_html($paymentData['orderInfo']) . '</li>';
+        echo '<li><?= _e('ID giao dịch:' , 'xpeed') ?>' . esc_html($paymentData['transId']) . '</li>';
+        echo '<li><?= _e('Tin nhắn:' , 'xpeed') ?>' . esc_html($paymentData['message']) . '</li>';
         echo '</ul>';
     } else {
         // Hiển thị thông báo lỗi
